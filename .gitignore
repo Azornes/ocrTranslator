@@ -127,3 +127,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+GoogleFreeSpeach
+GoogleFreeVision
+na wierzchu.ahk
+RunScreenshot2.bat
+configs
+test
+temp/
+.chatgpt_cache.json
