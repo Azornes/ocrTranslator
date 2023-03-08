@@ -2,13 +2,20 @@
 Convert Capture Image To Text(with BaiduOCR, GoogleOCR, Capture2Text) and
 translate text(with Google, Chatgpt, DeepL)
 ---
-### dependency
+Using this app, you can choose the OCR and translation services you would like to use. After pressing START or the keyboard shortcut Alt+Win+T, the program will launch and you can select the area of the screen you're interested in detecting text with OCR. Then, if a translation service was selected, the text will be translated.
+
+preview:
+![](documentation_images/GUI_preview.png)
+example:
+![](documentation_images/GUI_preview_example.png)
+---
+### Dependency
 1. [Python 3.9](https://www.python.org/downloads/release/python-390/).
 2. [Capture2Text](https://sourceforge.net/projects/capture2text/).
 
 to working you need create config.ini and generate [service_account_creds.json](https://developers.google.com/workspace/guides/create-credentials?hl=pl).
 And put this files to "ocrTranslate/configs"
-### how look example config.ini
+### What does an example config.ini look like
 ```
 [ChatGPT]
 ApiKey = your_ApiKey
