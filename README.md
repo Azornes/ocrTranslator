@@ -1,6 +1,17 @@
-# OCR_Translator
-Convert Capture Image To Text(with BaiduOCR, GoogleOCR, Capture2Text) and
-translate text(with Google, Chatgpt, DeepL)
+<p align="center">
+  <h1 align="center">OCR Translator</h1>
+  <p align="center">Convert Capture Image To Text and translate</p>
+</p>
+
+<p align="center">
+  <a href="https://github.com/Azornes/ocrTranslator">
+    <img alt="Visitors" src="https://visitor-badge.glitch.me/badge?page_id=azornes.ocrTranslator">
+   </a>
+</p>
+
+
+Convert Capture Image To Text (with BaiduOCR, GoogleOCR, Capture2Text) and
+translate this text (with Google, Chatgpt, DeepL).
 ---
 Using this app, you can choose the OCR and translation services you would like to use. After pressing START or the keyboard shortcut Alt+Win+T, the program will launch and you can select the area of the screen you're interested in detecting text with OCR. Then, if a translation service was selected, the text will be translated.
 
