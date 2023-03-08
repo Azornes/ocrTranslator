@@ -7,6 +7,7 @@ translate text(with Google, Chatgpt, DeepL)
 2. [Capture2Text](https://sourceforge.net/projects/capture2text/).
 
 to working you need create config.ini and generate [service_account_creds.json](https://developers.google.com/workspace/guides/create-credentials?hl=pl).
+And put this files to "ocrTranslate/configs"
 ### how look example config.ini
 ```
 [ChatGPT]
