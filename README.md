@@ -4,8 +4,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Azornes/ocrTranslator">
-    <img alt="Visitors" src="https://visitor-badge.glitch.me/badge?page_id=azornes.ocrTranslator">
+   <a href="https://github.com/Azornes/ocrTranslator">
+    <img alt="Visitors" src="https://shields-io-visitor-counter.herokuapp.com/badge?page=Azornes.ocrTranslator&color=1D70B8&logo=GitHub&logoColor=FFFFFF&style=flat-square">
    </a>
   <a href="https://www.python.org/">
     <img alt="python 3.9" src="https://img.shields.io/badge/python-3.9-3776AB?logo=Python&logoColor=FFFFFF&style=flat-square">
