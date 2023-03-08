@@ -1,6 +1,6 @@
 <p align="center">
   <h1 align="center">OCR Translator</h1>
-  <p align="center">Convert Capture Image To Text and translate</p>
+  <p align="center">Convert captured images into text and then translate that text.</p>
 </p>
 
 <p align="center">
@@ -10,10 +10,9 @@
 </p>
 
 
-Convert Capture Image To Text (with BaiduOCR, GoogleOCR, Capture2Text) and
-translate this text (with Google, Chatgpt, DeepL).
+Convert captured images to text using BaiduOCR, GoogleOCR, or Capture2Text, and translate the resulting text using Google, Chatgpt, or DeepL.
 ---
-Using this app, you can choose the OCR and translation services you would like to use. After pressing START or the keyboard shortcut Alt+Win+T, the program will launch and you can select the area of the screen you're interested in detecting text with OCR. Then, if a translation service was selected, the text will be translated.
+With this app, you can select your preferred OCR and translation services. After clicking on START or using the keyboard shortcut Alt+Win+T, the program will launch and you can choose the area of the screen to scan for text using OCR. If you have selected a translation service, the text will then be automatically translated.
 
 preview:
 ![](documentation_images/GUI_preview.png)
@@ -24,8 +23,8 @@ example:
 1. [Python 3.9](https://www.python.org/downloads/release/python-390/).
 2. [Capture2Text](https://sourceforge.net/projects/capture2text/).
 
-to working you need create config.ini and generate [service_account_creds.json](https://developers.google.com/workspace/guides/create-credentials?hl=pl).
-And put this files to "ocrTranslate/configs"
+To get it working, you need to create a config.ini file and generate a [service_account_creds.json](https://developers.google.com/workspace/guides/create-credentials?hl=pl).
+Then, put both of these files into the 'ocrTranslate/configs' directory.
 ### What does an example config.ini look like
 ```
 [ChatGPT]
@@ -45,6 +44,6 @@ path_to_Capture2Text_CLI_exe = C:\Program Files\Capture2Text\Capture2Text_CLI.ex
 
 at this moment only supported chatgpt identification by email and password.
 
-### how to get session token to chatgpt free (WIP)
-1. Login to https://chat.openai.com
-2. Open Console in your google chrome -> Application -> Storage -> Cookies -> https://chat.openai.com -> Value from __Secure-next-auth.session-token
+### How to get session token for ChatGPT Free (WIP)
+1. Login in to https://chat.openai.com
+2. Open the console in Google Chrome -> Application -> Storage -> Cookies -> https://chat.openai.com -> Get the value from __Secure-next-auth.session-token
