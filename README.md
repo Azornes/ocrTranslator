@@ -7,6 +7,9 @@
   <a href="https://github.com/Azornes/ocrTranslator">
     <img alt="Visitors" src="https://visitor-badge.glitch.me/badge?page_id=azornes.ocrTranslator">
    </a>
+  <a href="https://www.python.org/">
+    <img alt="python 3.9" src="https://img.shields.io/badge/python-3.9-3776AB?logo=Python&logoColor=FFFFFF&style=flat-square">
+   </a>
 </p>
 
 
@@ -42,7 +45,7 @@ SecretKey = your_SecretKey
 path_to_Capture2Text_CLI_exe = C:\Program Files\Capture2Text\Capture2Text_CLI.exe
 ```
 
-at this moment only supported chatgpt identification by email and password.
+At the moment, ChatGPT authentication is only supported through email and password.
 
 ### How to get session token for ChatGPT Free (WIP)
 1. Login in to https://chat.openai.com
