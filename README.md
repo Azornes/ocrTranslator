@@ -1,6 +1,6 @@
 <p align="center">
   <h1 align="center">OCR Translator</h1>
-  <p align="center">Convert captured images into text and then translate that text.</p>
+  <p align="center"><i>Convert captured images into text and then translate that text.</i></p>
 </p>
 
 <p align="center">
@@ -12,8 +12,6 @@
    </a>
 </p>
 
-
-Convert captured images to text using BaiduOCR, GoogleOCR, or Capture2Text, and translate the resulting text using Google, Chatgpt, or DeepL.
 ---
 With this app, you can select your preferred OCR and translation services. After clicking on START or using the keyboard shortcut Alt+Win+T, the program will launch and you can choose the area of the screen to scan for text using OCR. If you have selected a translation service, the text will then be automatically translated.
 
