@@ -1,5 +1,10 @@
 import os
 
+if not os.path.exists("ocrTranslate/temp"):
+    os.mkdir("ocrTranslate/temp")
+if not os.path.exists("ocrTranslate/configs"):
+    os.mkdir("ocrTranslate/configs")
+
 
 class Assets:
     path_to_icon = os.path.abspath("ocrTranslate/assets/icon.ico")

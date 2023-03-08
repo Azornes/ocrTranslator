@@ -2,7 +2,6 @@ import asyncio
 import ctypes
 import logging
 
-# from ocrTranslate.tk_gui import *
 import tkinter
 
 from ocrTranslate.assets import Assets as assets

@@ -1,8 +1,8 @@
 wxpython==4.2.0
 pillow==9.4.0
-google-cloud-translate==3.10.1
+google-cloud-translate==3.11.0
 google-cloud-texttospeech==2.14.1
-google-cloud-vision==3.3.1
+google-cloud-vision==3.4.0
 
 future==0.18.3
 py2exe==0.13.0.0
@@ -12,8 +12,13 @@ keyboard==0.13.5
 pyshadow==0.0.5
 customtkinter==5.1.2
 
-revChatGPT==3.1.4
+revChatGPT==3.1.5
 baidu-aip==4.16.10
 deepl-cli==0.3.1
 
 mss==7.0.1
+
+pypiwin32~=223
+pywin32~=305
+selenium~=4.8.2
+chardet==5.1.0

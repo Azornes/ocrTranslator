@@ -128,6 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+.idea
+
 GoogleFreeSpeach
 GoogleFreeVision
 na wierzchu.ahk
