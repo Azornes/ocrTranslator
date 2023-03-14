@@ -85,6 +85,20 @@ bind $popdown.f.l <KeyPress> [list ComboListKeyPressed %%W %%K]
         self.bind('<KeyRelease>', self.handle_keyrelease)
         self['values'] = self._completion_list  # Setup our popup menu
 
+    def set_completion_list_without_bind(self, completion_list):
+        """
+        Use the completion list as drop down selection menu, arrows move through menu.
+
+        :param completion_list: completion values
+        :type completion_list: list
+        """
+        self._completion_list = sorted(completion_list, key=str.lower)  # Work with a sorted list
+        self.configure(values=completion_list)
+        self._hits = []
+        self._hit_index = 0
+        self.position = 0
+        self['values'] = self._completion_list  # Setup our popup menu
+
     def autocomplete(self, delta=0):
         """
         Autocomplete the Combobox.
@@ -155,7 +169,7 @@ bind $popdown.f.l <KeyPress> [list ComboListKeyPressed %%W %%K]
     def configure(self, **kwargs):
         """Configure widget specific keyword arguments in addition to :class:`ttk.Combobox` keyword arguments."""
         if "completevalues" in kwargs:
-            self.set_completion_list(kwargs.pop("completevalues"))
+            self.set_completion_list_without_bind(kwargs.pop("completevalues"))
         return tk.CTkComboBox.configure(self, **kwargs)
 
     def cget(self, key):

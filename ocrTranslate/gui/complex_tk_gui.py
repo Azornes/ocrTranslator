@@ -1,13 +1,14 @@
 import customtkinter
 from ocrTranslate.assets import Assets as assets
 from ocrTranslate.gui.auto_complete_combobox import AutocompleteCombobox
-from ocrTranslate.langs import _langs
+from ocrTranslate.langs import _langs, services_translators_languages
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
 result_boxes = []  # Result window identified earlier
 from PIL import Image
+
 
 class ComplexTkGui(customtkinter.CTk):
     def __init__(self):
@@ -62,8 +63,8 @@ class ComplexTkGui(customtkinter.CTk):
         self.switch_from_clipboard = customtkinter.CTkSwitch(self.scrollable_frame, text="Only from clipboard", command=self.disable_all_ocr_switchers)
         self.switch_from_clipboard.grid(row=2, column=2, padx=0, pady=(0, 10), sticky="NSEW")
 
-        #self.scrollable_frame_textbox = customtkinter.CTkTextbox(self, width=250)
-        #self.scrollable_frame_textbox.grid(row=1, column=1,padx=(10, 10), pady=(10, 10), sticky="nsew")
+        # self.scrollable_frame_textbox = customtkinter.CTkTextbox(self, width=250)
+        # self.scrollable_frame_textbox.grid(row=1, column=1,padx=(10, 10), pady=(10, 10), sticky="nsew")
 
         self.scrollable_frame_textbox = customtkinter.CTkTextbox(self.scrollable_frame, height=1500)
         self.scrollable_frame_textbox.grid(row=3, column=0, columnspan=4, rowspan=10, padx=(10, 10), pady=(10, 10), sticky="NSEW")
@@ -83,8 +84,7 @@ class ComplexTkGui(customtkinter.CTk):
         self.scrollable_frame_translation.grid(row=0, column=0, padx=(0, 0), pady=(0, 0), sticky="nsew")
         self.scrollable_frame_translation.grid_columnconfigure((0, 1, 2), weight=1)
 
-
-        self.option_menu_translation = customtkinter.CTkOptionMenu(self.scrollable_frame_translation, dynamic_resizing=False, values=["Disabled", "GoogleFree", "ChatGPT", "Deepl"])
+        self.option_menu_translation = customtkinter.CTkOptionMenu(self.scrollable_frame_translation, dynamic_resizing=False, values=["Disabled", "GoogleFree", "ChatGPT", "DeepL", 'Alibaba', 'Argos', 'Baidu', 'Bing', 'Caiyun', 'Google', 'Iciba', 'Iflytek', 'Iflyrec', 'Itranslate', 'Lingvanex', 'Mglip', 'ModernMt', 'myMemory', 'Niutrans', 'Papago', 'qqFanyi', 'qqTranSmart', 'Reverso', 'Sogou', 'TranslateCom', 'Utibet', 'VolcEngine', 'Yandex', 'Youdao'], command=self.change_languages)
         self.option_menu_translation.grid(row=0, column=0, columnspan=3, padx=20, pady=(20, 10))
 
         self.switch_game_mode = customtkinter.CTkSwitch(self.scrollable_frame_translation, text="Turn game mode", )
@@ -158,7 +158,6 @@ class ComplexTkGui(customtkinter.CTk):
             self.switch_from_clipboard.configure(state="enabled")
             self.switch_from_text.configure(state="enabled")
 
-
     def open_input_dialog_event(self):
         dialog = customtkinter.CTkInputDialog(text="Type in a number:", title="CTkInputDialog")
         print("CTkInputDialog:", dialog.get_input())
@@ -179,6 +178,20 @@ class ComplexTkGui(customtkinter.CTk):
 
         self.combobox_from_language.set(to_lang)
         self.combobox_to_language.set(from_lang)
+
+    def change_languages(self, test):
+        c = []
+        if self.option_menu_translation.get().lower() in services_translators_languages.keys():
+            lista = services_translators_languages.get(self.option_menu_translation.get().lower(), [])
+            c = [_langs.get(a, a) for a in lista]
+            self.combobox_from_language.configure(completevalues=c)
+            self.combobox_to_language.configure(completevalues=c)
+
+            if self.combobox_from_language.get() not in c:
+                self.combobox_from_language.set("auto")
+            if self.combobox_to_language.get() not in c:
+                self.combobox_to_language.set("")
+
 
     def combo_pressed_print(self, test):
         print(test)

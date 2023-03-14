@@ -5,7 +5,7 @@ import logging
 import tkinter
 
 from ocrTranslate.assets import Assets as assets
-from ocrTranslate.config_files import google_api, google_free, path_to_Capture2Text_CLI_exe, chatGpt, baidu_client, deepL
+from ocrTranslate.config_files import google_api, google_free, path_to_Capture2Text_CLI_exe, chatGpt, baidu_client, deepL, multi_translators
 from ocrTranslate.gui.complex_tk_gui import ComplexTkGui, result_boxes
 
 import os
@@ -267,6 +267,8 @@ def translate(results):
         translated = deepL.translate_by_special_point_deepL(results, root.combobox_from_language.get(), root.combobox_to_language.get())
     elif root.option_menu_translation.get() == "ChatGPT":
         translated = asyncio.run(chatGpt.translate_by_chat_gpt(results, root.combobox_to_language.get()))
+    elif root.option_menu_translation.get() in ['alibaba', 'argos', 'baidu', 'bing', 'caiyun', 'google', 'iciba', 'iflytek', 'iflyrec', 'itranslate', 'lingvanex', 'mglip', 'modernMt', 'myMemory', 'niutrans', 'papago', 'qqFanyi', 'qqTranSmart', 'reverso', 'sogou', 'translateCom', 'utibet', 'volcEngine', 'yandex', 'youdao']:
+        translated = multi_translators.translate(results, root.combobox_from_language.get(), root.combobox_to_language.get(), root.option_menu_translation.get())
     if root.switch_results_to_clipboard.get() == 1:
         root.clipboard_clear()
         root.clipboard_append(translated)

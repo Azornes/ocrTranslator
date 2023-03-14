@@ -12,9 +12,10 @@ keyboard==0.13.5
 pyshadow==0.0.5
 customtkinter==5.1.2
 
-revChatGPT==3.1.6
+revChatGPT==3.3.5
 baidu-aip==4.16.10
-deepl-cli==0.3.1
+deepl-cli==0.4.0
+translators==5.6.3
 
 mss==7.0.1
 
@@ -22,3 +23,7 @@ pypiwin32==223
 pywin32==305
 selenium~=4.8.2
 chardet==5.1.0
+darkdetect~=0.8.0
+langcodes~=3.3.0
+language_data==1.1
+configparser~=5.3.0
