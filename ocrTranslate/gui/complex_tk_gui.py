@@ -1,7 +1,7 @@
 import customtkinter
 from ocrTranslate.assets import Assets as assets
 from ocrTranslate.gui.auto_complete_combobox import AutocompleteCombobox
-from ocrTranslate.langs import _langs, services_translators_languages
+from ocrTranslate.langs import _langs, services_translators_languages, _langs2
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -98,11 +98,11 @@ class ComplexTkGui(customtkinter.CTk):
         self.label_to_language = customtkinter.CTkLabel(self.scrollable_frame_translation, text="To language:", anchor="w")
         self.label_to_language.grid(row=2, column=2, padx=(0, 20), pady=(0, 0))
 
-        self.combobox_from_language = AutocompleteCombobox(self.scrollable_frame_translation, completevalues=list(_langs.values()))
+        self.combobox_from_language = AutocompleteCombobox(self.scrollable_frame_translation, completevalues=list(_langs2.values()))
         self.combobox_from_language.grid(row=3, column=0, padx=(20, 5), pady=(0, 0))
         self.button_reverse_language = customtkinter.CTkButton(master=self.scrollable_frame_translation, text="", fg_color="transparent", border_width=0, width=26, anchor="left", height=26, text_color=("gray10", "#DCE4EE"), image=self.rev_translate_icon, command=self.reverse_languages)
         self.button_reverse_language.grid(row=3, column=1, padx=(0, 0), pady=(0, 0))
-        self.combobox_to_language = AutocompleteCombobox(self.scrollable_frame_translation, completevalues=list(_langs.values()))
+        self.combobox_to_language = AutocompleteCombobox(self.scrollable_frame_translation, completevalues=list(_langs2.values()))
         self.combobox_to_language.grid(row=3, column=2, padx=(5, 20), pady=(0, 0))
 
         self.translation_frame_textbox = customtkinter.CTkTextbox(self.scrollable_frame_translation, width=250, height=2000)
@@ -191,6 +191,15 @@ class ComplexTkGui(customtkinter.CTk):
                 self.combobox_from_language.set("auto")
             if self.combobox_to_language.get() not in c:
                 self.combobox_to_language.set("")
+        elif self.option_menu_translation.get() == "ChatGPT" or self.option_menu_translation.get() == "GoogleFree":
+            self.combobox_from_language.configure(completevalues=list(_langs2.values()))
+            self.combobox_to_language.configure(completevalues=list(_langs2.values()))
+
+            if self.combobox_from_language.get() not in list(_langs2.values()):
+                self.combobox_from_language.set("auto")
+            if self.combobox_to_language.get() not in list(_langs2.values()):
+                self.combobox_to_language.set("")
+
 
 
     def combo_pressed_print(self, test):
