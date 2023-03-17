@@ -45,7 +45,7 @@ class ComplexTkGui(customtkinter.CTk):
         # ||||||||||||||||||| create scrollable frame |||||||||||||||||||
         self.scrollable_frame = customtkinter.CTkScrollableFrame(self, label_text="OCR Checker")
         self.scrollable_frame.grid(row=0, column=1, padx=(20, 0), pady=(20, 0), sticky="nsew")
-        self.scrollable_frame.grid_columnconfigure((0, 1, 2, 3), weight=1)
+        self.scrollable_frame.grid_columnconfigure((0, 1, 2, 3, 4), weight=1)
 
         self.switch_google_api = customtkinter.CTkSwitch(self.scrollable_frame, text="Turn Google api", )
         self.switch_google_api.grid(row=0, column=1, padx=0, pady=(0, 10), sticky="NSEW")
@@ -57,17 +57,20 @@ class ComplexTkGui(customtkinter.CTk):
         self.switch_capture = customtkinter.CTkSwitch(self.scrollable_frame, text="Turn Capture2Text", )
         self.switch_capture.grid(row=1, column=2, padx=0, pady=(0, 10), sticky="NSEW")
 
+        self.switch_windows_ocr = customtkinter.CTkSwitch(self.scrollable_frame, text="Turn Windows OCR", )
+        self.switch_windows_ocr.grid(row=2, column=1, padx=0, pady=(0, 10), sticky="NSEW")
+
         self.switch_from_text = customtkinter.CTkSwitch(self.scrollable_frame, text="Only from below text", command=self.disable_all_ocr_switchers)
-        self.switch_from_text.grid(row=2, column=1, padx=0, pady=(0, 10), sticky="NSEW")
+        self.switch_from_text.grid(row=3, column=1, padx=0, pady=(0, 10), sticky="NSEW")
 
         self.switch_from_clipboard = customtkinter.CTkSwitch(self.scrollable_frame, text="Only from clipboard", command=self.disable_all_ocr_switchers)
-        self.switch_from_clipboard.grid(row=2, column=2, padx=0, pady=(0, 10), sticky="NSEW")
+        self.switch_from_clipboard.grid(row=3, column=2, padx=0, pady=(0, 10), sticky="NSEW")
 
         # self.scrollable_frame_textbox = customtkinter.CTkTextbox(self, width=250)
         # self.scrollable_frame_textbox.grid(row=1, column=1,padx=(10, 10), pady=(10, 10), sticky="nsew")
 
         self.scrollable_frame_textbox = customtkinter.CTkTextbox(self.scrollable_frame, height=1500)
-        self.scrollable_frame_textbox.grid(row=3, column=0, columnspan=4, rowspan=10, padx=(10, 10), pady=(10, 10), sticky="NSEW")
+        self.scrollable_frame_textbox.grid(row=4, column=0, columnspan=4, rowspan=10, padx=(10, 10), pady=(10, 10), sticky="NSEW")
 
         # ||||||||||||||||||| create tabview |||||||||||||||||||
         self.tabview = customtkinter.CTkTabview(self, width=25)

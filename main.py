@@ -4,6 +4,8 @@ import logging
 
 import tkinter
 
+import chardet
+
 from ocrTranslate.assets import Assets as assets
 from ocrTranslate.config_files import google_api, google_free, path_to_Capture2Text_CLI_exe, chatGpt, baidu_client, deepL, multi_translators
 from ocrTranslate.gui.complex_tk_gui import ComplexTkGui, result_boxes
@@ -164,9 +166,19 @@ class MyCapture:
                 # self.showtextwindow(ja_text)
                 return result
 
-        list_functions = [OCRGoogle, OCRBaiduu, OCRCapture2Text, OCRGoogleFree]
-        list_states_of_switches = [root.switch_google_api.get(), root.switch_baidu.get(), root.switch_capture.get(), root.switch_google_free.get()]
-        string_results = {0: "-Google API:\n", 1: "-Baidu:\n", 2: "-Capture2Text:\n", 3: "-Google Free:\n"}
+        def OCRWindows(test):
+            print("OCRWindows")
+            command = "{path_to_win_ocr} -Path '{path_to_tmp}' | Select-Object -ExpandProperty Text".format(path_to_tmp=assets.path_to_tmp2, path_to_win_ocr=assets.path_to_win_ocr)
+            result = subprocess.check_output(["powershell.exe", command])
+            print(result)
+            result_text = result.decode("cp852").strip()
+
+            print(result_text)
+            return result_text
+
+        list_functions = [OCRGoogle, OCRBaiduu, OCRCapture2Text, OCRGoogleFree, OCRWindows]
+        list_states_of_switches = [root.switch_google_api.get(), root.switch_baidu.get(), root.switch_capture.get(), root.switch_google_free.get(), root.switch_windows_ocr.get()]
+        string_results = {0: "-Google API:\n", 1: "-Baidu:\n", 2: "-Capture2Text:\n", 3: "-Google Free:\n", 4: "-Windows OCR:\n"}
 
         queues = [Queue() for _ in range(len(list_functions))]
         threads = []

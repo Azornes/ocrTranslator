@@ -12,7 +12,7 @@ keyboard==0.13.5
 pyshadow==0.0.5
 customtkinter==5.1.2
 
-revChatGPT==3.3.5
+revChatGPT==4.0.2
 baidu-aip==4.16.10
 deepl-cli==0.4.0
 translators==5.6.3

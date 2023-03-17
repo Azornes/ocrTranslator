@@ -36,3 +36,5 @@ class Assets:
 
     path_config_ini = resolve_path("ocrTranslate/configs/config.ini")
     path_service_account_creds = resolve_path("ocrTranslate/configs/service_account_creds.json")
+
+    path_to_win_ocr = resolve_path("ocrTranslate/services/Get-Win10OcrTextFromImage.ps1")
