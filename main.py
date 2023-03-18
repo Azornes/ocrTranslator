@@ -276,7 +276,7 @@ def translate(results):
     translated = ""
     if root.option_menu_translation.get() == "GoogleFree":
         translated = google_free.translate_by_special_point_google(results, root.combobox_to_language.get())
-    elif root.option_menu_translation.get() == "Deepl":
+    elif root.option_menu_translation.get() == "DeepL":
         translated = deepL.translate_by_special_point_deepL(results, root.combobox_from_language.get(), root.combobox_to_language.get())
     elif root.option_menu_translation.get() == "ChatGPT":
         translated = asyncio.run(chatGpt.translate_by_chat_gpt(results, root.combobox_to_language.get()))
