@@ -4,8 +4,6 @@ import logging
 
 import tkinter
 
-import chardet
-
 from ocrTranslate.assets import Assets as assets
 from ocrTranslate.config_files import google_api, google_free, path_to_Capture2Text_CLI_exe, chatGpt, baidu_client, deepL, multi_translators
 from ocrTranslate.gui.complex_tk_gui import ComplexTkGui, result_boxes
@@ -27,6 +25,7 @@ root = ComplexTkGui()
 
 myappid = 'Azornes.ocrTranslator'
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+
 
 # subprocess.call(["C:\Program Files\AutoHotkey\AutoHotkey.exe", "na wierzchu.ahk"])
 
@@ -101,10 +100,10 @@ class MyCapture:
 
         self.canvas.bind('<Motion>', onMouseMove)
 
-        def onEscPressd(event):
+        def onEscPressed(event):
             self.top.destroy()
 
-        self.canvas.bind('<Cancel>', onEscPressd)
+        self.canvas.bind('<Cancel>', onEscPressed)
 
         # Get the position where the mouse left button is lifted, save the screenshot of the region.
         def onLeftButtonUp(event):
@@ -171,13 +170,16 @@ class MyCapture:
             command = "{path_to_win_ocr} -Path '{path_to_tmp}' | Select-Object -ExpandProperty Text".format(path_to_tmp=assets.path_to_tmp2, path_to_win_ocr=assets.path_to_win_ocr)
             result = subprocess.check_output(["powershell.exe", command])
             print(result)
-            result_text = result.decode("cp852").strip()
+            try:
+                result_text = result.decode("cp852").strip()
+            except UnicodeDecodeError:
+                result_text = "Error decoding"
 
             print(result_text)
             return result_text
 
         list_functions = [OCRGoogle, OCRBaiduu, OCRCapture2Text, OCRGoogleFree, OCRWindows]
-        list_states_of_switches = [root.switch_google_api.get(), root.switch_baidu.get(), root.switch_capture.get(), root.switch_google_free.get(), root.switch_windows_ocr.get()]
+        list_states_of_switches = [root.switch_ocr_google_api.get(), root.switch_ocr_baidu_api.get(), root.switch_ocr_capture2text.get(), root.switch_ocr_google_free.get(), root.switch_ocr_windows_local.get()]
         string_results = {0: "-Google API:\n", 1: "-Baidu:\n", 2: "-Capture2Text:\n", 3: "-Google Free:\n", 4: "-Windows OCR:\n"}
 
         queues = [Queue() for _ in range(len(list_functions))]
@@ -200,7 +202,6 @@ class MyCapture:
                     result = queue.get()
                 else:
                     result += string_results[i] + queue.get() + "\n\n"
-
 
         root.scrollable_frame_textbox.insert("0.0", result)
         if root.switch_results_to_clipboard.get() == 1:
@@ -279,7 +280,7 @@ def translate(results):
         translated = deepL.translate_by_special_point_deepL(results, root.combobox_from_language.get(), root.combobox_to_language.get())
     elif root.option_menu_translation.get() == "ChatGPT":
         translated = asyncio.run(chatGpt.translate_by_chat_gpt(results, root.combobox_to_language.get()))
-    elif root.option_menu_translation.get() in ['alibaba', 'argos', 'baidu', 'bing', 'caiyun', 'google', 'iciba', 'iflytek', 'iflyrec', 'itranslate', 'lingvanex', 'mglip', 'modernMt', 'myMemory', 'niutrans', 'papago', 'qqFanyi', 'qqTranSmart', 'reverso', 'sogou', 'translateCom', 'utibet', 'volcEngine', 'yandex', 'youdao']:
+    elif root.option_menu_translation.get().lower() in ['alibaba', 'argos', 'baidu', 'bing', 'caiyun', 'google', 'iciba', 'iflytek', 'iflyrec', 'itranslate', 'lingvanex', 'mglip', 'modernMt', 'myMemory', 'niutrans', 'papago', 'qqFanyi', 'qqTranSmart', 'reverso', 'sogou', 'translateCom', 'utibet', 'volcEngine', 'yandex', 'youdao']:
         translated = multi_translators.translate(results, root.combobox_from_language.get(), root.combobox_to_language.get(), root.option_menu_translation.get())
     if root.switch_results_to_clipboard.get() == 1:
         root.clipboard_clear()

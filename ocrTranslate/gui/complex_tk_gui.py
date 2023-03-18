@@ -45,32 +45,40 @@ class ComplexTkGui(customtkinter.CTk):
         # ||||||||||||||||||| create scrollable frame |||||||||||||||||||
         self.scrollable_frame = customtkinter.CTkScrollableFrame(self, label_text="OCR Checker")
         self.scrollable_frame.grid(row=0, column=1, padx=(20, 0), pady=(20, 0), sticky="nsew")
-        self.scrollable_frame.grid_columnconfigure((0, 1, 2, 3, 4), weight=1)
+        self.scrollable_frame.grid_columnconfigure((0, 1, 2, 3), weight=1)
+        # self.scrollable_frame.grid_columnconfigure("all", weight=1)
 
-        self.switch_google_api = customtkinter.CTkSwitch(self.scrollable_frame, text="Turn Google api", )
-        self.switch_google_api.grid(row=0, column=1, padx=0, pady=(0, 10), sticky="NSEW")
-        self.switch_google_free = customtkinter.CTkSwitch(self.scrollable_frame, text="Turn Google Free", )
-        self.switch_google_free.grid(row=0, column=2, padx=0, pady=(0, 10), sticky="NSEW")
+        self.switch_ocr_google_api = None
+        self.switch_ocr_google_free = None
+        self.switch_ocr_baidu_api = None
+        self.switch_ocr_capture2text = None
+        self.switch_ocr_windows_local = None
+        self.switches_ocr = []
 
-        self.switch_baidu = customtkinter.CTkSwitch(self.scrollable_frame, text="Turn Baidu api", )
-        self.switch_baidu.grid(row=1, column=1, padx=0, pady=(0, 10), sticky="NSEW")
-        self.switch_capture = customtkinter.CTkSwitch(self.scrollable_frame, text="Turn Capture2Text", )
-        self.switch_capture.grid(row=1, column=2, padx=0, pady=(0, 10), sticky="NSEW")
+        switchers = [("Google api",), ("Google Free",),
+                     ("Baidu api",), ("Capture2Text",),
+                     ("Windows local",),
+                    ]
 
-        self.switch_windows_ocr = customtkinter.CTkSwitch(self.scrollable_frame, text="Turn Windows OCR", )
-        self.switch_windows_ocr.grid(row=2, column=1, padx=0, pady=(0, 10), sticky="NSEW")
+        rows = len(switchers)//2
+        for i, switcher in enumerate(switchers):
+            method_name = 'switch_ocr_{}'.format(switcher[0].lower().replace(" ", "_"))
+            switch = customtkinter.CTkSwitch(self.scrollable_frame, text="Turn " + switcher[0])
+            switch.grid(row=i // 2, column=(i % 2) + 1, padx=0, pady=(0, 10), sticky="NSEW")
+            setattr(self, method_name, switch)
+            self.switches_ocr.append(switch)
 
         self.switch_from_text = customtkinter.CTkSwitch(self.scrollable_frame, text="Only from below text", command=self.disable_all_ocr_switchers)
-        self.switch_from_text.grid(row=3, column=1, padx=0, pady=(0, 10), sticky="NSEW")
+        self.switch_from_text.grid(row=rows+1, column=1, padx=0, pady=(0, 10), sticky="NSEW")
 
         self.switch_from_clipboard = customtkinter.CTkSwitch(self.scrollable_frame, text="Only from clipboard", command=self.disable_all_ocr_switchers)
-        self.switch_from_clipboard.grid(row=3, column=2, padx=0, pady=(0, 10), sticky="NSEW")
+        self.switch_from_clipboard.grid(row=rows+1, column=2, padx=0, pady=(0, 10), sticky="NSEW")
 
         # self.scrollable_frame_textbox = customtkinter.CTkTextbox(self, width=250)
         # self.scrollable_frame_textbox.grid(row=1, column=1,padx=(10, 10), pady=(10, 10), sticky="nsew")
 
         self.scrollable_frame_textbox = customtkinter.CTkTextbox(self.scrollable_frame, height=1500)
-        self.scrollable_frame_textbox.grid(row=4, column=0, columnspan=4, rowspan=10, padx=(10, 10), pady=(10, 10), sticky="NSEW")
+        self.scrollable_frame_textbox.grid(row=rows+2, column=0, columnspan=4, rowspan=10, padx=(10, 10), pady=(10, 10), sticky="NSEW")
 
         # ||||||||||||||||||| create tabview |||||||||||||||||||
         self.tabview = customtkinter.CTkTabview(self, width=25)
@@ -139,14 +147,9 @@ class ComplexTkGui(customtkinter.CTk):
 
     def disable_all_ocr_switchers(self):
         if self.switch_from_text.get() == 1 or self.switch_from_clipboard.get() == 1:
-            self.switch_google_api.deselect()
-            self.switch_google_api.configure(state="disabled")
-            self.switch_google_free.deselect()
-            self.switch_google_free.configure(state="disabled")
-            self.switch_baidu.deselect()
-            self.switch_baidu.configure(state="disabled")
-            self.switch_capture.deselect()
-            self.switch_capture.configure(state="disabled")
+            for switch_ocr in self.switches_ocr:
+                switch_ocr.deselect()
+                switch_ocr.configure(state="disabled")
             if self.switch_from_text.get() == 1:
                 self.switch_from_clipboard.deselect()
                 self.switch_from_clipboard.configure(state="disabled")
@@ -154,10 +157,8 @@ class ComplexTkGui(customtkinter.CTk):
                 self.switch_from_text.deselect()
                 self.switch_from_text.configure(state="disabled")
         else:
-            self.switch_google_api.configure(state="enabled")
-            self.switch_google_free.configure(state="enabled")
-            self.switch_baidu.configure(state="enabled")
-            self.switch_capture.configure(state="enabled")
+            for switch_ocr in self.switches_ocr:
+                switch_ocr.configure(state="enabled")
             self.switch_from_clipboard.configure(state="enabled")
             self.switch_from_text.configure(state="enabled")
 

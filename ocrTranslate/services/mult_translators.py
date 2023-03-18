@@ -21,4 +21,4 @@ class MultiTranslators:
             words = word
 
         print(ts.translators_pool)
-        return ts.translate_text(query_text=words, translator=translator, from_language=_language_from, to_language=_language_to)
+        return ts.translate_text(query_text=words, translator=translator.lower(), from_language=_language_from, to_language=_language_to)

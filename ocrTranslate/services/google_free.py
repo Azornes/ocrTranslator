@@ -16,15 +16,15 @@ from ocrTranslate.langs import _langs
 
 class GoogleFree:
     def __init__(self, ) -> None:
-        self.script_string = "var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) { items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;"
+        self.script_string: str = "var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) { items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;"
         with open(assets.path_to_test_image, 'rb') as img:
             print("Initializing ocr_google_free...")
             b64_string = base64.b64encode(img.read())
             self.ocr_google_free(b64_string.decode('utf-8'))
         # stdout colors
-        self.GREEN = "\033[92m"
-        self.WARNING = "\033[93m"
-        self.ENDCOLOR = "\033[0m"
+        self.GREEN: str = "\033[92m"
+        self.WARNING: str = "\033[93m"
+        self.ENDCOLOR: str = "\033[0m"
 
     def print_web_element(self, web_element_info):
         driver = web_element_info.parent
@@ -99,7 +99,7 @@ class GoogleFree:
 
         self.show_captcha(driver)
 
-    def translate_by_special_point_google(self, word, language_to="en"):
+    def translate_by_special_point_google(self, word, language_to: str = "en") -> str:
 
         _language_to = list(_langs.keys())[list(_langs.values()).index(language_to)]
         words = ""
