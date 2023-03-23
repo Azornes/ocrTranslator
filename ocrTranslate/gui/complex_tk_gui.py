@@ -1,5 +1,6 @@
 import customtkinter
 from ocrTranslate.assets import Assets as assets
+from ocrTranslate.config_files import google_api, capture2Text
 from ocrTranslate.gui.auto_complete_combobox import AutocompleteCombobox
 from ocrTranslate.langs import _langs, services_translators_languages, _langs2
 
@@ -158,29 +159,36 @@ class ComplexTkGui(customtkinter.CTk):
         self.scrollable_settings_frame.grid_columnconfigure(0, weight=0)
         self.scrollable_settings_frame.grid_columnconfigure(1, weight=1)
 
-        self.label_chatgpt = customtkinter.CTkLabel(self.scrollable_settings_frame, text="ChatGPT:", anchor="w", font=customtkinter.CTkFont(size=14, weight="bold"))
-        self.label_chatgpt.grid(row=0, column=0, padx=(5, 5), pady=(5, 5))
+        self.entry_settings = []
 
-        self.label_chatgpt_apikey = customtkinter.CTkLabel(self.scrollable_settings_frame, text="ApiKey:", anchor="w")
-        self.label_chatgpt_apikey.grid(row=1, column=0, padx=(5, 5), pady=(5, 5))
-        self.entry_chatgpt_apikey = customtkinter.CTkEntry(self.scrollable_settings_frame, placeholder_text="ApiKey")
-        self.entry_chatgpt_apikey.grid(row=1, column=1, padx=(5, 5), pady=(5, 5), sticky="nsew")
+        settings_dict = {
+            'ChatGPT': ("ApiKey", 'session_token', "email", "password"),
+            'Baidu': ("AppId", 'ApiKey', "SecretKey"),
+            'Capture2Text': ("path_to_Capture2Text_CLI_exe",)
+            }
 
-        self.label_chatgpt_session_token = customtkinter.CTkLabel(self.scrollable_settings_frame, text="session_token:", anchor="w")
-        self.label_chatgpt_session_token.grid(row=2, column=0, padx=(5, 5), pady=(5, 5))
-        self.entry_chatgpt_session_token = customtkinter.CTkEntry(self.scrollable_settings_frame, placeholder_text="session_token")
-        self.entry_chatgpt_session_token.grid(row=2, column=1, padx=(5, 5), pady=(5, 5), sticky="nsew")
+        iterations = 0
+        for service in settings_dict.items():
+            label_main_name = 'label_{}'.format(service[0].lower().replace(" ", "_"))
+            print(label_main_name)
+            label_main = customtkinter.CTkLabel(self.scrollable_settings_frame, text=service[0] + ":", anchor="w", font=customtkinter.CTkFont(size=14, weight="bold"))
+            label_main.grid(row=iterations, column=0, padx=(5, 5), pady=(5, 5))
+            setattr(self, label_main_name, label_main)
+            iterations = iterations + 1
+            for element in service[1]:
+                label_name = 'label_{}_{}'.format(service[0].lower().replace(" ", "_"), element.lower().replace(" ", "_"))
+                print(label_name)
+                label = customtkinter.CTkLabel(self.scrollable_settings_frame, text=element, anchor="w")
+                label.grid(row=iterations, column=0, padx=(5, 5), pady=(5, 5), sticky="nsew")
+                setattr(self, label_name, label)
 
-        self.label_chatgpt_email = customtkinter.CTkLabel(self.scrollable_settings_frame, text="email:", anchor="w")
-        self.label_chatgpt_email.grid(row=3, column=0, padx=(5, 5), pady=(5, 5))
-        self.entry_chatgpt_email = customtkinter.CTkEntry(self.scrollable_settings_frame, placeholder_text="email")
-        self.entry_chatgpt_email.grid(row=3, column=1, padx=(5, 5), pady=(5, 5), sticky="nsew")
-
-        self.label_chatgpt_password = customtkinter.CTkLabel(self.scrollable_settings_frame, text="password:", anchor="w")
-        self.label_chatgpt_password.grid(row=4, column=0, padx=(5, 5), pady=(5, 5))
-        self.entry_chatgpt_password = customtkinter.CTkEntry(self.scrollable_settings_frame, placeholder_text="password")
-        self.entry_chatgpt_password.grid(row=4, column=1, padx=(5, 5), pady=(5, 5), sticky="nsew")
-
+                entry_name = 'entry_{}_{}'.format(service[0].lower().replace(" ", "_"), element.lower().replace(" ", "_"))
+                print(entry_name)
+                entry = customtkinter.CTkEntry(self.scrollable_settings_frame, placeholder_text=element)
+                entry.grid(row=iterations, column=1, padx=(5, 5), pady=(5, 5), sticky="nsew")
+                setattr(self, entry_name, entry)
+                self.entry_settings.append(entry)
+                iterations = iterations + 1
 
 
 
@@ -190,6 +198,10 @@ class ComplexTkGui(customtkinter.CTk):
         self.option_menu_translation.set("Disabled")
         # select default frame
         self.select_frame_by_name("home")
+        if not google_api.is_active:
+            self.switch_ocr_google_api.configure(state="disabled")
+        if not capture2Text.is_active:
+            self.switch_ocr_capture2text.configure(state="disabled")
 
     def hide_show_side_bar(self):
         if self.sidebar_frame.winfo_manager() == "grid":
@@ -212,6 +224,11 @@ class ComplexTkGui(customtkinter.CTk):
         else:
             for switch_ocr in self.switches_ocr:
                 switch_ocr.configure(state="enabled")
+            if not google_api.is_active:
+                self.switch_ocr_google_api.configure(state="disabled")
+            if not capture2Text.is_active:
+                self.switch_ocr_capture2text.configure(state="disabled")
+
             self.switch_from_clipboard.configure(state="enabled")
             self.switch_from_text.configure(state="enabled")
 

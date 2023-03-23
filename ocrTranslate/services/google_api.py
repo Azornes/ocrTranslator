@@ -14,10 +14,14 @@ from google.oauth2 import service_account
 
 class GoogleAPI:
     def __init__(self, path_service_account_creds="", ) -> None:
-        self.credentials = service_account.Credentials.from_service_account_file(path_service_account_creds)
-        self.translate_client = TranslateClient(credentials=self.credentials)
-        self.vision_client = ImageAnnotatorClient(credentials=self.credentials)
-        self.text_to_speech_client = texttospeech.TextToSpeechClient(credentials=self.credentials)
+        if os.path.exists(path_service_account_creds):
+            self.credentials = service_account.Credentials.from_service_account_file(path_service_account_creds)
+            self.translate_client = TranslateClient(credentials=self.credentials)
+            self.vision_client = ImageAnnotatorClient(credentials=self.credentials)
+            self.text_to_speech_client = texttospeech.TextToSpeechClient(credentials=self.credentials)
+            self.is_active = True
+        else:
+            self.is_active = False
         # stdout colors
         self.GREEN = "\033[92m"
         self.WARNING = "\033[93m"

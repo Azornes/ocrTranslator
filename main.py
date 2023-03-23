@@ -5,7 +5,7 @@ import logging
 import tkinter
 
 from ocrTranslate.assets import Assets as assets
-from ocrTranslate.config_files import google_api, google_free, path_to_Capture2Text_CLI_exe, chatGpt, baidu_client, deepL, multi_translators
+from ocrTranslate.config_files import google_api, google_free, chatGpt, baidu_client, deepL, multi_translators, capture2Text
 from ocrTranslate.gui.complex_tk_gui import ComplexTkGui, result_boxes
 
 import os
@@ -152,8 +152,7 @@ class MyCapture:
                 return result
 
         def OCRCapture2Text(test):
-            EXE_PATH = path_to_Capture2Text_CLI_exe
-            result = subprocess.check_output(EXE_PATH + ' --image {path_to_tmp} '.format(path_to_tmp=assets.path_to_tmp) + '--output-format ${capture}')
+            result = capture2Text.ocr_by_capture2text()
             print(result.decode('UTF-8'))
             return result.decode('UTF-8')
 
