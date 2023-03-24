@@ -16,9 +16,7 @@
 With this app, you can select your preferred OCR and translation services. After clicking on START or using the keyboard shortcut Alt+Win+T, the program will launch and you can choose the area of the screen to scan for text using OCR. If you have selected a translation service, the text will then be automatically translated.
 
 preview:
-![](documentation_images/GUI_preview.png)
-example:
-![](documentation_images/GUI_preview_example.png)
+![](documentation_images/Showrun.gif)
 ---
 ### Dependency
 1. [Python 3.9](https://www.python.org/downloads/release/python-390/).
