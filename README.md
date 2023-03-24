@@ -22,26 +22,8 @@ example:
 ---
 ### Dependency
 1. [Python 3.9](https://www.python.org/downloads/release/python-390/).
-2. [Capture2Text](https://sourceforge.net/projects/capture2text/).
-
-To get it working, you need to create a config.ini file and generate a [service_account_creds.json](https://developers.google.com/workspace/guides/create-credentials?hl=pl).
-Then, put both of these files into the 'ocrTranslate/configs' directory.
-### What does an example config.ini look like
-```
-[ChatGPT]
-ApiKey = your_ApiKey
-session_token = "your_session_token"
-email = your_email
-password = your_password
-
-[Baidu]
-AppId = your_appid
-ApiKey = your_ApiKey
-SecretKey = your_SecretKey
-
-[Capture2Text]
-path_to_Capture2Text_CLI_exe = C:\Program Files\Capture2Text\Capture2Text_CLI.exe
-```
+2. (optional) [Capture2Text](https://sourceforge.net/projects/capture2text/).
+3. (optional) Google api generate a [service_account_creds.json](https://developers.google.com/workspace/guides/create-credentials?hl=pl). Then, put file into the 'ocrTranslate/configs' directory.
 
 At the moment, ChatGPT authentication is only supported through email and password.
 
