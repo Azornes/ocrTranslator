@@ -1,6 +1,10 @@
+import base64
+import configparser
+import os
+
 import customtkinter
 from ocrTranslate.assets import Assets as assets
-from ocrTranslate.config_files import google_api, capture2Text
+from ocrTranslate.config_files import google_api, capture2Text, chatGpt
 from ocrTranslate.gui.auto_complete_combobox import AutocompleteCombobox
 from ocrTranslate.langs import _langs, services_translators_languages, _langs2
 
@@ -39,14 +43,21 @@ class ComplexTkGui(customtkinter.CTk):
         self.settings_button = customtkinter.CTkButton(self.sidebar_frame, corner_radius=0, height=40, border_spacing=10, text="Settings", fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"), image=self.settings_image, anchor="w", command=self.settings_button_event)
         self.settings_button.grid(row=2, column=0, sticky="ew")
 
+        self.sidebar_button_save = customtkinter.CTkButton(self.sidebar_frame, text="Save Settings", command=self.save_setting)
+        self.sidebar_button_save.grid(row=4, column=0, padx=20, pady=(10, 10))
+
+        self.sidebar_button_load = customtkinter.CTkButton(self.sidebar_frame, text="Load Settings", command=self.load_setting)
+        self.sidebar_button_load.grid(row=5, column=0, padx=20, pady=(10, 10))
+
+
         self.appearance_mode_label = customtkinter.CTkLabel(self.sidebar_frame, text="Appearance Mode:", anchor="w")
-        self.appearance_mode_label.grid(row=4, column=0, padx=20, pady=(10, 0))
+        self.appearance_mode_label.grid(row=6, column=0, padx=20, pady=(10, 0))
         self.appearance_mode_optionemenu = customtkinter.CTkOptionMenu(self.sidebar_frame, values=["Light", "Dark", "System"], command=self.change_appearance_mode_event)
-        self.appearance_mode_optionemenu.grid(row=5, column=0, padx=20, pady=(10, 10))
+        self.appearance_mode_optionemenu.grid(row=7, column=0, padx=20, pady=(10, 10))
         self.scaling_label = customtkinter.CTkLabel(self.sidebar_frame, text="UI Scaling:", anchor="w")
-        self.scaling_label.grid(row=6, column=0, padx=20, pady=(10, 0))
+        self.scaling_label.grid(row=8, column=0, padx=20, pady=(10, 0))
         self.scaling_optionemenu = customtkinter.CTkOptionMenu(self.sidebar_frame, values=["80%", "90%", "100%", "110%", "120%"], command=self.change_scaling_event)
-        self.scaling_optionemenu.grid(row=7, column=0, padx=20, pady=(10, 20))
+        self.scaling_optionemenu.grid(row=9, column=0, padx=20, pady=(10, 20))
 
         # |_________________________ create home frame _________________________|
         self.home_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
@@ -190,8 +201,6 @@ class ComplexTkGui(customtkinter.CTk):
                 self.entry_settings.append(entry)
                 iterations = iterations + 1
 
-
-
         # ||||||||||||||||||| set default values |||||||||||||||||||
         self.appearance_mode_optionemenu.set("Dark")
         self.scaling_optionemenu.set("100%")
@@ -202,6 +211,9 @@ class ComplexTkGui(customtkinter.CTk):
             self.switch_ocr_google_api.configure(state="disabled")
         if not capture2Text.is_active:
             self.switch_ocr_capture2text.configure(state="disabled")
+
+        self.load_setting()
+
 
     def hide_show_side_bar(self):
         if self.sidebar_frame.winfo_manager() == "grid":
@@ -294,6 +306,142 @@ class ComplexTkGui(customtkinter.CTk):
 
     def settings_button_event(self):
         self.select_frame_by_name("settings")
+
+    def get_key(self, valu):
+        for key, value in self.__dict__.items():
+            #print(str(key) + " | " + str(value))
+            if valu == str(value):
+                return key
+        return "key doesn't exist"
+
+    # save all gui elements into an ini file
+    def save_setting(self, settings_name="settings", first_time = False):
+        config = configparser.ConfigParser()
+        if first_time:
+            dict_settings = {"geometry": "1100x580+52+52"}
+        else:
+            dict_settings = {"geometry": self.geometry()}
+        dict_settings.update(self.save_mass_tree(self))
+        config[settings_name] = dict_settings
+        with open(assets.path_settings_gui, "w") as configfile:
+            config.write(configfile)
+
+        capture2Text.__init__(path_to_Capture2Text_CLI_exe=config["settings"]['entry_capture2text_path_to_capture2text_cli_exe'])
+        chatGpt.__init__(config["settings"]['entry_chatgpt_email'], config["settings"]['entry_chatgpt_password'])
+        if google_api.is_active:
+            self.switch_ocr_google_api.configure(state="enabled")
+        else:
+            self.switch_ocr_google_api.configure(state="disabled")
+        if capture2Text.is_active:
+            self.switch_ocr_capture2text.configure(state="enabled")
+        else:
+            self.switch_ocr_capture2text.configure(state="disabled")
+
+    def save_mass(self, child, result={}):
+       # print(child)
+        if ("checkbox" in child.winfo_name()):
+            #print("checkbox")
+            #print(child.get())
+            result[self.get_key(str(child))] = child.get()
+        if ("switch" in child.winfo_name()):
+            #print("switch")
+            #print(child.get())
+            result[self.get_key(str(child))] = child.get()
+        if ("ctkentry" in child.winfo_name()):
+            #print("ctkentry")
+            #print(child.get())
+            result[self.get_key(str(child))] = child.get()
+        if ("slider" in child.winfo_name()):
+            #print("slider")
+            #print(child.get())
+            result[self.get_key(str(child))] = child.get()
+        if ("segmented" in child.winfo_name()):
+           # print("segmented")
+            #print(child.get())
+            result[self.get_key(str(child))] = child.get()
+        if ("combobox" in child.winfo_name()):
+            #print("combobox")
+            #print(child.get())
+            result[self.get_key(str(child))] = child.get()
+        if ("optionmenu" in child.winfo_name()):
+            #print("optionmenu")
+            #print(child.get())
+            result[self.get_key(str(child))] = child.get().replace('%', '%%')
+        if ("textbox" in child.winfo_name()):
+            #print("textbox")
+            #print(child.get(0.0, 'end-1c'))
+            result[self.get_key(str(child))] = base64.b64encode(child.get("1.0", "end").encode("utf-8")).decode("utf-8"),
+        if ("radiobutton" in child.winfo_name()):
+            print("radiobutton")
+        return result
+
+    def save_mass_tree(self, widget, dict_result_atr={}):
+        dict_result_atr = self.save_mass(widget, dict_result_atr)
+        for child in widget.winfo_children():
+            dict_result_atr = self.save_mass_tree(child, dict_result_atr)
+        #print(dict_result_atr)
+        return dict_result_atr
+
+    # load all gui elements from an ini file
+    def load_mass(self, child, config, settings_name):
+        #print(child)
+        if "checkbox" in child.winfo_name():
+            child.select() if int(config[settings_name][self.get_key(str(child))]) else child.deselect()
+            if callable(child._command):
+                child._command()
+        if "switch" in child.winfo_name():
+            child.select() if int(config[settings_name][self.get_key(str(child))]) else child.deselect()
+            if callable(child._command):
+                child._command()
+        if "slider" in child.winfo_name():
+            child.set(float(config[settings_name][self.get_key(str(child))]))
+            if callable(child._command):
+                child._command()
+        if "segmented" in child.winfo_name():
+            child.set(config[settings_name][self.get_key(str(child))])
+            if callable(child._command):
+                child._command()
+        if "combobox" in child.winfo_name():
+            child.set(config[settings_name][self.get_key(str(child))])
+            if callable(child._command):
+                child._command()
+        if "ctkentry" in child.winfo_name():
+            child.delete(0, "end")
+            child.insert(0, config[settings_name][self.get_key(str(child))])
+        if "textbox" in child.winfo_name():
+            child.delete("1.0", "end")
+            child.insert("0.0", base64.b64decode(config[settings_name][self.get_key(str(child))]).decode("utf-8"))
+        if "radiobutton" in child.winfo_name():
+            print("radiobutton")
+        if "optionmenu" in child.winfo_name():
+        #if re.search(r"ctkoptionmenu(?![\w\d\.])", str(child)):
+            child.set(config[settings_name][self.get_key(str(child))])
+            if callable(child._command):
+                try:
+                    child._command()
+                except TypeError:
+                    child._command(config[settings_name][self.get_key(str(child))])
+
+    def load_mass_tree(self, widget, config={}, settings_name=""):
+        self.load_mass(widget, config, settings_name)
+        for child in widget.winfo_children():
+            self.load_mass_tree(child, config, settings_name)
+
+    def load_setting(self, settings_name="settings", first_time = False):
+        config = configparser.ConfigParser()
+        if not os.path.exists(assets.path_settings_gui) or first_time:
+            self.save_setting(first_time = True)
+            first_time = True
+        config.read(assets.path_settings_gui)
+        self.geometry(config[settings_name]["geometry"])
+        try:
+            self.load_mass_tree(self, config, settings_name)
+            if first_time:
+                self.geometry(f"{1100}x{580}")
+        except KeyError:
+            self.load_setting(first_time = True)
+
+
 
 
 if __name__ == "__main__":
