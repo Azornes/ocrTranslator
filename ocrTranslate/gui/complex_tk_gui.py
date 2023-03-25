@@ -181,20 +181,20 @@ class ComplexTkGui(customtkinter.CTk):
         iterations = 0
         for service in settings_dict.items():
             label_main_name = 'label_{}'.format(service[0].lower().replace(" ", "_"))
-            print(label_main_name)
+            #print(label_main_name)
             label_main = customtkinter.CTkLabel(self.scrollable_settings_frame, text=service[0] + ":", anchor="w", font=customtkinter.CTkFont(size=14, weight="bold"))
             label_main.grid(row=iterations, column=0, padx=(5, 5), pady=(5, 5))
             setattr(self, label_main_name, label_main)
             iterations = iterations + 1
             for element in service[1]:
                 label_name = 'label_{}_{}'.format(service[0].lower().replace(" ", "_"), element.lower().replace(" ", "_"))
-                print(label_name)
+                #print(label_name)
                 label = customtkinter.CTkLabel(self.scrollable_settings_frame, text=element, anchor="w")
                 label.grid(row=iterations, column=0, padx=(5, 5), pady=(5, 5), sticky="nsew")
                 setattr(self, label_name, label)
 
                 entry_name = 'entry_{}_{}'.format(service[0].lower().replace(" ", "_"), element.lower().replace(" ", "_"))
-                print(entry_name)
+                #print(entry_name)
                 entry = customtkinter.CTkEntry(self.scrollable_settings_frame, placeholder_text=element)
                 entry.grid(row=iterations, column=1, padx=(5, 5), pady=(5, 5), sticky="nsew")
                 setattr(self, entry_name, entry)
