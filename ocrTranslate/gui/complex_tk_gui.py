@@ -173,7 +173,7 @@ class ComplexTkGui(customtkinter.CTk):
         self.entry_settings = []
 
         settings_dict = {
-            'ChatGPT': ("ApiKey", 'session_token', "email", "password"),
+            'ChatGPT': ("ApiKey", 'session_token', "access_token", "email", "password"),
             'Baidu': ("AppId", 'ApiKey', "SecretKey"),
             'Capture2Text': ("path_to_Capture2Text_CLI_exe",)
             }

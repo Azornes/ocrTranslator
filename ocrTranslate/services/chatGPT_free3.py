@@ -1,24 +1,49 @@
 from revChatGPT.V1 import Chatbot as ChatbotFree
+from secrets import compare_digest
 
 
 class ChatGPTFree:
-    def __init__(self, email, password) -> None:
-        if not email == "" and not password == "":
+    def __init__(self, email="", password="", session_token="", access_token="") -> None:
+        self.chat_gpt_free = None
+        if not compare_digest(email, "") and not compare_digest(password, ""):
             self.email = email
             self.password = password
-            self.chat_gpt_free = None
             self.is_active = True
-            self.renew_chatbot_session()
+            self.renew_chatbot_session_password()
+        elif not compare_digest(session_token, ""):
+            self.session_token = session_token
+            self.is_active = True
+            self.renew_chatbot_session_token()
+        elif not compare_digest(access_token, ""):
+            self.access_token = access_token
+            self.is_active = True
+            self.renew_chatbot_access_token()
         else:
             self.is_active = False
 
-    def renew_chatbot_session(self):
+    def renew_chatbot_session_password(self):
         try:
             self.chat_gpt_free = ChatbotFree(config={"email": "{email}".format(email=self.email), "password": "{password}".format(password=self.password)})
         except Exception as e:
             self.is_active = False
             print(e)
+            print("password or email are invalid")
+
+    def renew_chatbot_session_token(self):
+        try:
+            self.chat_gpt_free = ChatbotFree(config={"session_token": "{session_token}".format(session_token=self.session_token)})
+        except Exception as e:
+            self.is_active = False
+            print(e)
             print("session token has been out of date, please renew token")
+
+    def renew_chatbot_access_token(self):
+        try:
+            self.chat_gpt_free = ChatbotFree(config={"access_token": "{access_token}".format(access_token=self.access_token)})
+        except Exception as e:
+            self.is_active = False
+            print(e)
+            print("access token has been out of date, please renew token")
 
     async def translate_by_chat_gpt(self, word, language_to="English"):
         if self.is_active:

@@ -24,9 +24,24 @@ config = RawConfigParser()
 
 config.read(assets.path_settings_gui)
 
-capture2Text = Capture2Text(path_to_Capture2Text_CLI_exe=config["settings"]['entry_capture2text_path_to_capture2text_cli_exe'])
-chatGpt = ChatGPTFree(config["settings"]['entry_chatgpt_email'], config["settings"]['entry_chatgpt_password'])
-baidu_client = AipOcr(config["settings"]['entry_baidu_appid'], config["settings"]['entry_baidu_apikey'], config["settings"]['entry_baidu_secretkey'])
+try:
+    capture2Text = Capture2Text(path_to_Capture2Text_CLI_exe=config["settings"]['entry_capture2text_path_to_capture2text_cli_exe'])
+except KeyError:
+    capture2Text = Capture2Text()
+
+try:
+    chatGpt = ChatGPTFree(email=config["settings"]['entry_chatgpt_email'],
+                          password=config["settings"]['entry_chatgpt_password'],
+                          session_token=config["settings"]['entry_chatgpt_session_token'],
+                          access_token=config["settings"]['entry_chatgpt_access_token']
+                          )
+except KeyError:
+    chatGpt = ChatGPTFree()
+
+try:
+    baidu_client = AipOcr(config["settings"]['entry_baidu_appid'], config["settings"]['entry_baidu_apikey'], config["settings"]['entry_baidu_secretkey'])
+except KeyError:
+    baidu_client = AipOcr("", "", "")
 
 deepL = DeepL()
 multi_translators = MultiTranslators()
