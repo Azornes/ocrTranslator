@@ -5,7 +5,7 @@ import logging
 import tkinter
 
 from ocrTranslate.assets import Assets as assets
-from ocrTranslate.config_files import google_api, google_free, chatGpt, baidu_client, deepL, multi_translators, capture2Text
+from ocrTranslate.config_files import google_api, google_free, chatGpt, baidu_client, deepL, multi_translators, capture2Text, tesseract
 from ocrTranslate.gui.complex_tk_gui import ComplexTkGui, result_boxes
 
 import os
@@ -177,9 +177,14 @@ class MyCapture:
             print(result_text)
             return result_text
 
-        list_functions = [OCRGoogle, OCRBaiduu, OCRCapture2Text, OCRGoogleFree, OCRWindows]
-        list_states_of_switches = [root.switch_ocr_google_api.get(), root.switch_ocr_baidu_api.get(), root.switch_ocr_capture2text.get(), root.switch_ocr_google_free.get(), root.switch_ocr_windows_local.get()]
-        string_results = {0: "-Google API:\n", 1: "-Baidu:\n", 2: "-Capture2Text:\n", 3: "-Google Free:\n", 4: "-Windows OCR:\n"}
+        def OCRTesseract(test):
+            print("OCRTesseract")
+            result_text = tesseract.ocr_by_tesseract(assets.path_to_tmp2)
+            return result_text
+
+        list_functions = [OCRGoogle, OCRBaiduu, OCRCapture2Text, OCRGoogleFree, OCRWindows, OCRTesseract]
+        list_states_of_switches = [root.switch_ocr_google_api.get(), root.switch_ocr_baidu_api.get(), root.switch_ocr_capture2text.get(), root.switch_ocr_google_free.get(), root.switch_ocr_windows_local.get(), root.switch_ocr_tesseract.get()]
+        string_results = {0: "-Google API:\n", 1: "-Baidu:\n", 2: "-Capture2Text:\n", 3: "-Google Free:\n", 4: "-Windows OCR:\n", 5: "-Tesseract:\n"}
 
         queues = [Queue() for _ in range(len(list_functions))]
         threads = []

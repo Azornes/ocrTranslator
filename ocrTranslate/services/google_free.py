@@ -45,16 +45,17 @@ class GoogleFree:
     def show_captcha(self, driver):
         print("Spawning browser for google captcha...")
         print("Scroll down on site to resolve captcha")
-        file_path = "file:///" + os.getcwd() + "/GoogleFreeVision/1.html"
-        #file_path = "https://cloud.google.com/vision"
+        #file_path = "file:///" + os.getcwd() + "/GoogleFreeVision/1.html"
+        file_path = "https://cloud.google.com/vision"
+        #file_path = "https://cloud.google.com/vision/docs/drag-and-drop"
         driver.get(file_path)
         # print(driver.page_source)
 
         shadow = Shadow(driver)
         shadow.set_explicit_wait(5, 1)  # delay
 
-        iframe = shadow.find_element("body > div > p > cloudx-demo > iframe:nth-child(1)")  # Iframe #documents object
-        #iframe = shadow.find_element("#section-2 > div > cloudx-demo > iframe:nth-child(1)")  # Iframe #documents object
+        #iframe = shadow.find_element("body > div > p > cloudx-demo > iframe:nth-child(1)")  # Iframe #documents object
+        iframe = shadow.find_element("#section-2 > div > cloudx-demo > iframe:nth-child(1)")  # Iframe #documents object
 
         driver.switch_to.frame(iframe)  # switching to #documents
         shadow = Shadow(driver)

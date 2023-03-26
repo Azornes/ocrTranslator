@@ -9,6 +9,8 @@ from ocrTranslate.services.mult_translators import MultiTranslators
 from ocrTranslate.assets import Assets as assets
 from aip import AipOcr
 
+from ocrTranslate.services.tesseract import Tesseract
+
 google_free = GoogleFree()
 google_api = GoogleAPI(path_service_account_creds=assets.path_service_account_creds)
 
@@ -28,6 +30,11 @@ try:
     capture2Text = Capture2Text(path_to_Capture2Text_CLI_exe=config["settings"]['entry_capture2text_path_to_capture2text_cli_exe'])
 except KeyError:
     capture2Text = Capture2Text()
+
+try:
+    tesseract = Tesseract(path_to_tesseract_exe=config["settings"]['entry_tesseract_path_to_tesseract_exe'])
+except KeyError:
+    tesseract = Tesseract()
 
 try:
     chatGpt = ChatGPTFree(email=config["settings"]['entry_chatgpt_email'],

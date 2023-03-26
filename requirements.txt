@@ -16,6 +16,7 @@ revChatGPT==4.0.9
 baidu-aip==4.16.10
 deepl-cli==0.4.0
 translators==5.6.3
+pytesseract==0.3.10
 
 mss==7.0.1
 

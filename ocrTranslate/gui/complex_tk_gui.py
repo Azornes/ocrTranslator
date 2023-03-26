@@ -4,7 +4,7 @@ import os
 
 import customtkinter
 from ocrTranslate.assets import Assets as assets
-from ocrTranslate.config_files import google_api, capture2Text, chatGpt
+from ocrTranslate.config_files import google_api, capture2Text, chatGpt, tesseract
 from ocrTranslate.gui.auto_complete_combobox import AutocompleteCombobox
 from ocrTranslate.langs import _langs, services_translators_languages, _langs2
 
@@ -77,9 +77,10 @@ class ComplexTkGui(customtkinter.CTk):
         self.switch_ocr_baidu_api = None
         self.switch_ocr_capture2text = None
         self.switch_ocr_windows_local = None
+        self.switch_ocr_tesseract = None
         self.switches_ocr = []
 
-        switchers = [("Google api",), ("Google Free",), ("Baidu api",), ("Capture2Text",), ("Windows local",), ]
+        switchers = [("Google api",), ("Google Free",), ("Baidu api",), ("Capture2Text",), ("Windows local",), ("Tesseract",),]
 
         rows = len(switchers) // 2
         for i, switcher in enumerate(switchers):
@@ -175,7 +176,8 @@ class ComplexTkGui(customtkinter.CTk):
         settings_dict = {
             'ChatGPT': ("ApiKey", 'session_token', "access_token", "email", "password"),
             'Baidu': ("AppId", 'ApiKey', "SecretKey"),
-            'Capture2Text': ("path_to_Capture2Text_CLI_exe",)
+            'Capture2Text': ("path_to_Capture2Text_CLI_exe",),
+            'Tesseract': ("path_to_tesseract_exe",)
             }
 
         iterations = 0
@@ -207,10 +209,7 @@ class ComplexTkGui(customtkinter.CTk):
         self.option_menu_translation.set("Disabled")
         # select default frame
         self.select_frame_by_name("home")
-        if not google_api.is_active:
-            self.switch_ocr_google_api.configure(state="disabled")
-        if not capture2Text.is_active:
-            self.switch_ocr_capture2text.configure(state="disabled")
+        self.check_ocrs_are_active()
 
         self.load_setting()
 
@@ -236,10 +235,7 @@ class ComplexTkGui(customtkinter.CTk):
         else:
             for switch_ocr in self.switches_ocr:
                 switch_ocr.configure(state="enabled")
-            if not google_api.is_active:
-                self.switch_ocr_google_api.configure(state="disabled")
-            if not capture2Text.is_active:
-                self.switch_ocr_capture2text.configure(state="disabled")
+            self.check_ocrs_are_active()
 
             self.switch_from_clipboard.configure(state="enabled")
             self.switch_from_text.configure(state="enabled")
@@ -314,6 +310,21 @@ class ComplexTkGui(customtkinter.CTk):
                 return key
         return "key doesn't exist"
 
+
+    def check_ocrs_are_active (self):
+        if google_api.is_active:
+            self.switch_ocr_google_api.configure(state="enabled")
+        else:
+            self.switch_ocr_google_api.configure(state="disabled")
+        if capture2Text.is_active:
+            self.switch_ocr_capture2text.configure(state="enabled")
+        else:
+            self.switch_ocr_capture2text.configure(state="disabled")
+        if tesseract.is_active:
+            self.switch_ocr_tesseract.configure(state="enabled")
+        else:
+            self.switch_ocr_tesseract.configure(state="disabled")
+
     # save all gui elements into an ini file
     def save_setting(self, settings_name="settings", first_time = False):
         config = configparser.ConfigParser()
@@ -327,15 +338,13 @@ class ComplexTkGui(customtkinter.CTk):
             config.write(configfile)
 
         capture2Text.__init__(path_to_Capture2Text_CLI_exe=config["settings"]['entry_capture2text_path_to_capture2text_cli_exe'])
-        chatGpt.__init__(config["settings"]['entry_chatgpt_email'], config["settings"]['entry_chatgpt_password'])
-        if google_api.is_active:
-            self.switch_ocr_google_api.configure(state="enabled")
-        else:
-            self.switch_ocr_google_api.configure(state="disabled")
-        if capture2Text.is_active:
-            self.switch_ocr_capture2text.configure(state="enabled")
-        else:
-            self.switch_ocr_capture2text.configure(state="disabled")
+        tesseract.__init__(path_to_tesseract_exe=config["settings"]['entry_tesseract_path_to_tesseract_exe'])
+        chatGpt.__init__(email=config["settings"]['entry_chatgpt_email'],
+                          password=config["settings"]['entry_chatgpt_password'],
+                          session_token=config["settings"]['entry_chatgpt_session_token'],
+                          access_token=config["settings"]['entry_chatgpt_access_token']
+                          )
+        self.check_ocrs_are_active()
 
     def save_mass(self, child, result={}):
        # print(child)
