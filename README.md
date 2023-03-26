@@ -23,10 +23,9 @@ preview:
 2. (optional) [Capture2Text](https://sourceforge.net/projects/capture2text/).
 3. (optional) [Tesseract](https://github.com/UB-Mannheim/tesseract/wiki).
 4. (optional) Google api generate a [service_account_creds.json](https://developers.google.com/workspace/guides/create-credentials). Then, put file into the 'ocrTranslate/configs' directory.
-5. <details>
-
+5. 
+<details>
 <summary>
-
 ### (optional) ChatGPT
 > #### [Source](https://github.com/acheong08/ChatGPT)
 </summary>
