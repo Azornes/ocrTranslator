@@ -42,13 +42,14 @@ Not supported for Google/Microsoft accounts
 2. Open the console in Google Chrome -> Application -> Storage -> Cookies -> https://chat.openai.com -> Get the value from __Secure-next-auth.session-token
 #### - Access token
 https://chat.openai.com/api/auth/session
+
 </details>
+
+
 
 
 <details>
 <summary>
-
----
 
 ### Supported OCR Services
 </summary>
@@ -62,6 +63,8 @@ https://chat.openai.com/api/auth/session
 | 5   | [Baidu Api](https://intl.cloud.baidu.com/product/ocr.html)                                            | Online         | stable |
 
 </details>
+
+
 <details>
 <summary>
 
