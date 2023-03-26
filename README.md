@@ -21,10 +21,28 @@ preview:
 ### Dependency
 1. [Python 3.9](https://www.python.org/downloads/release/python-390/).
 2. (optional) [Capture2Text](https://sourceforge.net/projects/capture2text/).
-3. (optional) Google api generate a [service_account_creds.json](https://developers.google.com/workspace/guides/create-credentials?hl=pl). Then, put file into the 'ocrTranslate/configs' directory.
+3. (optional) [Tesseract](https://github.com/UB-Mannheim/tesseract/wiki).
+4. (optional) Google api generate a [service_account_creds.json](https://developers.google.com/workspace/guides/create-credentials?hl=pl). Then, put file into the 'ocrTranslate/configs' directory.
 
-At the moment, ChatGPT authentication is only supported through email and password.
+<details>
 
-### How to get session token for ChatGPT Free (WIP)
+<summary>
+
+### (optional) ChatGPT
+> #### [Source](https://github.com/acheong08/ChatGPT)
+</summary>
+
+## Configuration
+1. Create account on [OpenAI's ChatGPT](https://chat.openai.com/)
+2. Save your email and password
+### Authentication method: (Choose 1 and paste to app settings)
+#### - Email/Password
+Not supported for Google/Microsoft accounts
+#### - Session token
 1. Login in to https://chat.openai.com
 2. Open the console in Google Chrome -> Application -> Storage -> Cookies -> https://chat.openai.com -> Get the value from __Secure-next-auth.session-token
+#### - Access token
+https://chat.openai.com/api/auth/session
+</details>
+
+
