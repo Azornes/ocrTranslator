@@ -22,7 +22,7 @@ preview:
 1. [Python 3.9](https://www.python.org/downloads/release/python-390/).
 2. (optional) [Capture2Text](https://sourceforge.net/projects/capture2text/).
 3. (optional) [Tesseract](https://github.com/UB-Mannheim/tesseract/wiki).
-4. (optional) Google api generate a [service_account_creds.json](https://developers.google.com/workspace/guides/create-credentials?hl=pl). Then, put file into the 'ocrTranslate/configs' directory.
+4. (optional) Google api generate a [service_account_creds.json](https://developers.google.com/workspace/guides/create-credentials). Then, put file into the 'ocrTranslate/configs' directory.
 
 <details>
 
