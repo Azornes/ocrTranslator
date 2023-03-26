@@ -55,11 +55,12 @@ https://chat.openai.com/api/auth/session
 
 | ID  | OCR                                                                                                   | Online/Offline | Status |
 |-----|-------------------------------------------------------------------------------------------------------|----------------|--------|
-| 1   | [Google Vision Api](https://cloud.google.com/vision/docs/ocr)                                         | Online         | /      |
+| 1   | [Google Vision Api](https://cloud.google.com/vision/docs/ocr)                                         | Online         | stable |
 | 2   | [Google Vision Free Demo](https://cloud.google.com/vision/docs/drag-and-drop)                         | Online         | stable |
-| 3   | [Windows OCR](https://learn.microsoft.com/en-us/uwp/api/windows.media.ocr.ocrengine?view=winrt-22621) | Offline        | stable |
-| 4   | [Capture2Text](https://capture2text.sourceforge.net/)                                                 | Offline        | stable |
-| 5   | [Baidu Api](https://intl.cloud.baidu.com/product/ocr.html)                                            | Online         | stable |
+| 3   | [Baidu Api](https://intl.cloud.baidu.com/product/ocr.html)                                            | Online         | stable |
+| 4   | [Windows OCR](https://learn.microsoft.com/en-us/uwp/api/windows.media.ocr.ocrengine?view=winrt-22621) | Offline        | stable |
+| 5   | [Capture2Text](https://capture2text.sourceforge.net/)                                                 | Offline        | stable |
+| 6   | [Tesseract](https://tesseract-ocr.github.io/tessdoc/)                                                 | Offline        | stable |
 
 </details>
 
