@@ -5,7 +5,7 @@ import logging
 import tkinter
 
 from ocrTranslate.assets import Assets as assets
-from ocrTranslate.config_files import google_api, google_free, chatGpt, baidu_client, deepL, multi_translators, capture2Text, tesseract
+from ocrTranslate.config_files import google_api, google_free, chatGpt, deepL, multi_translators, capture2Text, tesseract, baidu
 from ocrTranslate.gui.complex_tk_gui import ComplexTkGui, result_boxes
 
 import os
@@ -25,6 +25,9 @@ root = ComplexTkGui()
 
 myappid = 'Azornes.ocrTranslator'
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+
+# get current path
+path = os.path.dirname(os.path.abspath(__file__))
 
 
 # subprocess.call(["C:\Program Files\AutoHotkey\AutoHotkey.exe", "na wierzchu.ahk"])
@@ -139,16 +142,12 @@ class MyCapture:
     def get_text_from_ocr(self):
         def OCRGoogle(test):
             with open(assets.path_to_tmp, 'rb') as img:
-                img2 = ImageEnhance.Image.open(img)
-                result = google_api.ocr_by_google_api(img2)
-                # self.showtextwindow(ja_text)
+                result = google_api.ocr_by_google_api(ImageEnhance.Image.open(img))
                 return result
 
         def OCRBaiduu(test):
             with open(assets.path_to_tmp2, 'rb') as img:
-                img = img.read()
-                result = baidu_client.basicGeneral(img)
-                result = get_result_text(result)
+                result = baidu.ocr_by_baidu(img.read())
                 return result
 
         def OCRCapture2Text(test):
@@ -158,9 +157,7 @@ class MyCapture:
 
         def OCRGoogleFree(test):
             with open(assets.path_to_tmp, 'rb') as img:
-                import base64
-                b64_string = base64.b64encode(img.read())
-                result = google_free.ocr_google_free(b64_string.decode('utf-8'))
+                result = google_free.ocr_google_free(img)
                 # self.showtextwindow(ja_text)
                 return result
 
@@ -185,6 +182,7 @@ class MyCapture:
         list_functions = [OCRGoogle, OCRBaiduu, OCRCapture2Text, OCRGoogleFree, OCRWindows, OCRTesseract]
         list_states_of_switches = [root.switch_ocr_google_api.get(), root.switch_ocr_baidu_api.get(), root.switch_ocr_capture2text.get(), root.switch_ocr_google_free.get(), root.switch_ocr_windows_local.get(), root.switch_ocr_tesseract.get()]
         string_results = {0: "-Google API:\n", 1: "-Baidu:\n", 2: "-Capture2Text:\n", 3: "-Google Free:\n", 4: "-Windows OCR:\n", 5: "-Tesseract:\n"}
+
 
         queues = [Queue() for _ in range(len(list_functions))]
         threads = []
@@ -258,7 +256,7 @@ class MyCapture:
             result_boxes.append(result_toplevel)
             print(text)
 
-            result_toplevel.after(10000, lambda: result_toplevel.destroy())  # Destroy the widget after 30 seconds
+            result_toplevel.after(60000, lambda: result_toplevel.destroy())  # Destroy the widget after 30 seconds
         else:
             def top_close():
                 result_toplevel.destroy()
@@ -330,18 +328,6 @@ def buttonCaptureClick():
             translate(root.scrollable_frame_textbox.get('1.0', 'end'))
         else:
             translate(root.clipboard_get())
-
-
-def get_result_text(json):
-    s = ''
-    if json.__contains__('words_result_num') and json['words_result_num'] > 0:
-        for i in range(0, json['words_result_num']):
-            s += json['words_result'][i]['words']
-            s += '\r\n'
-    else:
-        # s += '"text not found"！'
-        s += ''
-    return s
 
 
 def key(event):

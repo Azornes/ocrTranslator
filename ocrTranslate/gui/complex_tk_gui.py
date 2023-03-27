@@ -4,7 +4,7 @@ import os
 
 import customtkinter
 from ocrTranslate.assets import Assets as assets
-from ocrTranslate.config_files import google_api, capture2Text, chatGpt, tesseract
+from ocrTranslate.config_files import google_api, capture2Text, chatGpt, tesseract, baidu
 from ocrTranslate.gui.auto_complete_combobox import AutocompleteCombobox
 from ocrTranslate.langs import _langs, services_translators_languages, _langs2
 
@@ -324,6 +324,10 @@ class ComplexTkGui(customtkinter.CTk):
             self.switch_ocr_tesseract.configure(state="enabled")
         else:
             self.switch_ocr_tesseract.configure(state="disabled")
+        if baidu.is_active:
+            self.switch_ocr_baidu_api.configure(state="enabled")
+        else:
+            self.switch_ocr_baidu_api.configure(state="disabled")
 
     # save all gui elements into an ini file
     def save_setting(self, settings_name="settings", first_time = False):
@@ -344,6 +348,8 @@ class ComplexTkGui(customtkinter.CTk):
                           session_token=config["settings"]['entry_chatgpt_session_token'],
                           access_token=config["settings"]['entry_chatgpt_access_token']
                           )
+        baidu.__init__(appid=config["settings"]['entry_baidu_appid'], apikey=config["settings"]['entry_baidu_apikey'], secretkey=config["settings"]['entry_baidu_secretkey'])
+
         self.check_ocrs_are_active()
 
     def save_mass(self, child, result={}):

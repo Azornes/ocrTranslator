@@ -19,8 +19,7 @@ class GoogleFree:
         self.script_string: str = "var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) { items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;"
         with open(assets.path_to_test_image, 'rb') as img:
             print("Initializing ocr_google_free...")
-            b64_string = base64.b64encode(img.read())
-            self.ocr_google_free(b64_string.decode('utf-8'))
+            self.ocr_google_free(img)
         # stdout colors
         self.GREEN: str = "\033[92m"
         self.WARNING: str = "\033[93m"
@@ -142,7 +141,9 @@ class GoogleFree:
         result = list_to_string(list_of_words_translated)
         return result
 
-    def ocr_google_free(self, image: str) -> str:
+    def ocr_google_free(self, img) -> str:
+        image = base64.b64encode(img.read()).decode('utf-8')
+
         token = "03AG"
 
         url = "https://cxl-services.appspot.com/proxy"

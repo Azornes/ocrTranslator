@@ -1,5 +1,6 @@
 from configparser import RawConfigParser
 
+from ocrTranslate.services.baidu import Baidu
 from ocrTranslate.services.capture2text import Capture2Text
 from ocrTranslate.services.google_free import GoogleFree
 from ocrTranslate.services.google_api import GoogleAPI
@@ -46,9 +47,10 @@ except KeyError:
     chatGpt = ChatGPTFree()
 
 try:
-    baidu_client = AipOcr(config["settings"]['entry_baidu_appid'], config["settings"]['entry_baidu_apikey'], config["settings"]['entry_baidu_secretkey'])
+    baidu = Baidu(appid=config["settings"]['entry_baidu_appid'], apikey=config["settings"]['entry_baidu_apikey'], secretkey=config["settings"]['entry_baidu_secretkey'])
 except KeyError:
-    baidu_client = AipOcr("", "", "")
+    baidu = Baidu()
+
 
 deepL = DeepL()
 multi_translators = MultiTranslators()
