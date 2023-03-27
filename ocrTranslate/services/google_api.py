@@ -22,10 +22,6 @@ class GoogleAPI:
             self.is_active = True
         else:
             self.is_active = False
-        # stdout colors
-        self.GREEN = "\033[92m"
-        self.WARNING = "\033[93m"
-        self.ENDCOLOR = "\033[0m"
 
     def text_to_wav(self, voice_name: str, text: str):
         language_code = "-".join(voice_name.split("-")[:2])

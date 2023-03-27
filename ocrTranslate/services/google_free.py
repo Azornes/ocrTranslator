@@ -1,4 +1,3 @@
-import os
 import re
 import time
 import logging
@@ -20,10 +19,6 @@ class GoogleFree:
         with open(assets.path_to_test_image, 'rb') as img:
             print("Initializing ocr_google_free...")
             self.ocr_google_free(img)
-        # stdout colors
-        self.GREEN: str = "\033[92m"
-        self.WARNING: str = "\033[93m"
-        self.ENDCOLOR: str = "\033[0m"
 
     def print_web_element(self, web_element_info):
         driver = web_element_info.parent

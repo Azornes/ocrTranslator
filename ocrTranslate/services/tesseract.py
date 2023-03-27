@@ -1,7 +1,7 @@
 import os
-
 from ocrTranslate.utils import parse_html_link
 import pytesseract
+
 
 class Tesseract:
     def __init__(self, path_to_tesseract_exe="", ) -> None:
@@ -10,10 +10,6 @@ class Tesseract:
             self.is_active = True
         else:
             self.is_active = False
-        # stdout colors
-        self.GREEN = "\033[92m"
-        self.WARNING = "\033[93m"
-        self.ENDCOLOR = "\033[0m"
 
     def ocr_by_tesseract(self, path_image: str) -> str:
         pytesseract.pytesseract.tesseract_cmd = self.path_to_tesseract_exe

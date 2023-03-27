@@ -8,7 +8,6 @@ from ocrTranslate.services.chatGPT_free3 import ChatGPTFree
 from ocrTranslate.services.DeepL import DeepL
 from ocrTranslate.services.mult_translators import MultiTranslators
 from ocrTranslate.assets import Assets as assets
-from aip import AipOcr
 
 from ocrTranslate.services.tesseract import Tesseract
 
