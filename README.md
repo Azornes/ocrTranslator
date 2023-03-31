@@ -53,15 +53,15 @@ https://chat.openai.com/api/auth/session
 ### Supported OCR Services
 </summary>
 
-| ID  | OCR                                                                                                   | Online/Offline | Status |
+| ID  | OCR                                                                                                   | Internet/Local | Status |
 |-----|-------------------------------------------------------------------------------------------------------|----------------|--------|
-| 1   | [Google Vision Api](https://cloud.google.com/vision/docs/ocr)                                         | Online         | stable |
-| 2   | [Google Vision Free Demo](https://cloud.google.com/vision/docs/drag-and-drop)                         | Online         | stable |
-| 3   | [Baidu Api](https://intl.cloud.baidu.com/product/ocr.html)                                            | Online         | stable |
-| 4   | [Windows OCR](https://learn.microsoft.com/en-us/uwp/api/windows.media.ocr.ocrengine?view=winrt-22621) | Offline        | stable |
-| 5   | [Capture2Text](https://capture2text.sourceforge.net/)                                                 | Offline        | stable |
-| 6   | [Tesseract](https://tesseract-ocr.github.io/tessdoc/)                                                 | Offline        | stable |
-
+| 1   | [Google Vision Api](https://cloud.google.com/vision/docs/ocr)                                         | Internet       | stable |
+| 2   | [Google Vision Free Demo](https://cloud.google.com/vision/docs/drag-and-drop)                         | Internet       | stable |
+| 3   | [Baidu Api](https://intl.cloud.baidu.com/product/ocr.html)                                            | Internet       | stable |
+| 4   | [Windows OCR](https://learn.microsoft.com/en-us/uwp/api/windows.media.ocr.ocrengine?view=winrt-22621) | Local          | stable |
+| 5   | [Capture2Text](https://capture2text.sourceforge.net/)                                                 | Local          | stable |
+| 6   | [Tesseract](https://tesseract-ocr.github.io/tessdoc/)                                                 | Local          | stable |
+| 7   | [RapidOCR](https://github.com/RapidAI/RapidOCR)                                                       | Local          | stable |
 </details>
 
 
