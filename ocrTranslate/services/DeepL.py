@@ -1,3 +1,5 @@
+import asyncio
+
 import deepl
 from ocrTranslate.langs import _langs
 
@@ -5,6 +7,11 @@ from ocrTranslate.langs import _langs
 class DeepL:
     def __init__(self) -> None:
         self.email = None
+        try:
+            self.deepl_init = deepl.DeepLCLI("auto", "en")
+        except Exception as e:
+            self.deepl_init = None
+            print(e)
 
     # deepl-translate library
     def translate_by_special_point_deepL_old(self, word, language_from="english", language_to="polish"):
@@ -31,8 +38,10 @@ class DeepL:
                     words = words + i + "\n"
         else:
             words = word
-
-        t = deepl.DeepLCLI(_language_from, _language_to)
-        result = t.translate(words)
+        self.deepl_init.to_lang = _language_to
+        self.deepl_init.from_lang = _language_from
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        result = self.deepl_init.translate(words)
         return result
 

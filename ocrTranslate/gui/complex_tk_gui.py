@@ -162,10 +162,17 @@ class ComplexTkGui(customtkinter.CTk):
         self.label_tab_3.grid(row=0, column=0, padx=20, pady=20)
 
         # ||||||||||||||||||| create main entry and button |||||||||||||||||||
-        self.button_start = customtkinter.CTkButton(master=self.home_frame, text="START", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.pressed_print)
-        self.button_start.grid(row=1, column=1, columnspan=2, padx=(20, 20), pady=(20, 20))
         self.button_options = customtkinter.CTkButton(master=self.home_frame, text="Options", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.hide_show_side_bar)
-        self.button_options.grid(row=1, column=0, padx=(20, 20), pady=(20, 20))
+        self.button_options.grid(row=1, column=0, padx=(20, 20), pady=5)
+
+        self.button_start = customtkinter.CTkButton(master=self.home_frame, text="START", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.pressed_print)
+        self.button_start.grid(row=1, column=1, padx=(20, 20), pady=5)
+
+        self.loading_icon = AnimatedGif(self.home_frame, assets.path_to_loading_gif, 0.04)
+        self.loading_icon.grid(row=1, column=1, padx=(20, 20), pady=0, sticky="e")
+        self.loading_icon.grid_save()
+        self.loading_icon.start()
+        self.loading_icon.stop()
 
         # |_________________________ create settings frame _________________________|
         self.settings_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")

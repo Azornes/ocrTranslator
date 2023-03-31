@@ -9,9 +9,12 @@ class RapidOcr:
         result, elapse = self.rapid_ocr(path)
         text_result = ""
 
-        for res in result:
-            print(res[1])
-            text_result += res[1] + "\n"
+        if result is None:
+            for res in result:
+                print(res[1])
+                text_result += res[1] + "\n"
+        else:
+            text_result = "text not found"
         return text_result
 
 

@@ -188,7 +188,6 @@ class MyCapture:
         list_states_of_switches = [root.switch_ocr_google_api.get(), root.switch_ocr_baidu_api.get(), root.switch_ocr_capture2text.get(), root.switch_ocr_google_free.get(), root.switch_ocr_windows_local.get(), root.switch_ocr_tesseract.get(), root.switch_ocr_rapidocr.get()]
         string_results = {0: "-Google API:\n", 1: "-Baidu:\n", 2: "-Capture2Text:\n", 3: "-Google Free:\n", 4: "-Windows OCR:\n", 5: "-Tesseract:\n", 6: "-Rapid OCR:\n"}
 
-
         queues = [Queue() for _ in range(len(list_functions))]
         threads = []
 
@@ -209,7 +208,6 @@ class MyCapture:
                     result = queue.get()
                 else:
                     result += string_results[i] + queue.get() + "\n\n"
-
 
         root.scrollable_frame_textbox.insert("0.0", result)
         if root.switch_results_to_clipboard.get() == 1:
@@ -285,6 +283,7 @@ class MyCapture:
 
 
 def translate(results):
+    root.loading_icon.start()
     translated = ""
     if root.option_menu_translation.get() == "GoogleFree":
         translated = google_free.translate_by_special_point_google(results, root.combobox_to_language.get())
@@ -298,6 +297,7 @@ def translate(results):
         root.clipboard_clear()
         root.clipboard_append(translated)
     root.translation_frame_textbox.insert("0.0", translated + "\n\n")
+    root.loading_icon.stop()
     return translated
 
 
