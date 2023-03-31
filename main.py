@@ -5,7 +5,7 @@ import logging
 import tkinter
 
 from ocrTranslate.assets import Assets as assets
-from ocrTranslate.config_files import google_api, google_free, chatGpt, deepL, multi_translators, capture2Text, tesseract, baidu
+from ocrTranslate.config_files import google_api, google_free, chatGpt, deepL, multi_translators, capture2Text, tesseract, baidu, rapid_ocr
 from ocrTranslate.gui.complex_tk_gui import ComplexTkGui, result_boxes
 
 import os
@@ -179,9 +179,14 @@ class MyCapture:
             result_text = tesseract.ocr_by_tesseract(assets.path_to_tmp2)
             return result_text
 
-        list_functions = [OCRGoogle, OCRBaiduu, OCRCapture2Text, OCRGoogleFree, OCRWindows, OCRTesseract]
-        list_states_of_switches = [root.switch_ocr_google_api.get(), root.switch_ocr_baidu_api.get(), root.switch_ocr_capture2text.get(), root.switch_ocr_google_free.get(), root.switch_ocr_windows_local.get(), root.switch_ocr_tesseract.get()]
-        string_results = {0: "-Google API:\n", 1: "-Baidu:\n", 2: "-Capture2Text:\n", 3: "-Google Free:\n", 4: "-Windows OCR:\n", 5: "-Tesseract:\n"}
+        def OCRRapid(test):
+            print("OCRRapid")
+            result_text = rapid_ocr.ocr_by_rapid(assets.path_to_tmp2)
+            return result_text
+
+        list_functions = [OCRGoogle, OCRBaiduu, OCRCapture2Text, OCRGoogleFree, OCRWindows, OCRTesseract, OCRRapid]
+        list_states_of_switches = [root.switch_ocr_google_api.get(), root.switch_ocr_baidu_api.get(), root.switch_ocr_capture2text.get(), root.switch_ocr_google_free.get(), root.switch_ocr_windows_local.get(), root.switch_ocr_tesseract.get(), root.switch_ocr_rapidocr.get()]
+        string_results = {0: "-Google API:\n", 1: "-Baidu:\n", 2: "-Capture2Text:\n", 3: "-Google Free:\n", 4: "-Windows OCR:\n", 5: "-Tesseract:\n", 6: "-Rapid OCR:\n"}
 
 
         queues = [Queue() for _ in range(len(list_functions))]
@@ -205,6 +210,7 @@ class MyCapture:
                 else:
                     result += string_results[i] + queue.get() + "\n\n"
 
+
         root.scrollable_frame_textbox.insert("0.0", result)
         if root.switch_results_to_clipboard.get() == 1:
             root.clipboard_clear()
@@ -213,14 +219,18 @@ class MyCapture:
         # if root.switch_from_text.get() == 1:
         #    results = root.scrollable_frame_textbox.get('1.0', 'end')
 
-        if root.option_menu_translation.get() != "Disabled":
-            translated = translate(result)
-            self.show_text_window(translated)
-        else:
-            #    translated = "    Google API:\n\n" + result1 + "\n    Baidu:\n\n" + get_result_text(
-            #        result2) + "\n    Capture:\n\n" + result3 + "\n\n    GooglePoint:\n\n" + result4
-            #    root.scrollable_frame_textbox.insert("0.0",translated)
-            self.show_text_window(result)
+        def translate_from_ocr():
+            if root.option_menu_translation.get() != "Disabled":
+                translated = translate(result)
+                self.show_text_window(translated)
+            else:
+                #    translated = "    Google API:\n\n" + result1 + "\n    Baidu:\n\n" + get_result_text(
+                #        result2) + "\n    Capture:\n\n" + result3 + "\n\n    GooglePoint:\n\n" + result4
+                #    root.scrollable_frame_textbox.insert("0.0",translated)
+                self.show_text_window(result)
+
+        thread = Thread(target=translate_from_ocr)
+        thread.start()
 
         # self.showtextwindow("BaiduOCR: \n\n" + getresulttext(result2) + "\nGooglVisionOCR: \n\n" + result1)
 

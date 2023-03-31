@@ -5,6 +5,7 @@ import os
 import customtkinter
 from ocrTranslate.assets import Assets as assets
 from ocrTranslate.config_files import google_api, capture2Text, chatGpt, tesseract, baidu
+from ocrTranslate.gui.AnimatedGif import AnimatedGif
 from ocrTranslate.gui.auto_complete_combobox import AutocompleteCombobox
 from ocrTranslate.langs import _langs, services_translators_languages, _langs2
 
@@ -78,9 +79,10 @@ class ComplexTkGui(customtkinter.CTk):
         self.switch_ocr_capture2text = None
         self.switch_ocr_windows_local = None
         self.switch_ocr_tesseract = None
+        self.switch_ocr_rapidocr = None
         self.switches_ocr = []
 
-        switchers = [("Google api",), ("Google Free",), ("Baidu api",), ("Capture2Text",), ("Windows local",), ("Tesseract",),]
+        switchers = [("Google api",), ("Google Free",), ("Baidu api",), ("Capture2Text",), ("Windows local",), ("Tesseract",), ("RapidOCR",),]
 
         rows = len(switchers) // 2
         for i, switcher in enumerate(switchers):
@@ -148,6 +150,12 @@ class ComplexTkGui(customtkinter.CTk):
         # ||| Speech to Text tab |||
         self.label_tab_2 = customtkinter.CTkLabel(self.tabview.tab("Speech to Text"), text="WORK IN PROGRESS")
         self.label_tab_2.grid(row=0, column=0, padx=20, pady=20)
+
+
+
+        lbl_with_my_gif = AnimatedGif(self.label_tab_2, assets.path_to_loading_gif, 0.02)
+        lbl_with_my_gif.grid(row=0, column=0, padx=20, pady=20)
+        lbl_with_my_gif.start()
 
         # ||| Text to Speech tab |||
         self.label_tab_3 = customtkinter.CTkLabel(self.tabview.tab("Text to Speech"), text="WORK IN PROGRESS")
@@ -315,18 +323,22 @@ class ComplexTkGui(customtkinter.CTk):
         if google_api.is_active:
             self.switch_ocr_google_api.configure(state="enabled")
         else:
+            self.switch_ocr_google_api.deselect()
             self.switch_ocr_google_api.configure(state="disabled")
         if capture2Text.is_active:
             self.switch_ocr_capture2text.configure(state="enabled")
         else:
+            self.switch_ocr_capture2text.deselect()
             self.switch_ocr_capture2text.configure(state="disabled")
         if tesseract.is_active:
             self.switch_ocr_tesseract.configure(state="enabled")
         else:
+            self.switch_ocr_tesseract.deselect()
             self.switch_ocr_tesseract.configure(state="disabled")
         if baidu.is_active:
             self.switch_ocr_baidu_api.configure(state="enabled")
         else:
+            self.switch_ocr_baidu_api.deselect()
             self.switch_ocr_baidu_api.configure(state="disabled")
 
     # save all gui elements into an ini file

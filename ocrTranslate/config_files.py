@@ -8,6 +8,7 @@ from ocrTranslate.services.chatGPT_free3 import ChatGPTFree
 from ocrTranslate.services.DeepL import DeepL
 from ocrTranslate.services.mult_translators import MultiTranslators
 from ocrTranslate.assets import Assets as assets
+from ocrTranslate.services.rapid_ocr import RapidOcr
 
 from ocrTranslate.services.tesseract import Tesseract
 
@@ -53,3 +54,4 @@ except KeyError:
 
 deepL = DeepL()
 multi_translators = MultiTranslators()
+rapid_ocr = RapidOcr()

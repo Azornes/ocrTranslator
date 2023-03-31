@@ -40,3 +40,5 @@ class Assets:
     path_to_home_light = resolve_path("ocrTranslate/assets/home_light.png")
     path_to_settings_dark = resolve_path("ocrTranslate/assets/settings_dark.png")
     path_to_settings_light = resolve_path("ocrTranslate/assets/settings_light.png")
+    path_to_loading_gif = resolve_path("ocrTranslate/assets/loading.gif")
+    path_to_loading_png = resolve_path("ocrTranslate/assets/loading.png")
