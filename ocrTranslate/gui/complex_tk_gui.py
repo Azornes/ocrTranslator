@@ -53,7 +53,6 @@ class ComplexTkGui(customtkinter.CTk):
         self.sidebar_button_load = customtkinter.CTkButton(self.sidebar_frame, text="Load Settings", command=self.load_setting)
         self.sidebar_button_load.grid(row=5, column=0, padx=20, pady=(10, 10))
 
-
         self.appearance_mode_label = customtkinter.CTkLabel(self.sidebar_frame, text="Appearance Mode:", anchor="w")
         self.appearance_mode_label.grid(row=6, column=0, padx=20, pady=(10, 0))
         self.appearance_mode_optionemenu = customtkinter.CTkOptionMenu(self.sidebar_frame, values=["Light", "Dark", "System"], command=self.change_appearance_mode_event)
@@ -85,7 +84,7 @@ class ComplexTkGui(customtkinter.CTk):
         self.switch_ocr_rapidocr = None
         self.switches_ocr = []
 
-        switchers = [("Google api",), ("Google Free",), ("Baidu api",), ("Capture2Text",), ("Windows local",), ("Tesseract",), ("RapidOCR",),]
+        switchers = [("Google api",), ("Google Free",), ("Baidu api",), ("Capture2Text",), ("Windows local",), ("Tesseract",), ("RapidOCR",), ]
 
         rows = len(switchers) // 2
         for i, switcher in enumerate(switchers):
@@ -190,30 +189,25 @@ class ComplexTkGui(customtkinter.CTk):
 
         self.entry_settings = []
 
-        settings_dict = {
-            'ChatGPT': ("ApiKey", 'session_token', "access_token", "email", "password"),
-            'Baidu': ("AppId", 'ApiKey', "SecretKey"),
-            'Capture2Text': ("path_to_Capture2Text_CLI_exe",),
-            'Tesseract': ("path_to_tesseract_exe",)
-            }
+        settings_dict = {'ChatGPT': ("ApiKey", 'session_token', "access_token", "email", "password"), 'Baidu': ("AppId", 'ApiKey', "SecretKey"), 'Capture2Text': ("path_to_Capture2Text_CLI_exe",), 'Tesseract': ("path_to_tesseract_exe",)}
 
         iterations = 0
         for service in settings_dict.items():
             label_main_name = 'label_{}'.format(service[0].lower().replace(" ", "_"))
-            #print(label_main_name)
+            # print(label_main_name)
             label_main = customtkinter.CTkLabel(self.scrollable_settings_frame, text=service[0] + ":", anchor="w", font=customtkinter.CTkFont(size=14, weight="bold"))
             label_main.grid(row=iterations, column=0, padx=(5, 5), pady=(5, 5))
             setattr(self, label_main_name, label_main)
             iterations = iterations + 1
             for element in service[1]:
                 label_name = 'label_{}_{}'.format(service[0].lower().replace(" ", "_"), element.lower().replace(" ", "_"))
-                #print(label_name)
+                # print(label_name)
                 label = customtkinter.CTkLabel(self.scrollable_settings_frame, text=element, anchor="w")
                 label.grid(row=iterations, column=0, padx=(5, 5), pady=(5, 5), sticky="nsew")
                 setattr(self, label_name, label)
 
                 entry_name = 'entry_{}_{}'.format(service[0].lower().replace(" ", "_"), element.lower().replace(" ", "_"))
-                #print(entry_name)
+                # print(entry_name)
                 entry = customtkinter.CTkEntry(self.scrollable_settings_frame, placeholder_text=element)
                 entry.grid(row=iterations, column=1, padx=(5, 5), pady=(5, 5), sticky="nsew")
                 setattr(self, entry_name, entry)
@@ -229,7 +223,6 @@ class ComplexTkGui(customtkinter.CTk):
         self.check_ocrs_are_active()
 
         self.load_setting()
-
 
     def hide_show_side_bar(self):
         if self.sidebar_frame.winfo_manager() == "grid":
@@ -322,28 +315,30 @@ class ComplexTkGui(customtkinter.CTk):
 
     def get_key(self, valu):
         for key, value in self.__dict__.items():
-            #print(str(key) + " | " + str(value))
+            # print(str(key) + " | " + str(value))
             if valu == str(value):
                 return key
         return "key doesn't exist"
 
-
-    def check_ocrs_are_active (self):
+    def check_ocrs_are_active(self):
         if google_api.is_active:
             self.switch_ocr_google_api.configure(state="enabled")
         else:
             self.switch_ocr_google_api.deselect()
             self.switch_ocr_google_api.configure(state="disabled")
+
         if capture2Text.is_active:
             self.switch_ocr_capture2text.configure(state="enabled")
         else:
             self.switch_ocr_capture2text.deselect()
             self.switch_ocr_capture2text.configure(state="disabled")
+
         if tesseract.is_active:
             self.switch_ocr_tesseract.configure(state="enabled")
         else:
             self.switch_ocr_tesseract.deselect()
             self.switch_ocr_tesseract.configure(state="disabled")
+
         if baidu.is_active:
             self.switch_ocr_baidu_api.configure(state="enabled")
         else:
@@ -351,7 +346,7 @@ class ComplexTkGui(customtkinter.CTk):
             self.switch_ocr_baidu_api.configure(state="disabled")
 
     # save all gui elements into an ini file
-    def save_setting(self, settings_name="settings", first_time = False):
+    def save_setting(self, settings_name="settings", first_time=False):
         config = configparser.ConfigParser()
         if first_time:
             dict_settings = {"geometry": "1100x580+52+52"}
@@ -364,50 +359,46 @@ class ComplexTkGui(customtkinter.CTk):
 
         capture2Text.__init__(path_to_Capture2Text_CLI_exe=config["settings"]['entry_capture2text_path_to_capture2text_cli_exe'])
         tesseract.__init__(path_to_tesseract_exe=config["settings"]['entry_tesseract_path_to_tesseract_exe'])
-        chatGpt.__init__(email=config["settings"]['entry_chatgpt_email'],
-                          password=config["settings"]['entry_chatgpt_password'],
-                          session_token=config["settings"]['entry_chatgpt_session_token'],
-                          access_token=config["settings"]['entry_chatgpt_access_token']
-                          )
+        chatGpt.__init__(email=config["settings"]['entry_chatgpt_email'], password=config["settings"]['entry_chatgpt_password'], session_token=config["settings"]['entry_chatgpt_session_token'], access_token=config["settings"]['entry_chatgpt_access_token'])
         baidu.__init__(appid=config["settings"]['entry_baidu_appid'], apikey=config["settings"]['entry_baidu_apikey'], secretkey=config["settings"]['entry_baidu_secretkey'])
 
         self.check_ocrs_are_active()
 
     def save_mass(self, child, result={}):
-       # print(child)
-        if ("checkbox" in child.winfo_name()):
-            #print("checkbox")
-            #print(child.get())
+        # print(child)
+        if "checkbox" in child.winfo_name():
+            # print("checkbox")
+            # print(child.get())
             result[self.get_key(str(child))] = child.get()
-        if ("switch" in child.winfo_name()):
-            #print("switch")
-            #print(child.get())
+        if "switch" in child.winfo_name():
+            # print("switch")
+            # print(child.get())
             result[self.get_key(str(child))] = child.get()
-        if ("ctkentry" in child.winfo_name()):
-            #print("ctkentry")
-            #print(child.get())
+        if "ctkentry" in child.winfo_name():
+            # print("ctkentry")
+            # print(child.get())
             result[self.get_key(str(child))] = child.get()
-        if ("slider" in child.winfo_name()):
-            #print("slider")
-            #print(child.get())
+        if "slider" in child.winfo_name():
+            # print("slider")
+            # print(child.get())
             result[self.get_key(str(child))] = child.get()
-        if ("segmented" in child.winfo_name()):
-           # print("segmented")
-            #print(child.get())
+        if "segmented" in child.winfo_name():
+            # print("segmented")
+            # print(child.get())
             result[self.get_key(str(child))] = child.get()
-        if ("combobox" in child.winfo_name()):
-            #print("combobox")
-            #print(child.get())
+        if "combobox" in child.winfo_name():
+            # print("combobox")
+            # print(child.get())
             result[self.get_key(str(child))] = child.get()
-        if ("optionmenu" in child.winfo_name()):
-            #print("optionmenu")
-            #print(child.get())
+        if "optionmenu" in child.winfo_name():
+            # print("optionmenu")
+            # print(child.get())
             result[self.get_key(str(child))] = child.get().replace('%', '%%')
-        if ("textbox" in child.winfo_name()):
-            #print("textbox")
-            #print(child.get(0.0, 'end-1c'))
+        if "textbox" in child.winfo_name():
+            # print("textbox")
+            # print(child.get(0.0, 'end-1c'))
             result[self.get_key(str(child))] = base64.b64encode(child.get("1.0", "end").encode("utf-8")).decode("utf-8"),
-        if ("radiobutton" in child.winfo_name()):
+        if "radiobutton" in child.winfo_name():
             print("radiobutton")
         return result
 
@@ -415,12 +406,12 @@ class ComplexTkGui(customtkinter.CTk):
         dict_result_atr = self.save_mass(widget, dict_result_atr)
         for child in widget.winfo_children():
             dict_result_atr = self.save_mass_tree(child, dict_result_atr)
-        #print(dict_result_atr)
+        # print(dict_result_atr)
         return dict_result_atr
 
     # load all gui elements from an ini file
     def load_mass(self, child, config, settings_name):
-        #print(child)
+        # print(child)
         if "checkbox" in child.winfo_name():
             child.select() if int(config[settings_name][self.get_key(str(child))]) else child.deselect()
             if callable(child._command):
@@ -450,7 +441,7 @@ class ComplexTkGui(customtkinter.CTk):
         if "radiobutton" in child.winfo_name():
             print("radiobutton")
         if "optionmenu" in child.winfo_name():
-        #if re.search(r"ctkoptionmenu(?![\w\d\.])", str(child)):
+            # if re.search(r"ctkoptionmenu(?![\w\d\.])", str(child)):
             child.set(config[settings_name][self.get_key(str(child))])
             if callable(child._command):
                 try:
@@ -463,10 +454,10 @@ class ComplexTkGui(customtkinter.CTk):
         for child in widget.winfo_children():
             self.load_mass_tree(child, config, settings_name)
 
-    def load_setting(self, settings_name="settings", first_time = False):
+    def load_setting(self, settings_name="settings", first_time=False):
         config = configparser.ConfigParser()
         if not os.path.exists(assets.path_settings_gui) or first_time:
-            self.save_setting(first_time = True)
+            self.save_setting(first_time=True)
             first_time = True
         config.read(assets.path_settings_gui)
         self.geometry(config[settings_name]["geometry"])
@@ -475,9 +466,7 @@ class ComplexTkGui(customtkinter.CTk):
             if first_time:
                 self.geometry(f"{1100}x{580}")
         except KeyError:
-            self.load_setting(first_time = True)
-
-
+            self.load_setting(first_time=True)
 
 
 if __name__ == "__main__":
