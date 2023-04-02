@@ -222,11 +222,10 @@ class MyCapture:
         thread.start()
 
     def show_text_window(self, text):
-        result_toplevel = tkinter.Toplevel()
-        result_toplevel.title('OCR window')
-        result_toplevel.iconbitmap(assets.path_to_icon2)
-
         if root.switch_game_mode.get() == 1:
+            result_toplevel = tkinter.Toplevel()
+            result_toplevel.title('OCR window')
+            result_toplevel.iconbitmap(assets.path_to_icon2)
             def click(event):
                 result_toplevel.destroy()
 
@@ -241,7 +240,10 @@ class MyCapture:
             self.resultbox.pack()
             result_boxes.append(result_toplevel)
             result_toplevel.after(60000, lambda: result_toplevel.destroy())  # Destroy the widget after 30 seconds
-        else:
+        elif root.switch_window_mode.get() == 1:
+            result_toplevel = tkinter.Toplevel()
+            result_toplevel.title('OCR window')
+            result_toplevel.iconbitmap(assets.path_to_icon2)
             def top_close():
                 result_toplevel.destroy()
 

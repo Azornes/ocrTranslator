@@ -2,6 +2,7 @@ import base64
 import configparser
 import os
 
+from tktooltip import ToolTip
 import customtkinter
 from ocrTranslate.assets import Assets as assets
 from ocrTranslate.config_files import google_api, capture2Text, chatGpt, tesseract, baidu
@@ -23,6 +24,8 @@ class ComplexTkGui(customtkinter.CTk):
         # ||||||||||||||||||| configure window |||||||||||||||||||
         self.title("OCR_Translator")
         self.geometry(f"{1100}x{580}")
+        # ||||||||||||||||||| configure tooltip style |||||||||||||||||||
+        tooltip_style = {"delay": 0.01, "follow": True, "parent_kwargs": {"bg": "black", "padx": 1, "pady": 1}, "fg": "white", "bg": "#1c1c1c", "padx": 4, "pady": 4}
         # ||||||||||||||||||| configure grid layout |||||||||||||||||||
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -94,9 +97,11 @@ class ComplexTkGui(customtkinter.CTk):
 
         self.switch_from_text = customtkinter.CTkSwitch(self.scrollable_frame, text="Only from below text", command=self.disable_all_ocr_switchers)
         self.switch_from_text.grid(row=rows + 1, column=1, padx=0, pady=(0, 10), sticky="NSEW")
+        ToolTip(self.switch_from_text, msg="Translate text only from below text box", **tooltip_style)
 
         self.switch_from_clipboard = customtkinter.CTkSwitch(self.scrollable_frame, text="Only from clipboard", command=self.disable_all_ocr_switchers)
         self.switch_from_clipboard.grid(row=rows + 1, column=2, padx=0, pady=(0, 10), sticky="NSEW")
+        ToolTip(self.switch_from_clipboard, msg="Translate text only from clipboard", **tooltip_style)
 
         # self.scrollable_frame_textbox = customtkinter.CTkTextbox(self, width=250)
         # self.scrollable_frame_textbox.grid(row=1, column=1,padx=(10, 10), pady=(10, 10), sticky="nsew")
@@ -124,10 +129,15 @@ class ComplexTkGui(customtkinter.CTk):
             services_translators_languages_tab.append(a)
 
         self.option_menu_translation = customtkinter.CTkOptionMenu(self.scrollable_frame_translation, dynamic_resizing=False, values=services_translators_languages_tab, command=self.change_languages)
-        self.option_menu_translation.grid(row=0, column=0, columnspan=3, padx=20, pady=(20, 10))
+        self.option_menu_translation.grid(row=0, column=1, padx=20, pady=(20, 10))
+
+        self.switch_window_mode = customtkinter.CTkSwitch(self.scrollable_frame_translation, text="Turn window mode", )
+        self.switch_window_mode.grid(row=0, column=0, padx=(10, 0), pady=(20, 10))
+        ToolTip(self.switch_window_mode, msg="Show an additional window with the translation or OCR.", **tooltip_style)
 
         self.switch_game_mode = customtkinter.CTkSwitch(self.scrollable_frame_translation, text="Turn game mode", )
         self.switch_game_mode.grid(row=1, column=0, padx=10, pady=(0, 20))
+        ToolTip(self.switch_game_mode, msg="Show an additional window with the translation above the selected text. Click middle button of mouse to close window", **tooltip_style)
 
         self.switch_results_to_clipboard = customtkinter.CTkSwitch(self.scrollable_frame_translation, text="Results to Clipboard", )
         self.switch_results_to_clipboard.grid(row=1, column=2, padx=10, pady=(0, 20))
