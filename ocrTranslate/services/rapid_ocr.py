@@ -9,7 +9,7 @@ class RapidOcr:
         result, elapse = self.rapid_ocr(path)
         text_result = ""
 
-        if result is None:
+        if result is not None:
             for res in result:
                 print(res[1])
                 text_result += res[1] + "\n"
@@ -18,5 +18,6 @@ class RapidOcr:
         return text_result
 
 
-# rapid_ocr = RapidOcr()
-# rapid_ocr.ocr_by_rapid("C:\\Programowanie\\Projekty\\Python\\HelpApps\\ocrTranslator3\\ocrTranslate\\temp\\temp.png")
+# rapid_ocr = RapidOcrr()
+# test = rapid_ocr.ocr_by_rapid("C:\\Programowanie\\Projekty\\Python\\HelpApps\\ocrTranslator3\\ocrTranslate\\temp\\temp.png")
+# print(test)

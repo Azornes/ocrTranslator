@@ -33,7 +33,7 @@ path = os.path.dirname(os.path.abspath(__file__))
 # subprocess.call(["C:\Program Files\AutoHotkey\AutoHotkey.exe", "na wierzchu.ahk"])
 
 class MyCapture:
-    def __init__(self, png):
+    def __init__(self):
         # Variables X and Y are used to register the position of the left mouse button
         self.X = tkinter.IntVar(value=0)
         self.Y = tkinter.IntVar(value=0)
@@ -41,8 +41,6 @@ class MyCapture:
         self.Y2 = tkinter.IntVar(value=0)
         self.sel = False
         # screen size
-        # self.screenWidth = root.winfo_screenwidth()+1920
-        # self.screenHeight = root.winfo_screenheight()
         self.screen_width = GetSystemMetrics(78)
         self.screen_height = GetSystemMetrics(79)
         print("screen width and height: " + str(self.screen_width) + "x" + str(self.screen_height))
@@ -59,7 +57,6 @@ class MyCapture:
 
         # A position in which the left mouse button is pressed
         def onLeftButtonDown(event):
-            # pdb.set_trace()
             self.X.set(event.x)
             self.Y.set(event.y)
             # start screenshot
@@ -69,7 +66,6 @@ class MyCapture:
 
         # Move the left mouse button to display the selected area
         def onLeftButtonMove(event):
-            # pdb.set_trace()
             global lastDraw, r, c
             try:
                 # Delete the newly drawn graphic, otherwise when the mouse is moved it will be a black rectangle.
@@ -127,9 +123,6 @@ class MyCapture:
             pic = ImageGrab.grab((left + 1, top + 1, right, bottom), all_screens=True)
 
             self.top.destroy()  # Close the top-level container.
-            # Pop up the save screenshot dialog.
-            # fileName = tkinter.filedialog.asksaveasfilename(title='保存截图',
-            # filetypes=[('image','*.jpg *.png')])
             if pic:
                 pic.save(assets.path_to_tmp)
                 pic.save(assets.path_to_tmp2)  # Close the current window.  # self.top.destroy()
@@ -213,6 +206,7 @@ class MyCapture:
         if root.switch_results_to_clipboard.get() == 1:
             root.clipboard_clear()
             root.clipboard_append(result)
+
         # root.scrollable_frame_textbox.get('1.0', 'end')
         # if root.switch_from_text.get() == 1:
         #    results = root.scrollable_frame_textbox.get('1.0', 'end')
@@ -222,15 +216,10 @@ class MyCapture:
                 translated = translate(result)
                 self.show_text_window(translated)
             else:
-                #    translated = "    Google API:\n\n" + result1 + "\n    Baidu:\n\n" + get_result_text(
-                #        result2) + "\n    Capture:\n\n" + result3 + "\n\n    GooglePoint:\n\n" + result4
-                #    root.scrollable_frame_textbox.insert("0.0",translated)
                 self.show_text_window(result)
 
         thread = Thread(target=translate_from_ocr)
         thread.start()
-
-        # self.showtextwindow("BaiduOCR: \n\n" + getresulttext(result2) + "\nGooglVisionOCR: \n\n" + result1)
 
     def show_text_window(self, text):
         result_toplevel = tkinter.Toplevel()
@@ -238,42 +227,27 @@ class MyCapture:
         result_toplevel.iconbitmap(assets.path_to_icon2)
 
         if root.switch_game_mode.get() == 1:
-            result_toplevel.overrideredirect(1)  # will remove the top badge of window
-            result_toplevel.attributes('-topmost', 'true')
-            # w = result_toplevel.winfo_width()
-            # h = result_toplevel.winfo_height()
-
-            result_toplevel.geometry("%dx%d+%d+%d" % (abs(self.X2.get() - self.X.get()), abs(self.Y2.get() - self.Y.get()), min(self.X.get(), self.X2.get()), abs(min(self.Y.get(), self.Y2.get()) - abs(self.Y2.get() - self.Y.get()))))
-
-            # def topclose():
-            #     resultboxes.remove(self)
-            # result_toplevel.protocol('WM_DELETE_WINDOW', topclose)
-
-            # L1 = tkinter.Label(result_toplevel, text='OCR Tekst：')
-            # L1.pack()
-            result_text = tkinter.Text(result_toplevel, width=abs(self.X2.get() - self.X.get()), height=abs(self.Y2.get() - self.Y.get()))
-
             def click(event):
                 result_toplevel.destroy()
 
+            result_toplevel.overrideredirect(1)  # will remove the top badge of window
+            result_toplevel.attributes('-topmost', 'true')
+            result_toplevel.geometry("%dx%d+%d+%d" % (abs(self.X2.get() - self.X.get()), abs(self.Y2.get() - self.Y.get()), min(self.X.get(), self.X2.get()), abs(min(self.Y.get(), self.Y2.get()) - abs(self.Y2.get() - self.Y.get()))))
+            result_text = tkinter.Text(result_toplevel, width=abs(self.X2.get() - self.X.get()), height=abs(self.Y2.get() - self.Y.get()))
             result_text.bind('<Button-2>', click)
             result_text.insert(tkinter.END, text)
             result_text.pack()
             self.resultbox = tkinter.Message(result_toplevel)
             self.resultbox.pack()
             result_boxes.append(result_toplevel)
-            print(text)
-
             result_toplevel.after(60000, lambda: result_toplevel.destroy())  # Destroy the widget after 30 seconds
         else:
             def top_close():
                 result_toplevel.destroy()
 
             result_toplevel.protocol('WM_DELETE_WINDOW', top_close)
-
             L1 = tkinter.Label(result_toplevel, text='OCR Text：')
             L1.pack()
-
             result_text = tkinter.Text(result_toplevel, width=100, height=50)
             result_text.insert(tkinter.END, text)
             result_text.pack()
@@ -301,43 +275,44 @@ def translate(results):
     return translated
 
 
-def buttonCaptureClick():
-    with mss() as sct:
-        sct.shot(mon=-1, output=assets.path_to_tmp4)
-    if root.switch_from_text.get() != 1 and root.switch_from_clipboard.get() != 1:
+def translate_without_ocr():
+    if root.switch_from_text.get() == 1:
+        translate(root.scrollable_frame_textbox.get('1.0', 'end'))
+    else:
+        translate(root.clipboard_get())
+
+
+def handle_app_windows(win_state):
+    if win_state == 'normal' and root.state() == 'normal':
         root.state('icon')
         for box in result_boxes:
             try:
                 box.state('icon')
             except Exception:
                 pass
-        time.sleep(0.2)
-        filename = assets.path_to_tmp3
-        im = ImageGrab.grab()
-        im = ImageEnhance.Brightness(im).enhance(0.8)
-        im.save(filename)
-        im.close()
-
-        w = MyCapture(filename)
-        # buttonCapture.wait_window(w.top)
-        root.button_start.wait_window(w.top)
-        # pdb.set_trace()
-        # result = w.getText()
-        w.get_text_from_ocr()
-        # printresult(result)
-
+    elif win_state == 'normal':
         root.state('normal')
         for box in result_boxes:
             try:
                 box.state('normal')
             except Exception:
                 pass
-        os.remove(filename)
+
+
+def buttonCaptureClick():
+    win_state = root.state()
+    if root.switch_from_text.get() != 1 and root.switch_from_clipboard.get() != 1:
+        handle_app_windows(win_state)
+        with mss() as sct:
+            sct.shot(mon=-1, output=assets.path_to_tmp4)
+        time.sleep(0.2)
+        w = MyCapture()
+        root.button_start.wait_window(w.top)
+        w.get_text_from_ocr()
+        handle_app_windows(win_state)
     else:
-        if root.switch_from_text.get() == 1:
-            translate(root.scrollable_frame_textbox.get('1.0', 'end'))
-        else:
-            translate(root.clipboard_get())
+        thread = Thread(target=translate_without_ocr)
+        thread.start()
 
 
 def key(event):
