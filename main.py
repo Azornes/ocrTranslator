@@ -159,8 +159,6 @@ class MyCapture:
                 result_text = ocr_result.decode("cp852").strip()
             except UnicodeDecodeError:
                 result_text = "Error decoding"
-
-            print(result_text)
             return result_text
 
         def OCRTesseract(test):
@@ -180,7 +178,7 @@ class MyCapture:
 
         for i, func in enumerate(list_functions):
             if list_states_of_switches[i] == 1:
-                print(func.__name__)
+                # print(func.__name__)
                 t = Thread(target=lambda q, func, arg1: q.put(func(arg1)), args=(queues[i], func, 'world!'))
                 threads.append(t)
                 t.start()
@@ -196,7 +194,7 @@ class MyCapture:
                 else:
                     result += string_results[i] + queue.get() + "\n\n"
 
-        root.scrollable_frame_textbox.insert("0.0", result)
+        root.scrollable_frame_textbox.insert("end", result)
         if root.switch_results_to_clipboard.get() == 1:
             root.clipboard_clear()
             root.clipboard_append(result)
@@ -250,6 +248,12 @@ class MyCapture:
             result_boxes.append(result_toplevel)
 
 
+async def display_translations_ChatGPT(word, language_to="English"):
+    root.translation_frame_textbox.insert("end", "\n\n")
+    async for response in chatGpt.translate_by_chat_gpt(word, language_to):
+        root.translation_frame_textbox.insert("end", response)
+
+
 def translate(results):
     root.loading_icon.start()
     translated = ""
@@ -258,13 +262,14 @@ def translate(results):
     elif root.option_menu_translation.get() == "DeepL":
         translated = deepL.translate_by_special_point_deepL(results, root.combobox_from_language.get(), root.combobox_to_language.get())
     elif root.option_menu_translation.get() == "ChatGPT":
-        translated = asyncio.run(chatGpt.translate_by_chat_gpt(results, root.combobox_to_language.get()))
+        asyncio.run(display_translations_ChatGPT(results, root.combobox_to_language.get()))
     elif root.option_menu_translation.get() in ['alibaba', 'argos', 'baidu', 'bing', 'caiyun', 'google', 'iciba', 'iflytek', 'iflyrec', 'itranslate', 'lingvanex', 'mglip', 'modernMt', 'myMemory', 'niutrans', 'papago', 'qqFanyi', 'qqTranSmart', 'reverso', 'sogou', 'translateCom', 'utibet', 'volcEngine', 'yandex', 'youdao']:
         translated = multi_translators.translate(results, root.combobox_from_language.get(), root.combobox_to_language.get(), root.option_menu_translation.get())
     if root.switch_results_to_clipboard.get() == 1:
         root.clipboard_clear()
         root.clipboard_append(translated)
-    root.translation_frame_textbox.insert("0.0", translated + "\n\n")
+    elif root.option_menu_translation.get() != "ChatGPT":
+        root.translation_frame_textbox.insert("end", translated + "\n\n")
     root.loading_icon.stop()
     return translated
 

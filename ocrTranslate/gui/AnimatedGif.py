@@ -41,11 +41,9 @@ class AnimatedGif(ctk.CTkLabel):
 
     def grid_save(self):
         self.grid_saved = self.grid_info()
-        print(self.grid_saved)
 
     def grid_restore(self):
         self.grid(**self.grid_saved)
-        print(self.grid_saved)
 
     def start(self):
         """ Starts non-threaded version that we need to manually update() """

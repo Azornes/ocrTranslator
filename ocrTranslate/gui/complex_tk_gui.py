@@ -32,6 +32,8 @@ class ComplexTkGui(customtkinter.CTk):
 
         # ||||||||||||||||||| load images |||||||||||||||||||
         self.rev_translate_icon = customtkinter.CTkImage(Image.open(assets.reverse_icon), size=(26, 26))
+        self.send_message_icon = customtkinter.CTkImage(light_image=Image.open(assets.path_to_send_message_black), dark_image=Image.open(assets.path_to_send_message_white), size=(26, 26))
+        self.chat_ai_icon = customtkinter.CTkImage(light_image=Image.open(assets.path_to_chatai_black), dark_image=Image.open(assets.path_to_chatai_white), size=(20, 20))
         self.home_image = customtkinter.CTkImage(light_image=Image.open(assets.path_to_home_dark), dark_image=Image.open(assets.path_to_home_light), size=(20, 20))
         self.settings_image = customtkinter.CTkImage(light_image=Image.open(assets.path_to_settings_dark), dark_image=Image.open(assets.path_to_settings_light), size=(20, 20))
         # ||||||||||||||||||| create sidebar frame with widgets |||||||||||||||||||
@@ -40,29 +42,33 @@ class ComplexTkGui(customtkinter.CTk):
         self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="OCR_Translator", font=customtkinter.CTkFont(size=20, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 10))
 
-        self.sidebar_frame.grid_rowconfigure(3, weight=1)
+        self.sidebar_frame.grid_rowconfigure(4, weight=1)
 
         self.home_button = customtkinter.CTkButton(self.sidebar_frame, corner_radius=0, height=40, border_spacing=10, text="Home", fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"), image=self.home_image, anchor="w", command=self.home_button_event)
         self.home_button.grid(row=1, column=0, sticky="ew")
+        self.chat_ai_button = customtkinter.CTkButton(self.sidebar_frame, corner_radius=0, height=40, border_spacing=10, text="Chat AI", fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"), image=self.chat_ai_icon, anchor="w", command=self.chat_ai_button_event)
+        self.chat_ai_button.grid(row=2, column=0, sticky="ew")
         self.settings_button = customtkinter.CTkButton(self.sidebar_frame, corner_radius=0, height=40, border_spacing=10, text="Settings", fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"), image=self.settings_image, anchor="w", command=self.settings_button_event)
-        self.settings_button.grid(row=2, column=0, sticky="ew")
+        self.settings_button.grid(row=3, column=0, sticky="ew")
 
         self.sidebar_button_save = customtkinter.CTkButton(self.sidebar_frame, text="Save Settings", command=self.save_setting)
-        self.sidebar_button_save.grid(row=4, column=0, padx=20, pady=(10, 10))
+        self.sidebar_button_save.grid(row=5, column=0, padx=20, pady=(10, 10))
 
         self.sidebar_button_load = customtkinter.CTkButton(self.sidebar_frame, text="Load Settings", command=self.load_setting)
-        self.sidebar_button_load.grid(row=5, column=0, padx=20, pady=(10, 10))
+        self.sidebar_button_load.grid(row=6, column=0, padx=20, pady=(10, 10))
 
         self.appearance_mode_label = customtkinter.CTkLabel(self.sidebar_frame, text="Appearance Mode:", anchor="w")
-        self.appearance_mode_label.grid(row=6, column=0, padx=20, pady=(10, 0))
+        self.appearance_mode_label.grid(row=7, column=0, padx=20, pady=(10, 0))
         self.appearance_mode_optionemenu = customtkinter.CTkOptionMenu(self.sidebar_frame, values=["Light", "Dark", "System"], command=self.change_appearance_mode_event)
-        self.appearance_mode_optionemenu.grid(row=7, column=0, padx=20, pady=(10, 10))
+        self.appearance_mode_optionemenu.grid(row=8, column=0, padx=20, pady=(10, 10))
         self.scaling_label = customtkinter.CTkLabel(self.sidebar_frame, text="UI Scaling:", anchor="w")
-        self.scaling_label.grid(row=8, column=0, padx=20, pady=(10, 0))
+        self.scaling_label.grid(row=9, column=0, padx=20, pady=(10, 0))
         self.scaling_optionemenu = customtkinter.CTkOptionMenu(self.sidebar_frame, values=["80%", "90%", "100%", "110%", "120%"], command=self.change_scaling_event)
-        self.scaling_optionemenu.grid(row=9, column=0, padx=20, pady=(10, 20))
-
+        self.scaling_optionemenu.grid(row=10, column=0, padx=20, pady=(10, 20))
+        # section Home Frame
+        # |_████████████████████████████████████████████████████████████████████|
         # |_________________________ create home frame _________________________|
+        # |_████████████████████████████████████████████████████████████████████|
         self.home_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.home_frame.grid_columnconfigure(0, weight=1)
         self.home_frame.grid_columnconfigure(1, weight=1)
@@ -105,7 +111,7 @@ class ComplexTkGui(customtkinter.CTk):
         # self.scrollable_frame_textbox = customtkinter.CTkTextbox(self, width=250)
         # self.scrollable_frame_textbox.grid(row=1, column=1,padx=(10, 10), pady=(10, 10), sticky="nsew")
 
-        self.scrollable_frame_textbox = customtkinter.CTkTextbox(self.scrollable_frame, height=1500)
+        self.scrollable_frame_textbox = customtkinter.CTkTextbox(self.scrollable_frame, height=1500, undo=True, autoseparators=True)
         self.scrollable_frame_textbox.grid(row=rows + 2, column=0, columnspan=4, rowspan=10, padx=(10, 10), pady=(10, 10), sticky="NSEW")
 
         # ||||||||||||||||||| create tabview |||||||||||||||||||
@@ -157,7 +163,7 @@ class ComplexTkGui(customtkinter.CTk):
         self.combobox_to_language = AutocompleteCombobox(self.scrollable_frame_translation, completevalues=list(_langs2.values()))
         self.combobox_to_language.grid(row=3, column=2, padx=(5, 20), pady=(0, 0))
 
-        self.translation_frame_textbox = customtkinter.CTkTextbox(self.scrollable_frame_translation, width=250, height=2000)
+        self.translation_frame_textbox = customtkinter.CTkTextbox(self.scrollable_frame_translation, width=250, height=2000, undo=True, autoseparators=True)
         self.translation_frame_textbox.grid(row=4, column=0, columnspan=3, padx=(10, 10), pady=(10, 10), sticky="nsew")
 
         # ||| Speech to Text tab |||
@@ -174,8 +180,40 @@ class ComplexTkGui(customtkinter.CTk):
 
         self.button_start = customtkinter.CTkButton(master=self.home_frame, text="START", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.pressed_print)
         self.button_start.grid(row=1, column=1, padx=(20, 20), pady=5)
+        # section Chat Ai Frame
+        # |_██████████████████████████████████████████████████████████████████████|
+        # |_________________________ create Chat Ai frame ________________________|
+        # |_██████████████████████████████████████████████████████████████████████|
 
+        self.chat_ai_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+
+        self.chat_ai_frame.grid_rowconfigure(0, weight=1)
+        self.chat_ai_frame.grid_columnconfigure(0, weight=1)
+
+        # ||||||||||||||||||| create tabview |||||||||||||||||||
+        self.tabview_chat_ai = customtkinter.CTkTabview(self.chat_ai_frame, width=25)
+        self.tabview_chat_ai.grid(row=0, column=0, columnspan= 2, padx=(20, 20), pady=(5, 5), sticky="nsew")
+        self.tabview_chat_ai.add("ChatGPT")
+        self.tabview_chat_ai.add("Bing")
+        self.tabview_chat_ai.add("Bard")
+        self.tabview_chat_ai.tab("ChatGPT").grid_columnconfigure(0, weight=1)  # configure grid of individual tabs
+        self.tabview_chat_ai.tab("ChatGPT").grid_rowconfigure(0, weight=1)  # configure grid of individual tabs
+        # ||| ChatGPT tab |||
+        self.textbox_chatgpt_frame = customtkinter.CTkTextbox(self.tabview_chat_ai.tab("ChatGPT"), undo=True, autoseparators=True)
+        self.textbox_chatgpt_frame.grid(row=0, column=0, padx=(0, 0), pady=(0, 0), sticky="nsew")
+
+        self.textbox_chat_frame = customtkinter.CTkTextbox(self.chat_ai_frame, height=50, undo=True, autoseparators=True)
+        self.textbox_chat_frame.grid(row=1, column=0, padx=(20, 5), pady=(20, 20), sticky="nsew")
+        self.textbox_chat_frame.bind("<KeyRelease>", self.change_size_textbox)
+        self.textbox_chat_frame.bind("<KeyPress>", self.change_size_textbox)
+
+        self.button_send_message_chat_ai = customtkinter.CTkButton(master=self.chat_ai_frame, text="", fg_color="transparent", border_width=0, width=26, anchor="left", height=26, text_color=("gray10", "#DCE4EE"), image=self.send_message_icon, command=self.reverse_languages)
+        self.button_send_message_chat_ai.grid(row=1, column=1, padx=(5, 20), pady=(20, 20), sticky="nsew")
+
+        # section Settings Frame
+        # |_████████████████████████████████████████████████████████████████████████|
         # |_________________________ create settings frame _________________________|
+        # |_████████████████████████████████████████████████████████████████████████|
         self.settings_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
         self.settings_frame.grid_rowconfigure(0, weight=1)
@@ -213,8 +251,9 @@ class ComplexTkGui(customtkinter.CTk):
                 setattr(self, entry_name, entry)
                 self.entry_settings.append(entry)
                 iterations = iterations + 1
-
-        # ||||||||||||||||||| set default values |||||||||||||||||||
+        # |_████████████████████████████████████████████████████████████████████████|
+        # |___________________________ set default values __________________________|
+        # |_████████████████████████████████████████████████████████████████████████|
         self.appearance_mode_optionemenu.set("Dark")
         self.scaling_optionemenu.set("100%")
         self.option_menu_translation.set("Disabled")
@@ -223,6 +262,22 @@ class ComplexTkGui(customtkinter.CTk):
         self.check_ocrs_are_active()
 
         self.load_setting()
+
+    # section Functions
+    # |_████████████████████████████████████████████████████████████████████████|
+    # |___________________________ Functions __________________________|
+    # |_████████████████████████████████████████████████████████████████████████|
+
+    def change_size_textbox(self, event):
+        cursor_index = self.textbox_chat_frame._textbox.count('1.0', 'end', 'displaylines')[0]
+        new_height = (cursor_index * 15)+15
+        print(cursor_index)
+        print(self.textbox_chat_frame.cget('height'))
+        if new_height != self.textbox_chat_frame.cget('height') and self.textbox_chat_frame.cget('height') <= 105:
+            if new_height >= 105:
+                self.textbox_chat_frame.configure(height=105)
+            else:
+                self.textbox_chat_frame.configure(height=new_height)
 
     def hide_show_side_bar(self):
         if self.sidebar_frame.winfo_manager() == "grid":
@@ -296,6 +351,7 @@ class ComplexTkGui(customtkinter.CTk):
         # set button color for selected button
         self.home_button.configure(fg_color=("gray75", "gray25") if name == "home" else "transparent")
         self.settings_button.configure(fg_color=("gray75", "gray25") if name == "settings" else "transparent")
+        self.chat_ai_button.configure(fg_color=("gray75", "gray25") if name == "chat_ai" else "transparent")
 
         # show selected frame
         if name == "home":
@@ -306,9 +362,16 @@ class ComplexTkGui(customtkinter.CTk):
             self.settings_frame.grid(row=0, column=1, sticky="nsew")
         else:
             self.settings_frame.grid_forget()
+        if name == "chat_ai":
+            self.chat_ai_frame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.chat_ai_frame.grid_forget()
 
     def home_button_event(self):
         self.select_frame_by_name("home")
+
+    def chat_ai_button_event(self):
+        self.select_frame_by_name("chat_ai")
 
     def settings_button_event(self):
         self.select_frame_by_name("settings")

@@ -54,10 +54,10 @@ class ChatGPTFree:
                         words = words + i + "\n"
             else:
                 words = word
-            response = ""
+            prev_text = ""
             for data in self.chat_gpt_free.ask("Just translate the following sentence into {languageInText}, without any explanation and write only the translated sentence: {wordInText}".format(wordInText=words, languageInText=language_to)):
-                response = data["message"]
-
-            return response
+                response = data["message"][len(prev_text):]
+                prev_text = data["message"]
+                yield response
         else:
-            return "chatgpt non valid user date"
+            yield "chatgpt non valid user date"

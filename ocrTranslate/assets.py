@@ -42,3 +42,7 @@ class Assets:
     path_to_settings_light = resolve_path("ocrTranslate/assets/settings_light.png")
     path_to_loading_gif = resolve_path("ocrTranslate/assets/loading.gif")
     path_to_loading_png = resolve_path("ocrTranslate/assets/loading.png")
+    path_to_chatai_black = resolve_path("ocrTranslate/assets/chatai_black.png")
+    path_to_chatai_white = resolve_path("ocrTranslate/assets/chatai_white.png")
+    path_to_send_message_black = resolve_path("ocrTranslate/assets/send_message_black.png")
+    path_to_send_message_white = resolve_path("ocrTranslate/assets/send_message_white.png")
