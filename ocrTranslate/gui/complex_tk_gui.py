@@ -161,12 +161,6 @@ class ComplexTkGui(customtkinter.CTk):
         self.label_tab_2 = customtkinter.CTkLabel(self.tabview.tab("Speech to Text"), text="WORK IN PROGRESS")
         self.label_tab_2.grid(row=0, column=0, padx=20, pady=20)
 
-
-
-        lbl_with_my_gif = AnimatedGif(self.label_tab_2, assets.path_to_loading_gif, 0.02)
-        lbl_with_my_gif.grid(row=0, column=0, padx=20, pady=20)
-        lbl_with_my_gif.start()
-
         # ||| Text to Speech tab |||
         self.label_tab_3 = customtkinter.CTkLabel(self.tabview.tab("Text to Speech"), text="WORK IN PROGRESS")
         self.label_tab_3.grid(row=0, column=0, padx=20, pady=20)
