@@ -24,7 +24,7 @@ class AnimatedGif(ctk.CTkLabel):
 	Use start() method to begin animation, and set the stop flag to stop it
 	"""
 
-    def __init__(self, root, gif_file, delay=0.04):
+    def __init__(self, root, gif_file, delay=0.04, size=(40, 40)):
         """
 		:param root: tk.parent
 		:param gif_file: filename (and path) of animated gif
@@ -35,6 +35,7 @@ class AnimatedGif(ctk.CTkLabel):
         self.gif_file = gif_file
         self.delay = delay  # Animation delay - try low floats, like 0.04 (depends on the gif in question)
         self.stop_animation = False  # Thread exit request flag
+        self.size = size
         self.grid_saved = self.grid_info()
         self._num = 0
 
@@ -62,7 +63,7 @@ class AnimatedGif(ctk.CTkLabel):
         with Image.open(assets.path_to_loading_png) as im:
             try:
                 im.seek(self._num + 1)
-                self.gif = ctk.CTkImage(light_image=im, dark_image=im, size=(40, 40))
+                self.gif = ctk.CTkImage(light_image=im, dark_image=im, size=self.size)
                 self.configure(image=self.gif)  # do something to im
                 self._num += 1
             except EOFError:

@@ -135,32 +135,28 @@ class MyCapture:
     def get_text_from_ocr(self):
         def OCRGoogle(test):
             with open(assets.path_to_tmp, 'rb') as img:
-                result = google_api.ocr_by_google_api(ImageEnhance.Image.open(img))
-                return result
+                ocr_result = google_api.ocr_by_google_api(ImageEnhance.Image.open(img))
+                return ocr_result
 
         def OCRBaiduu(test):
             with open(assets.path_to_tmp2, 'rb') as img:
-                result = baidu.ocr_by_baidu(img.read())
-                return result
+                ocr_result = baidu.ocr_by_baidu(img.read())
+                return ocr_result
 
         def OCRCapture2Text(test):
-            result = capture2Text.ocr_by_capture2text()
-            print(result.decode('UTF-8'))
-            return result.decode('UTF-8')
+            ocr_result = capture2Text.ocr_by_capture2text()
+            return ocr_result.decode('UTF-8')
 
         def OCRGoogleFree(test):
             with open(assets.path_to_tmp, 'rb') as img:
-                result = google_free.ocr_google_free(img)
-                # self.showtextwindow(ja_text)
-                return result
+                ocr_result = google_free.ocr_google_free(img)
+                return ocr_result
 
         def OCRWindows(test):
-            print("OCRWindows")
             command = "{path_to_win_ocr} -Path '{path_to_tmp}' | Select-Object -ExpandProperty Text".format(path_to_tmp=assets.path_to_tmp2, path_to_win_ocr=assets.path_to_win_ocr)
-            result = subprocess.check_output(["powershell.exe", command])
-            print(result)
+            ocr_result = subprocess.check_output(["powershell.exe", command])
             try:
-                result_text = result.decode("cp852").strip()
+                result_text = ocr_result.decode("cp852").strip()
             except UnicodeDecodeError:
                 result_text = "Error decoding"
 
@@ -168,14 +164,12 @@ class MyCapture:
             return result_text
 
         def OCRTesseract(test):
-            print("OCRTesseract")
-            result_text = tesseract.ocr_by_tesseract(assets.path_to_tmp2)
-            return result_text
+            ocr_result = tesseract.ocr_by_tesseract(assets.path_to_tmp2)
+            return ocr_result
 
         def OCRRapid(test):
-            print("OCRRapid")
-            result_text = rapid_ocr.ocr_by_rapid(assets.path_to_tmp2)
-            return result_text
+            ocr_result = rapid_ocr.ocr_by_rapid(assets.path_to_tmp2)
+            return ocr_result
 
         list_functions = [OCRGoogle, OCRBaiduu, OCRCapture2Text, OCRGoogleFree, OCRWindows, OCRTesseract, OCRRapid]
         list_states_of_switches = [root.switch_ocr_google_api.get(), root.switch_ocr_baidu_api.get(), root.switch_ocr_capture2text.get(), root.switch_ocr_google_free.get(), root.switch_ocr_windows_local.get(), root.switch_ocr_tesseract.get(), root.switch_ocr_rapidocr.get()]
@@ -207,10 +201,6 @@ class MyCapture:
             root.clipboard_clear()
             root.clipboard_append(result)
 
-        # root.scrollable_frame_textbox.get('1.0', 'end')
-        # if root.switch_from_text.get() == 1:
-        #    results = root.scrollable_frame_textbox.get('1.0', 'end')
-
         def translate_from_ocr():
             if root.option_menu_translation.get() != "Disabled":
                 translated = translate(result)
@@ -226,6 +216,7 @@ class MyCapture:
             result_toplevel = tkinter.Toplevel()
             result_toplevel.title('OCR window')
             result_toplevel.iconbitmap(assets.path_to_icon2)
+
             def click(event):
                 result_toplevel.destroy()
 
@@ -244,6 +235,7 @@ class MyCapture:
             result_toplevel = tkinter.Toplevel()
             result_toplevel.title('OCR window')
             result_toplevel.iconbitmap(assets.path_to_icon2)
+
             def top_close():
                 result_toplevel.destroy()
 
@@ -322,12 +314,7 @@ def key(event):
 
 
 keyboard.add_hotkey('alt+win+t', key, args=('From global keystroke',))
-# root.bind('<Control-Alt-f>', key)
-
 root.button_start.configure(command=buttonCaptureClick)
-
-# buttonCapture = tkinter.Button(root, text='Start', command=buttonCaptureClick)
-# buttonCapture.place(x=160, y=10, width=80, height=30)
 
 try:
     root.mainloop()

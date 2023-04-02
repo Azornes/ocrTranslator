@@ -139,6 +139,10 @@ class ComplexTkGui(customtkinter.CTk):
         self.switch_game_mode.grid(row=1, column=0, padx=10, pady=(0, 20))
         ToolTip(self.switch_game_mode, msg="Show an additional window with the translation above the selected text. Click middle button of mouse to close window", **tooltip_style)
 
+        self.loading_icon = AnimatedGif(self.scrollable_frame_translation, assets.path_to_loading_gif, 0.04, size=(50, 50))
+        self.loading_icon.grid(row=1, column=1, rowspan=2, padx=0, pady=0, sticky="nsew")
+        self.loading_icon.grid_save()
+
         self.switch_results_to_clipboard = customtkinter.CTkSwitch(self.scrollable_frame_translation, text="Results to Clipboard", )
         self.switch_results_to_clipboard.grid(row=1, column=2, padx=10, pady=(0, 20))
 
@@ -171,12 +175,6 @@ class ComplexTkGui(customtkinter.CTk):
 
         self.button_start = customtkinter.CTkButton(master=self.home_frame, text="START", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.pressed_print)
         self.button_start.grid(row=1, column=1, padx=(20, 20), pady=5)
-
-        self.loading_icon = AnimatedGif(self.home_frame, assets.path_to_loading_gif, 0.04)
-        self.loading_icon.grid(row=1, column=1, padx=(20, 20), pady=0, sticky="e")
-        self.loading_icon.grid_save()
-        self.loading_icon.start()
-        self.loading_icon.stop()
 
         # |_________________________ create settings frame _________________________|
         self.settings_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
