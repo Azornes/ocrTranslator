@@ -1,3 +1,4 @@
+import os
 import re
 import time
 import logging
@@ -18,7 +19,7 @@ class GoogleFree:
         self.script_string: str = "var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) { items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;"
         with open(assets.path_to_test_image, 'rb') as img:
             print("Initializing ocr_google_free...")
-            self.ocr_google_free(img)
+            #self.ocr_google_free(img)
 
     def print_web_element(self, web_element_info):
         driver = web_element_info.parent
@@ -76,12 +77,16 @@ class GoogleFree:
 
         style_element1 = driver.execute_script(self.script_string, shadowDrop)
         while True:
-            style_element = driver.execute_script(self.script_string, shadowDrop)
-            # print(style_element1)
+            try:
+                style_element = driver.execute_script(self.script_string, shadowDrop)
+            except Exception:
+                #logging.exception("An exception was thrown!")
+                print("Too many requests, despawning browser...")
+                break
             if style_element != style_element1:
+                print("Success resolve captcha, despawning browser...")
                 break
             time.sleep(1)
-        print("Success resolve captcha, despawning browser...")
         driver.close()
 
     def refresh_session(self):

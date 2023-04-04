@@ -112,7 +112,7 @@ class ComplexTkGui(customtkinter.CTk):
         # self.scrollable_frame_textbox.grid(row=1, column=1,padx=(10, 10), pady=(10, 10), sticky="nsew")
 
         self.scrollable_frame_textbox = customtkinter.CTkTextbox(self.scrollable_frame, height=1500, undo=True, autoseparators=True)
-        self.scrollable_frame_textbox.grid(row=rows + 2, column=0, columnspan=4, rowspan=10, padx=(10, 10), pady=(10, 10), sticky="NSEW")
+        self.scrollable_frame_textbox.grid(row=rows + 2, column=0, columnspan=4, rowspan=10, padx=(10, 10), pady=(10, 10), sticky="nsew")
 
         # ||||||||||||||||||| create tabview |||||||||||||||||||
         self.tabview = customtkinter.CTkTabview(self.home_frame, width=25)
@@ -163,7 +163,7 @@ class ComplexTkGui(customtkinter.CTk):
         self.combobox_to_language = AutocompleteCombobox(self.scrollable_frame_translation, completevalues=list(_langs2.values()))
         self.combobox_to_language.grid(row=3, column=2, padx=(5, 20), pady=(0, 0))
 
-        self.translation_frame_textbox = customtkinter.CTkTextbox(self.scrollable_frame_translation, width=250, height=2000, undo=True, autoseparators=True)
+        self.translation_frame_textbox = customtkinter.CTkTextbox(self.scrollable_frame_translation, width=250, height=1500, undo=True, autoseparators=True)
         self.translation_frame_textbox.grid(row=4, column=0, columnspan=3, padx=(10, 10), pady=(10, 10), sticky="nsew")
 
         # ||| Speech to Text tab |||

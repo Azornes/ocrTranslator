@@ -3,6 +3,9 @@ import ctypes
 import logging
 
 import tkinter
+import customtkinter
+import win32gui
+from BlurWindow.blurWindow import blur
 
 from ocrTranslate.assets import Assets as assets
 from ocrTranslate.config_files import google_api, google_free, chatGpt, deepL, multi_translators, capture2Text, tesseract, baidu, rapid_ocr
@@ -31,6 +34,7 @@ path = os.path.dirname(os.path.abspath(__file__))
 
 
 # subprocess.call(["C:\Program Files\AutoHotkey\AutoHotkey.exe", "na wierzchu.ahk"])
+
 
 class MyCapture:
     def __init__(self):
@@ -194,7 +198,7 @@ class MyCapture:
                 else:
                     result += string_results[i] + queue.get() + "\n\n"
 
-        root.scrollable_frame_textbox.insert("end", result)
+        root.scrollable_frame_textbox.insert("0.0", result + "\n\n")
         if root.switch_results_to_clipboard.get() == 1:
             root.clipboard_clear()
             root.clipboard_append(result)
@@ -211,24 +215,100 @@ class MyCapture:
 
     def show_text_window(self, text):
         if root.switch_game_mode.get() == 1:
-            result_toplevel = tkinter.Toplevel()
-            result_toplevel.title('OCR window')
-            result_toplevel.iconbitmap(assets.path_to_icon2)
-
-            def click(event):
+            def destroy_result(event):
                 result_toplevel.destroy()
 
+            def start_move(event):
+                result_toplevel.x = event.x
+                result_toplevel.y = event.y
+
+            def stop_move(event):
+                result_toplevel.x = None
+                result_toplevel.y = None
+
+            def do_move(event):
+                deltax = event.x - result_toplevel.x
+                deltay = event.y - result_toplevel.y
+                x = result_toplevel.winfo_x() + deltax
+                y = result_toplevel.winfo_y() + deltay
+                result_toplevel.geometry(f"+{x}+{y}")
+
+            #result_toplevel = customtkinter.CTkToplevel()
+            result_toplevel = tkinter.Toplevel()
+            result_toplevel.title('OCR window')
             result_toplevel.overrideredirect(1)  # will remove the top badge of window
             result_toplevel.attributes('-topmost', 'true')
+            result_toplevel.wm_attributes('-transparentcolor', "#202020")
             result_toplevel.geometry("%dx%d+%d+%d" % (abs(self.X2.get() - self.X.get()), abs(self.Y2.get() - self.Y.get()), min(self.X.get(), self.X2.get()), abs(min(self.Y.get(), self.Y2.get()) - abs(self.Y2.get() - self.Y.get()))))
-            result_text = tkinter.Text(result_toplevel, width=abs(self.X2.get() - self.X.get()), height=abs(self.Y2.get() - self.Y.get()))
-            result_text.bind('<Button-2>', click)
-            result_text.insert(tkinter.END, text)
-            result_text.pack()
+
+            def stroke_text(text, textcolor, strokecolor):
+                xy = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+                max_width = int(canvas.cget('width'))
+                length_of_one_char = 7
+                line = ""
+                lines = []
+                for char in text:
+                    line += char
+                    test = len(line) * length_of_one_char
+                    if char == "\n" or test > max_width:
+                        lines.append(line.replace("\n", ""))
+                        line = ""
+                    elif char == " ":
+                        next_word_length = 0
+                        for next_char in text[text.index(char) + 1:]:
+                            if next_char == " ":
+                                break
+                            next_word_length += 1
+                        if test + next_word_length * length_of_one_char > max_width:
+                            lines.append(line[:-1])
+                            line = char
+                if line:
+                    lines.append(line)
+                text2 = "\n".join(lines)
+                print(repr(text2))
+                if '\n' in text2:
+                    lines2 = text2.split('\n')
+                    for i in range(len(lines2)):
+                        for x, y in xy:
+                            canvas.create_text((canvas.winfo_reqwidth() // 2) + x, 8 + y + i * 20, text=lines2[i], font=('Helvetica', 11, 'bold'), fill=strokecolor)
+                        canvas.create_text(canvas.winfo_reqwidth() // 2, 8 + i * 20, text=lines2[i], font=('Helvetica', 11, 'bold'), fill=textcolor)
+                else:
+                    for x, y in xy:
+                        canvas.create_text((canvas.winfo_reqwidth() // 2) + x, 8 + y, text=text2, font=('Helvetica', 11, 'bold'), fill=strokecolor)
+                    canvas.create_text(canvas.winfo_reqwidth() // 2, 8, text=text2, font=('Helvetica', 11, 'bold'), fill=textcolor)
+
+            canvas = tkinter.Canvas(result_toplevel, bg='#202020', width=abs(self.X2.get() - self.X.get()), height=abs(self.Y2.get() - self.Y.get()))
+            stroke_text(text, 'white', 'black')
+            canvas.configure(borderwidth=0, highlightthickness=0, relief="flat")
+            canvas.bind('<Button-2>', destroy_result)
+            canvas.bind("<ButtonPress-1>", start_move)
+            canvas.bind("<ButtonRelease-1>", stop_move)
+            canvas.bind("<B1-Motion>", do_move)
+            canvas.pack()
+            print(canvas.cget('width'))
+            canvas.cget('height')
+
+            # result_text = tkinter.Text(result_toplevel, width=abs(self.X2.get() - self.X.get()), height=abs(self.Y2.get() - self.Y.get()))
+            # result_text.configure(font=("Arial", 13, "bold"), fg="white", bg="black", borderwidth=0, highlightthickness=0, relief="flat")
+
+            #result_text = customtkinter.CTkTextbox(result_toplevel, width=abs(self.X2.get() - self.X.get()), height=abs(self.Y2.get() - self.Y.get()))
+            #helv36 = customtkinter.CTkFont(family="Helvetica", size=13, weight="bold")
+            #result_text.configure(font=helv36, text_color="white", fg_color="transparent", bg_color="#60b26c", border_spacing=0)
+
+
+            # result_text.bind('<Button-2>', destroy_result)
+            # result_text.bind("<ButtonPress-1>", start_move)
+            # result_text.bind("<ButtonRelease-1>", stop_move)
+            # result_text.bind("<B1-Motion>", do_move)
+            # result_text.insert(tkinter.END, text)
+            # result_text.pack(ipadx=0, ipady=0, padx=0, pady=0)
             self.resultbox = tkinter.Message(result_toplevel)
             self.resultbox.pack()
             result_boxes.append(result_toplevel)
-            result_toplevel.after(60000, lambda: result_toplevel.destroy())  # Destroy the widget after 30 seconds
+            hWnd = win32gui.GetParent(result_toplevel.winfo_id())
+            #blur(hWnd, hexColor='#12121240')
+            blur(hWnd)
+            result_toplevel.after(60000, lambda: result_toplevel.destroy())  # Destroy the widget after 60 seconds
         elif root.switch_window_mode.get() == 1:
             result_toplevel = tkinter.Toplevel()
             result_toplevel.title('OCR window')
@@ -249,9 +329,18 @@ class MyCapture:
 
 
 async def display_translations_ChatGPT(word, language_to="English"):
-    root.translation_frame_textbox.insert("end", "\n\n")
+    root.translation_frame_textbox.insert("0.0", "\n\n")
+    final_result = ""
+    line_num = 0
     async for response in chatGpt.translate_by_chat_gpt(word, language_to):
-        root.translation_frame_textbox.insert("end", response)
+        if "\n" in response:
+            root.translation_frame_textbox.insert(f"{line_num}.0 lineend", response)
+            line_num += 2
+        else:
+            root.translation_frame_textbox.insert(f"{line_num}.0 lineend", response)
+
+        final_result += response
+    return final_result
 
 
 def translate(results):
@@ -262,14 +351,14 @@ def translate(results):
     elif root.option_menu_translation.get() == "DeepL":
         translated = deepL.translate_by_special_point_deepL(results, root.combobox_from_language.get(), root.combobox_to_language.get())
     elif root.option_menu_translation.get() == "ChatGPT":
-        asyncio.run(display_translations_ChatGPT(results, root.combobox_to_language.get()))
+        translated = asyncio.run(display_translations_ChatGPT(results, root.combobox_to_language.get()))
     elif root.option_menu_translation.get() in ['alibaba', 'argos', 'baidu', 'bing', 'caiyun', 'google', 'iciba', 'iflytek', 'iflyrec', 'itranslate', 'lingvanex', 'mglip', 'modernMt', 'myMemory', 'niutrans', 'papago', 'qqFanyi', 'qqTranSmart', 'reverso', 'sogou', 'translateCom', 'utibet', 'volcEngine', 'yandex', 'youdao']:
         translated = multi_translators.translate(results, root.combobox_from_language.get(), root.combobox_to_language.get(), root.option_menu_translation.get())
     if root.switch_results_to_clipboard.get() == 1:
         root.clipboard_clear()
         root.clipboard_append(translated)
     elif root.option_menu_translation.get() != "ChatGPT":
-        root.translation_frame_textbox.insert("end", translated + "\n\n")
+        root.translation_frame_textbox.insert("0.0", translated + "\n\n")
     root.loading_icon.stop()
     return translated
 
