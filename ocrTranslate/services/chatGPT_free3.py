@@ -45,7 +45,7 @@ class ChatGPTFree:
             print(e)
             print("access token has been out of date, please renew token")
 
-    async def translate_by_chat_gpt(self, word, language_to="English"):
+    async def translate_by_chat_gpt_async(self, word, language_to="English"):
         if self.is_active:
             words = ""
             if type(word) != str:
@@ -61,3 +61,31 @@ class ChatGPTFree:
                 yield response
         else:
             yield "chatgpt non valid user date"
+
+    def translate_by_chat_gpt(self, word, language_to="English", prompt=""):
+        print("translate_by_chat_gpt")
+        if self.is_active:
+            words = ""
+            if type(word) != str:
+                for i in word:
+                    if i != "":
+                        words = words + i + "\n"
+            else:
+                words = word
+
+            if prompt == "":
+                prompt = "Just translate the following sentence into {languageInText}, without any explanation and write only the translated sentence: {wordInText}".format(wordInText=words, languageInText=language_to)
+            else:
+                prompt = prompt + " " + words
+
+            response = ""
+            prev_text = ""
+            for data in self.chat_gpt_free.ask(prompt):
+                response = data["message"]
+
+                message = data["message"][len(prev_text):]
+                print(message, end="", flush=True)
+                prev_text = data["message"]
+            return response
+        else:
+            return "chatgpt non valid user date"

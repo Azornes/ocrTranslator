@@ -12,7 +12,7 @@ class RapidOcr:
         if result is not None:
             for res in result:
                 print(res[1])
-                text_result += res[1] + "\n"
+                text_result += res[1].replace("\n", "") + " "
         else:
             text_result = "text not found"
         return text_result

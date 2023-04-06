@@ -4,6 +4,7 @@ import os
 
 from tktooltip import ToolTip
 import customtkinter
+
 from ocrTranslate.assets import Assets as assets
 from ocrTranslate.config_files import google_api, capture2Text, chatGpt, tesseract, baidu
 from ocrTranslate.gui.AnimatedGif import AnimatedGif
@@ -180,6 +181,14 @@ class ComplexTkGui(customtkinter.CTk):
 
         self.button_start = customtkinter.CTkButton(master=self.home_frame, text="START", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.pressed_print)
         self.button_start.grid(row=1, column=1, padx=(20, 20), pady=5)
+        self.seg_button_last_ocr_area = customtkinter.CTkSegmentedButton(self.home_frame)
+        self.seg_button_last_ocr_area.grid(row=1, column=1, padx=(20, 10), pady=(10, 10), sticky="w")
+        self.seg_button_last_ocr_area.configure(values=["Off", "On", "Saved"])
+        self.seg_button_last_ocr_area.winfo_children()[2].configure(state="disabled")
+        ToolTip(self.seg_button_last_ocr_area.winfo_children()[0], msg="Off - the option is turned off.", **tooltip_style)
+        ToolTip(self.seg_button_last_ocr_area.winfo_children()[1], msg="On - the next time the area will be saved.", **tooltip_style)
+        ToolTip(self.seg_button_last_ocr_area.winfo_children()[2], msg="Saved - the area is already saved, and does not need to be selected again for the next OCR run.", **tooltip_style)
+
         # section Chat Ai Frame
         # |_██████████████████████████████████████████████████████████████████████|
         # |_________________________ create Chat Ai frame ________________________|
@@ -219,9 +228,19 @@ class ComplexTkGui(customtkinter.CTk):
         self.settings_frame.grid_rowconfigure(0, weight=1)
         self.settings_frame.grid_columnconfigure(0, weight=1)
 
-        # ||||||||||||||||||| create scrollable frame |||||||||||||||||||
-        self.scrollable_settings_frame = customtkinter.CTkScrollableFrame(self.settings_frame, label_text="Settings")
-        self.scrollable_settings_frame.grid(row=0, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
+        # ||||||||||||||||||| create tabview |||||||||||||||||||
+        self.tabview_settings = customtkinter.CTkTabview(self.settings_frame, width=25)
+        self.tabview_settings.grid(row=0, column=0, columnspan= 2, padx=(15, 15), pady=(0, 15), sticky="nsew")
+        self.tabview_settings.add("Services")
+        self.tabview_settings.add("Other")
+        self.tabview_settings.tab("Services").grid_columnconfigure(0, weight=1)  # configure grid of individual tabs
+        self.tabview_settings.tab("Services").grid_rowconfigure(0, weight=1)  # configure grid of individual tabs
+        self.tabview_settings.tab("Other").grid_columnconfigure(0, weight=1)  # configure grid of individual tabs
+        self.tabview_settings.tab("Other").grid_rowconfigure(0, weight=1)  # configure grid of individual tabs
+
+        # ||||||||||||||||||| create scrollable frame Services settings |||||||||||||||||||
+        self.scrollable_settings_frame = customtkinter.CTkScrollableFrame(self.tabview_settings.tab("Services"), label_text="Services settings")
+        self.scrollable_settings_frame.grid(row=0, column=0, padx=0, pady=0, sticky="nsew")
         self.scrollable_settings_frame.grid_columnconfigure(0, weight=0)
         self.scrollable_settings_frame.grid_columnconfigure(1, weight=1)
 
@@ -251,6 +270,51 @@ class ComplexTkGui(customtkinter.CTk):
                 setattr(self, entry_name, entry)
                 self.entry_settings.append(entry)
                 iterations = iterations + 1
+
+        # ||||||||||||||||||| create scrollable frame Other settings |||||||||||||||||||
+        self.scrollable_settings_frame_others = customtkinter.CTkScrollableFrame(self.tabview_settings.tab("Other"), label_text="Other settings")
+        self.scrollable_settings_frame_others.grid(row=0, column=0, padx=0, pady=0, sticky="nsew")
+        self.scrollable_settings_frame_others.grid_columnconfigure(0, weight=0)
+        self.scrollable_settings_frame_others.grid_columnconfigure(1, weight=1)
+
+        self.label_main_bindings = customtkinter.CTkLabel(self.scrollable_settings_frame_others, text="Bindings" + ":", anchor="w", font=customtkinter.CTkFont(size=14, weight="bold"))
+        self.label_main_bindings.grid(row=0, column=0, padx=(5, 5), pady=(5, 5))
+
+        self.label_binding_start_ocr = customtkinter.CTkLabel(self.scrollable_settings_frame_others, text="Bind START", anchor="w")
+        self.label_binding_start_ocr.grid(row=1, column=0, padx=(5, 5), pady=(5, 5), sticky="nsew")
+
+        key_combination = []
+        def on_key_press(event):
+            nonlocal key_combination
+            separator = "_"
+            if separator in event.keysym:
+                first_part, second_part = event.keysym.split(separator, 1)
+                new_string = separator.join([first_part])
+            else:
+                new_string = event.keysym
+            if new_string not in key_combination:
+                key_combination.append(new_string)
+
+            self.entry_binding_start_ocr.configure(state="normal", border_color="orange")
+            self.entry_binding_start_ocr.delete(0, 'end')
+            self.entry_binding_start_ocr.insert(0, "+".join(key_combination))
+            self.entry_binding_start_ocr.configure(state="readonly")
+
+        def on_key_release(event):
+            nonlocal key_combination
+            self.entry_binding_start_ocr.configure(border_color="grey")
+            self.label_binding_start_ocr.focus_set()
+            key_combination = []
+
+        def on_mouse_press(event):
+            self.entry_binding_start_ocr.configure(state="readonly", border_color="orange")
+
+        self.entry_binding_start_ocr = customtkinter.CTkEntry(self.scrollable_settings_frame_others, placeholder_text="")
+        self.entry_binding_start_ocr.grid(row=1, column=1, padx=(5, 5), pady=(5, 5), sticky="nsew")
+        self.entry_binding_start_ocr.bind("<KeyPress>", on_key_press)
+        self.entry_binding_start_ocr.bind("<KeyRelease>", on_key_release)
+        self.entry_binding_start_ocr.bind("<ButtonPress>", on_mouse_press)
+
         # |_████████████████████████████████████████████████████████████████████████|
         # |___________________________ set default values __________________________|
         # |_████████████████████████████████████████████████████████████████████████|
@@ -413,10 +477,16 @@ class ComplexTkGui(customtkinter.CTk):
         config = configparser.ConfigParser()
         if first_time:
             dict_settings = {"geometry": "1100x580+52+52"}
+            dict_settings.update(self.save_mass_tree(self))
+            config[settings_name] = dict_settings
         else:
+            config.read(assets.path_settings_gui)
             dict_settings = {"geometry": self.geometry()}
-        dict_settings.update(self.save_mass_tree(self))
-        config[settings_name] = dict_settings
+            for key, value in dict_settings.items():
+                config.set("settings", str(key), str(value))
+            for key, value in self.save_mass_tree(self).items():
+                config.set("settings", str(key), str(value))
+
         with open(assets.path_settings_gui, "w") as configfile:
             config.write(configfile)
 
@@ -523,8 +593,8 @@ class ComplexTkGui(customtkinter.CTk):
             self.save_setting(first_time=True)
             first_time = True
         config.read(assets.path_settings_gui)
-        self.geometry(config[settings_name]["geometry"])
         try:
+            self.geometry(config[settings_name]["geometry"])
             self.load_mass_tree(self, config, settings_name)
             if first_time:
                 self.geometry(f"{1100}x{580}")

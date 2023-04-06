@@ -100,7 +100,7 @@ class GoogleFree:
 
         self.show_captcha(driver)
 
-    def translate_by_special_point_google(self, word, language_to: str = "en") -> str:
+    def translate_by_special_point_google(self, word, language_to: str = "English") -> str:
 
         _language_to = list(_langs.keys())[list(_langs.values()).index(language_to)]
         words = ""
@@ -136,7 +136,8 @@ class GoogleFree:
         # print(request_result['sentences'][x]['trans'])
         # line = request_result[0][0].strip().replace('\n', '')
         # list_of_words_translated.append(line)
-        line = request_result[0][0].strip().replace('\n', ' ')
+        # line = request_result[0][0].strip().replace('\n', ' ')
+        line = request_result[0][0].strip()
         list_of_words_translated.append(line)
 
         result = list_to_string(list_of_words_translated)

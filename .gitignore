@@ -138,3 +138,5 @@ configs
 test
 temp/
 .chatgpt_cache.json
+/ocrTranslate/translatesubs/
+/komendy_do_budowania.txt
