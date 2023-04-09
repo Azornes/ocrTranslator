@@ -5,7 +5,7 @@
 
 <p align="center">
    <a href="https://github.com/Azornes/ocrTranslator/releases">
-    <img alt="Downloads" src="https://img.shields.io/github/downloads/Azornes/ocrTranslator/release/total?label=Downloads&style=flat-square">
+    <img alt="Downloads" src="https://img.shields.io/github/downloads/Azornes/ocrTranslator/latest/total?label=Downloads&style=flat-square">
    </a>
    <a href="https://github.com/Azornes/ocrTranslator">
     <img alt="Visitors" src="https://shields-io-visitor-counter.herokuapp.com/badge?page=Azornes.ocrTranslator&color=1D70B8&logo=GitHub&logoColor=FFFFFF&style=flat-square">
