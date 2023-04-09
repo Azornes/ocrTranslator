@@ -5,7 +5,7 @@ class RapidOcr:
     def __init__(self) -> None:
         self.rapid_ocr = RapidOCR()
 
-    def ocr_by_rapid(self, path: str) -> str:
+    def run_ocr(self, path: str) -> str:
         result, elapse = self.rapid_ocr(path)
         text_result = ""
 

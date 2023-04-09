@@ -335,8 +335,8 @@ class ComplexTkGui(customtkinter.CTk):
     def change_size_textbox(self, event):
         cursor_index = self.textbox_chat_frame._textbox.count('1.0', 'end', 'displaylines')[0]
         new_height = (cursor_index * 15)+15
-        print(cursor_index)
-        print(self.textbox_chat_frame.cget('height'))
+        #print(cursor_index)
+        #print(self.textbox_chat_frame.cget('height'))
         if new_height != self.textbox_chat_frame.cget('height') and self.textbox_chat_frame.cget('height') <= 105:
             if new_height >= 105:
                 self.textbox_chat_frame.configure(height=105)
@@ -569,7 +569,7 @@ class ComplexTkGui(customtkinter.CTk):
             child.delete(0, "end")
             child.insert(0, config[settings_name][self.get_key(str(child))])
         if "textbox" in child.winfo_name():
-            child.delete("1.0", "end")
+            child.delete("0.0", "end")
             child.insert("0.0", base64.b64decode(config[settings_name][self.get_key(str(child))]).decode("utf-8"))
         if "radiobutton" in child.winfo_name():
             print("radiobutton")

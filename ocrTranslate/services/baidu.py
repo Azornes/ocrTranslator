@@ -22,7 +22,7 @@ class Baidu:
             print(e)
             print("appid or apikey or secretkey are invalid")
 
-    def ocr_by_baidu(self, img) -> str:
+    def run_ocr(self, img) -> str:
         result = self.baidu_client.basicGeneral(img)
         result = self.get_result_text(result)
         return result

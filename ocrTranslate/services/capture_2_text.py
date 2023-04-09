@@ -13,7 +13,7 @@ class Capture2Text:
         else:
             self.is_active = False
 
-    def ocr_by_capture2text(self) -> str:
+    def run_ocr(self) -> str:
         result = subprocess.check_output(self.path_to_Capture2Text_CLI_exe + ' --image {path_to_tmp} '.format(path_to_tmp=assets.path_to_tmp) + '--output-format ${capture}')
         return result
 

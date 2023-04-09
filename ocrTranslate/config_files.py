@@ -1,12 +1,12 @@
 from configparser import RawConfigParser
 
 from ocrTranslate.services.baidu import Baidu
-from ocrTranslate.services.capture2text import Capture2Text
+from ocrTranslate.services.capture_2_text import Capture2Text
 from ocrTranslate.services.google_free import GoogleFree
 from ocrTranslate.services.google_api import GoogleAPI
 from ocrTranslate.services.chatGPT_free3 import ChatGPTFree
-from ocrTranslate.services.DeepL import DeepL
-from ocrTranslate.services.mult_translators import MultiTranslators
+from ocrTranslate.services.deepL import DeepL
+from ocrTranslate.services.multi_translators import MultiTranslators
 from ocrTranslate.assets import Assets as assets
 from ocrTranslate.services.rapid_ocr import RapidOcr
 

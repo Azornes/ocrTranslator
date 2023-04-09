@@ -10,7 +10,7 @@ from selenium.webdriver.firefox.options import Options
 from pyshadow.main import Shadow
 
 from ocrTranslate.assets import Assets as assets
-from ocrTranslate.utils import list_to_string
+from ocrTranslate.utils import list_to_string, format_words
 from ocrTranslate.langs import _langs
 
 
@@ -100,17 +100,10 @@ class GoogleFree:
 
         self.show_captcha(driver)
 
-    def translate_by_special_point_google(self, word, language_to: str = "English") -> str:
-
+    def run_translate(self, word, language_to: str = "English") -> str:
         _language_to = list(_langs.keys())[list(_langs.values()).index(language_to)]
         words = ""
-        if type(word) != str:
-            for i in word:
-                if i != "":
-                    words = words + i + "%0A"
-        else:
-            words = word
-
+        words = format_words(word)
         url = "https://clients5.google.com/translate_a/t?client=dict-chrome-ex&sl=auto&tl={language_to}&q=".format(language_to=_language_to) + words
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36'}
 
@@ -143,7 +136,7 @@ class GoogleFree:
         result = list_to_string(list_of_words_translated)
         return result
 
-    def ocr_google_free(self, img) -> str:
+    def run_ocr(self, img) -> str:
         image = base64.b64encode(img.read()).decode('utf-8')
 
         token = "03AG"

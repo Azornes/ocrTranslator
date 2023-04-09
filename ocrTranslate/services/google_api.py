@@ -44,7 +44,7 @@ class GoogleAPI:
 
     # text_to_wav("pl-PL-Wavenet-B", "jakis tekst do powiedzenia a co?")
 
-    def ocr_by_google_api(self, image: Image) -> str:
+    def run_ocr(self, image: Image) -> str:
         """Detect text from PIL.Image data using Google Cloud Translate."""
 
         # Create bytestream of the given image
@@ -88,7 +88,7 @@ class GoogleAPI:
         '''
         return "{}".format(text)
 
-    def translate_by_google_api(self, text: str, target_language: str = 'en', source_language: str = 'ja') -> str:
+    def run_translate(self, text: str, target_language: str = 'en', source_language: str = 'ja') -> str:
         """
         from google.cloud import translate_v2 as translate2
         translate_client2 = translate2.Client(credentials=credentials)

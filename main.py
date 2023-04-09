@@ -167,21 +167,21 @@ class MyCapture:
     def get_text_from_ocr(self):
         def OCRGoogle(test):
             with open(assets.path_to_tmp, 'rb') as img:
-                ocr_result = google_api.ocr_by_google_api(ImageEnhance.Image.open(img))
+                ocr_result = google_api.run_ocr(ImageEnhance.Image.open(img))
                 return ocr_result
 
         def OCRBaiduu(test):
             with open(assets.path_to_tmp2, 'rb') as img:
-                ocr_result = baidu.ocr_by_baidu(img.read())
+                ocr_result = baidu.run_ocr(img.read())
                 return ocr_result
 
         def OCRCapture2Text(test):
-            ocr_result = capture2Text.ocr_by_capture2text()
+            ocr_result = capture2Text.run_ocr()
             return ocr_result.decode('UTF-8')
 
         def OCRGoogleFree(test):
             with open(assets.path_to_tmp, 'rb') as img:
-                ocr_result = google_free.ocr_google_free(img)
+                ocr_result = google_free.run_ocr(img)
                 return ocr_result
 
         def OCRWindows(test):
@@ -194,11 +194,11 @@ class MyCapture:
             return result_text
 
         def OCRTesseract(test):
-            ocr_result = tesseract.ocr_by_tesseract(assets.path_to_tmp2)
+            ocr_result = tesseract.run_ocr(assets.path_to_tmp2)
             return ocr_result
 
         def OCRRapid(test):
-            ocr_result = rapid_ocr.ocr_by_rapid(assets.path_to_tmp2)
+            ocr_result = rapid_ocr.run_ocr(assets.path_to_tmp2)
             return ocr_result
 
         list_functions = [OCRGoogle, OCRBaiduu, OCRCapture2Text, OCRGoogleFree, OCRWindows, OCRTesseract, OCRRapid]
@@ -391,7 +391,7 @@ async def display_translations_ChatGPT(word, language_to="English"):
     root.translation_frame_textbox.insert("0.0", "\n\n")
     final_result = ""
     line_num = 0
-    async for response in chatGpt.translate_by_chat_gpt_async(word, language_to):
+    async for response in chatGpt.run_translate_async(word, language_to):
         if "\n" in response:
             root.translation_frame_textbox.insert(f"{line_num}.0 lineend", response)
             line_num += 2
@@ -406,13 +406,13 @@ def translate(results):
     root.loading_icon.start()
     translated = ""
     if root.option_menu_translation.get() == "GoogleFree":
-        translated = google_free.translate_by_special_point_google(results, root.combobox_to_language.get())
+        translated = google_free.run_translate(results, root.combobox_to_language.get())
     elif root.option_menu_translation.get() == "DeepL":
-        translated = deepL.translate_by_special_point_deepL(results, root.combobox_from_language.get(), root.combobox_to_language.get())
+        translated = deepL.run_translate(results, root.combobox_from_language.get(), root.combobox_to_language.get())
     elif root.option_menu_translation.get() == "ChatGPT":
         translated = asyncio.run(display_translations_ChatGPT(results, root.combobox_to_language.get()))
     elif root.option_menu_translation.get() in ['alibaba', 'argos', 'baidu', 'bing', 'caiyun', 'google', 'iciba', 'iflytek', 'iflyrec', 'itranslate', 'lingvanex', 'mglip', 'modernMt', 'myMemory', 'niutrans', 'papago', 'qqFanyi', 'qqTranSmart', 'reverso', 'sogou', 'translateCom', 'utibet', 'volcEngine', 'yandex', 'youdao']:
-        translated = multi_translators.translate(results, root.combobox_from_language.get(), root.combobox_to_language.get(), root.option_menu_translation.get())
+        translated = multi_translators.run_translate(results, root.combobox_from_language.get(), root.combobox_to_language.get(), root.option_menu_translation.get())
     if root.switch_results_to_clipboard.get() == 1:
         root.clipboard_clear()
         root.clipboard_append(translated)
@@ -485,6 +485,35 @@ def load_hotkey():
 
 load_hotkey()
 root.button_start.configure(command=buttonCaptureClick)
+
+
+async def display_chat_ChatGPT(word):
+    async for response in chatGpt.run_chat_ai_async(word):
+        root.textbox_chatgpt_frame.insert('end', response)
+    root.textbox_chatgpt_frame.insert('end', "\n\n")
+
+def send_message_chat_ai():
+    # root.loading_icon.start()
+    message = root.textbox_chat_frame.get(0.0, 'end')
+    print(message)
+    root.textbox_chat_frame.delete(0.0, 'end')
+
+    root.textbox_chatgpt_frame.insert('end', f"You:\n")
+    root.textbox_chatgpt_frame.insert('end', f"{message}\n")
+    root.textbox_chatgpt_frame.insert('end', f"ChatGPT:\n")
+    asyncio.run(display_chat_ChatGPT(message))
+    # root.loading_icon.stop()
+
+
+def send_message_chat_ai_button():
+    thread = Thread(target=send_message_chat_ai)
+    thread.start()
+
+
+
+root.button_send_message_chat_ai.configure(command=send_message_chat_ai_button)
+
+
 
 try:
     root.mainloop()
