@@ -318,6 +318,7 @@ class ComplexTkGui(customtkinter.CTk):
         # |_████████████████████████████████████████████████████████████████████████|
         # |___________________________ set default values __________________________|
         # |_████████████████████████████████████████████████████████████████████████|
+        self.seg_button_last_ocr_area.set("Off")
         self.appearance_mode_optionemenu.set("Dark")
         self.scaling_optionemenu.set("100%")
         self.option_menu_translation.set("Disabled")

@@ -4,6 +4,9 @@
 </p>
 
 <p align="center">
+   <a href="https://github.com/Azornes/ocrTranslator/releases">
+    <img alt="Downloads" src="https://img.shields.io/github/downloads/Azornes/ocrTranslator/v0.1.0/total?label=Downloads&style=flat-square">
+   </a>
    <a href="https://github.com/Azornes/ocrTranslator">
     <img alt="Visitors" src="https://shields-io-visitor-counter.herokuapp.com/badge?page=Azornes.ocrTranslator&color=1D70B8&logo=GitHub&logoColor=FFFFFF&style=flat-square">
    </a>
@@ -11,6 +14,8 @@
     <img alt="python 3.9" src="https://img.shields.io/badge/python-3.9-3776AB?logo=Python&logoColor=FFFFFF&style=flat-square">
    </a>
 </p>
+
+[![Downloads](https://static.pepy.tech/badge/revchatgpt)](https://pypi.python.org/pypi/revChatGPT)
 
 ---
 With this app, you can select your preferred OCR and translation services. After clicking on START or using the keyboard shortcut Alt+Win+T, the program will launch and you can choose the area of the screen to scan for text using OCR. If you have selected a translation service, the text will then be automatically translated.
