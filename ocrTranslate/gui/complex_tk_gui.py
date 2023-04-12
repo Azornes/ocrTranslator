@@ -216,9 +216,13 @@ class ComplexTkGui(customtkinter.CTk):
         self.textbox_chat_frame.bind("<KeyRelease>", self.change_size_textbox)
         self.textbox_chat_frame.bind("<KeyPress>", self.change_size_textbox)
 
-        self.button_send_message_chat_ai = customtkinter.CTkButton(master=self.chat_ai_frame, text="", fg_color="transparent", border_width=0, width=26, anchor="left", height=26, text_color=("gray10", "#DCE4EE"), image=self.send_message_icon, command=self.reverse_languages)
+
+        self.button_send_message_chat_ai = customtkinter.CTkButton(master=self.chat_ai_frame, text="", fg_color="transparent", border_width=0, width=26, anchor="left", height=26, text_color=("gray10", "#DCE4EE"), image=self.send_message_icon)
         self.button_send_message_chat_ai.grid(row=1, column=1, padx=(5, 20), pady=(20, 20), sticky="nsew")
 
+        self.textbox_chat_frame.bind("<Shift-Return>", self.shift_enter)
+        self.textbox_chat_frame.bind("<KeyRelease-Return>", self.shift_enter)
+        self.textbox_chat_frame.bind("<Return>", lambda e: "break")
         # section Settings Frame
         # |_████████████████████████████████████████████████████████████████████████|
         # |_________________________ create settings frame _________________________|
@@ -332,6 +336,17 @@ class ComplexTkGui(customtkinter.CTk):
     # |_████████████████████████████████████████████████████████████████████████|
     # |___________________________ Functions __________________________|
     # |_████████████████████████████████████████████████████████████████████████|
+
+    def send_message_chat_ai(self, event=None):
+        if event is None or event.keysym == 'Return':
+            self.button_send_message_chat_ai.invoke()
+
+    def shift_enter(self, event=None):
+        if event is not None and event.keysym == 'Return' and event.state == 9:
+            self.change_size_textbox(event)
+        elif event is not None and event.keysym == 'Return' and event.state == 8:
+            if self.textbox_chat_frame.get("0.0", "end").strip():
+                self.button_send_message_chat_ai.invoke()
 
     def change_size_textbox(self, event):
         cursor_index = self.textbox_chat_frame._textbox.count('1.0', 'end', 'displaylines')[0]

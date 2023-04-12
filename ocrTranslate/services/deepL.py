@@ -1,7 +1,7 @@
 import asyncio
 
 import deepl
-from ocrTranslate.langs import _langs
+from ocrTranslate.langs import _langs, convert_language
 from ocrTranslate.utils import format_words
 
 
@@ -15,7 +15,7 @@ class DeepL:
             print(e)
 
     # deepl-translate library
-    def run_translate_old(self, word, language_from="english", language_to="polish"):
+    def run_translate_old(self, word, language_from: str = "English", language_to: str = " Polish"):
         words = ""
         if type(word) != str:
             for i in word:
@@ -29,22 +29,15 @@ class DeepL:
         return result
 
     # deepl-cli library
-    def run_translate(self, word, language_from="english", language_to="polish"):
-        _language_to = list(_langs.keys())[list(_langs.values()).index(language_to)]
-        _language_from = list(_langs.keys())[list(_langs.values()).index(language_from)]
+    def run_translate(self, word, language_from: str = "English", language_to: str = "Polish"):
+        self.deepl_init.from_lang, self.deepl_init.to_lang = convert_language(language_from, language_to)
         words = format_words(word)
-        self.deepl_init.to_lang = _language_to
-        self.deepl_init.from_lang = _language_from
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         result = self.deepl_init.translate(words)
         return result
 
-    async def run_translate_async(self, word, language_from="english", language_to="polish"):
-        _language_to = list(_langs.keys())[list(_langs.values()).index(language_to)]
-        _language_from = list(_langs.keys())[list(_langs.values()).index(language_from)]
+    async def run_translate_async(self, word, language_from: str = "English", language_to: str = "Polish"):
+        self.deepl_init.from_lang, self.deepl_init.to_lang = convert_language(language_from, language_to)
         words = format_words(word)
-        self.deepl_init.to_lang = _language_to
-        self.deepl_init.from_lang = _language_from
         return await self.deepl_init.translate_async(words)
-
