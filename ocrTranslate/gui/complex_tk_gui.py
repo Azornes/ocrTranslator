@@ -182,9 +182,9 @@ class ComplexTkGui(customtkinter.CTk):
 
 
         self.button_start = customtkinter.CTkButton(master=self.home_frame, text="START", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.pressed_print)
-        self.button_start.grid(row=1, column=1, padx=(20, 20), pady=5)
+        self.button_start.grid(row=1, column=0, columnspan = 2, padx=(20, 20), pady=5)
         self.seg_button_last_ocr_area = customtkinter.CTkSegmentedButton(self.home_frame)
-        self.seg_button_last_ocr_area.grid(row=1, column=1, padx=(20, 10), pady=(10, 10), sticky="w")
+        self.seg_button_last_ocr_area.grid(row=1, column=0, padx=(20, 10), pady=(10, 10), sticky="")
         self.seg_button_last_ocr_area.configure(values=["Off", "On", "Saved"])
         self.seg_button_last_ocr_area.winfo_children()[2].configure(state="disabled")
         ToolTip(self.seg_button_last_ocr_area.winfo_children()[0], msg="Off - the option is turned off.", **tooltip_style)
