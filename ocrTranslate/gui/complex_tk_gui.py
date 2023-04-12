@@ -38,10 +38,10 @@ class ComplexTkGui(customtkinter.CTk):
         self.home_image = customtkinter.CTkImage(light_image=Image.open(assets.path_to_home_dark), dark_image=Image.open(assets.path_to_home_light), size=(20, 20))
         self.settings_image = customtkinter.CTkImage(light_image=Image.open(assets.path_to_settings_dark), dark_image=Image.open(assets.path_to_settings_light), size=(20, 20))
         # ||||||||||||||||||| create sidebar frame with widgets |||||||||||||||||||
-        self.sidebar_frame = customtkinter.CTkFrame(self, width=100, corner_radius=0)
+        self.sidebar_frame = customtkinter.CTkFrame(self, width=100, corner_radius=10)
 
         self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="OCR_Translator", font=customtkinter.CTkFont(size=20, weight="bold"))
-        self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 10))
+        self.logo_label.grid(row=0, column=0, padx=20, pady=(10, 10))
 
         self.sidebar_frame.grid_rowconfigure(4, weight=1)
 
@@ -78,7 +78,7 @@ class ComplexTkGui(customtkinter.CTk):
 
         # ||||||||||||||||||| create scrollable frame |||||||||||||||||||
         self.scrollable_frame = customtkinter.CTkScrollableFrame(self.home_frame, label_text="OCR Checker")
-        self.scrollable_frame.grid(row=0, column=0, padx=(20, 0), pady=(20, 0), sticky="nsew")
+        self.scrollable_frame.grid(row=0, column=0, padx=(0, 0), pady=(20, 0), sticky="nsew")
         self.scrollable_frame.grid_columnconfigure((0, 1, 2, 3), weight=1)
         # self.scrollable_frame.grid_columnconfigure("all", weight=1)
 
@@ -176,8 +176,10 @@ class ComplexTkGui(customtkinter.CTk):
         self.label_tab_3.grid(row=0, column=0, padx=20, pady=20)
 
         # ||||||||||||||||||| create main entry and button |||||||||||||||||||
-        self.button_options = customtkinter.CTkButton(master=self.home_frame, text="Options", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.hide_show_side_bar)
-        self.button_options.grid(row=1, column=0, padx=(20, 20), pady=5)
+        self.button_options = customtkinter.CTkButton(master=self, corner_radius=0, height=20, width= 20, border_spacing=0, text="", fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"), image=self.settings_image, anchor="w", command=self.hide_show_side_bar)
+        #self.button_options = customtkinter.CTkButton(master=self, text="Options", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), width= 25, command=self.hide_show_side_bar)
+        self.button_options.grid(row=0, column=0, padx=(0, 0), pady=(0, 0), sticky="nw")
+
 
         self.button_start = customtkinter.CTkButton(master=self.home_frame, text="START", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.pressed_print)
         self.button_start.grid(row=1, column=1, padx=(20, 20), pady=5)
@@ -201,7 +203,7 @@ class ComplexTkGui(customtkinter.CTk):
 
         # ||||||||||||||||||| create tabview |||||||||||||||||||
         self.tabview_chat_ai = customtkinter.CTkTabview(self.chat_ai_frame, width=25)
-        self.tabview_chat_ai.grid(row=0, column=0, columnspan= 2, padx=(20, 20), pady=(5, 5), sticky="nsew")
+        self.tabview_chat_ai.grid(row=0, column=0, columnspan= 2, padx=(0, 20), pady=(5, 5), sticky="nsew")
         self.tabview_chat_ai.add("ChatGPT")
         self.tabview_chat_ai.add("Bing")
         self.tabview_chat_ai.add("Bard")
@@ -234,7 +236,7 @@ class ComplexTkGui(customtkinter.CTk):
 
         # ||||||||||||||||||| create tabview |||||||||||||||||||
         self.tabview_settings = customtkinter.CTkTabview(self.settings_frame, width=25)
-        self.tabview_settings.grid(row=0, column=0, columnspan= 2, padx=(15, 15), pady=(0, 15), sticky="nsew")
+        self.tabview_settings.grid(row=0, column=0, columnspan= 2, padx=(0, 20), pady=(0, 20), sticky="nsew")
         self.tabview_settings.add("Services")
         self.tabview_settings.add("Other")
         self.tabview_settings.tab("Services").grid_columnconfigure(0, weight=1)  # configure grid of individual tabs
@@ -363,7 +365,7 @@ class ComplexTkGui(customtkinter.CTk):
         if self.sidebar_frame.winfo_manager() == "grid":
             self.sidebar_frame.grid_forget()
         else:
-            self.sidebar_frame.grid(row=0, column=0, rowspan=4, sticky="nsew")
+            self.sidebar_frame.grid(row=0, column=0, rowspan=4, pady=(30, 0),padx=(0, 20), sticky="nsew")
             self.sidebar_frame.grid_columnconfigure(0, weight=1)
 
     def disable_all_ocr_switchers(self):
@@ -511,7 +513,7 @@ class ComplexTkGui(customtkinter.CTk):
         chatGpt.__init__(email=config["settings"]['entry_chatgpt_email'], password=config["settings"]['entry_chatgpt_password'], session_token=config["settings"]['entry_chatgpt_session_token'], access_token=config["settings"]['entry_chatgpt_access_token'])
         baidu.__init__(appid=config["settings"]['entry_baidu_appid'], apikey=config["settings"]['entry_baidu_apikey'], secretkey=config["settings"]['entry_baidu_secretkey'])
 
-        self.check_ocrs_are_active()
+        self.disable_all_ocr_switchers()
 
     def save_mass(self, child, result={}):
         # print(child)
@@ -546,7 +548,7 @@ class ComplexTkGui(customtkinter.CTk):
         if "textbox" in child.winfo_name():
             # print("textbox")
             # print(child.get(0.0, 'end-1c'))
-            result[self.get_key(str(child))] = base64.b64encode(child.get("1.0", "end").encode("utf-8")).decode("utf-8"),
+            result[self.get_key(str(child))] = base64.b64encode(child.get("0.0", "end-1c").encode("utf-8")).decode("utf-8"),
         if "radiobutton" in child.winfo_name():
             print("radiobutton")
         return result
