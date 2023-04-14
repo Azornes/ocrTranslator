@@ -411,7 +411,7 @@ def translate(results):
         translated = deepL.run_translate(results, root.combobox_from_language.get(), root.combobox_to_language.get())
     elif root.option_menu_translation.get() == "ChatGPT":
         translated = asyncio.run(display_translations_ChatGPT(results, root.combobox_to_language.get()))
-    elif root.option_menu_translation.get() in ['alibaba', 'argos', 'baidu', 'bing', 'caiyun', 'google', 'iciba', 'iflytek', 'iflyrec', 'itranslate', 'lingvanex', 'mglip', 'modernMt', 'myMemory', 'niutrans', 'papago', 'qqFanyi', 'qqTranSmart', 'reverso', 'sogou', 'translateCom', 'utibet', 'volcEngine', 'yandex', 'youdao']:
+    elif root.option_menu_translation.get() in ['alibaba', 'apertium', 'argos', 'baidu', 'bing', 'caiyun', 'cloudYi', 'deepl', 'elia', 'google', 'iciba', 'iflytek', 'iflyrec', 'itranslate', 'judic', 'languageWire', 'lingvanex', 'niutrans', 'mglip', 'modernMt', 'myMemory', 'papago', 'qqFanyi', 'qqTranSmart', 'reverso', 'sogou', 'sysTran', 'tilde', 'translateCom', 'translateMe', 'utibet', 'volcEngine', 'yandex', 'yeekit', 'youdao']:
         translated = multi_translators.run_translate(results, root.combobox_from_language.get(), root.combobox_to_language.get(), root.option_menu_translation.get())
     if root.switch_results_to_clipboard.get() == 1:
         root.clipboard_clear()
@@ -424,7 +424,7 @@ def translate(results):
 
 def translate_without_ocr():
     if root.switch_from_text.get() == 1:
-        translate(root.scrollable_frame_textbox.get('1.0', 'end'))
+        translate(root.scrollable_frame_textbox.get('0.0', 'end'))
     else:
         translate(root.clipboard_get())
 
@@ -489,7 +489,7 @@ root.button_start.configure(command=buttonCaptureClick)
 
 async def display_chat_ChatGPT(word):
     async for response in chatGpt.run_chat_ai_async(word):
-        root.textbox_chatgpt_frame.insert('end', response)
+        root.textbox_chatgpt_frame.insert('end', response, 'chatbot_message')
     root.textbox_chatgpt_frame.insert('end', "\n\n")
 
 def send_message_chat_ai():
@@ -498,14 +498,16 @@ def send_message_chat_ai():
     print(message)
     root.textbox_chat_frame.delete(0.0, 'end')
 
-    root.textbox_chatgpt_frame.insert('end', f"You:\n")
-    root.textbox_chatgpt_frame.insert('end', f"{message}\n")
-    root.textbox_chatgpt_frame.insert('end', f"ChatGPT:\n")
+    root.textbox_chatgpt_frame.insert('end', f"You:\n", 'user_name')
+    root.textbox_chatgpt_frame.insert('end', f"{message}\n", 'user_message')
+    root.textbox_chatgpt_frame.insert('end', f"ChatGPT:\n", 'chatbot_name')
     asyncio.run(display_chat_ChatGPT(message))
     # root.loading_icon.stop()
 
 
 def send_message_chat_ai_button():
+    #root.textbox_chatgpt_frame.insert("end", "test\n", "user")
+    #root.textbox_chatgpt_frame.insert("end", "test\n", 'chatbot')
     thread = Thread(target=send_message_chat_ai)
     thread.start()
 

@@ -2,6 +2,7 @@ from configparser import RawConfigParser
 
 from ocrTranslate.services.baidu import Baidu
 from ocrTranslate.services.capture_2_text import Capture2Text
+from ocrTranslate.services.edge_gpt import EdgeGPTFree
 from ocrTranslate.services.google_free import GoogleFree
 from ocrTranslate.services.google_api import GoogleAPI
 from ocrTranslate.services.chatGPT_free3 import ChatGPTFree
@@ -45,6 +46,13 @@ try:
                           )
 except KeyError:
     chatGpt = ChatGPTFree()
+
+try:
+    edgeGpt = EdgeGPTFree(cookies=config["settings"]['entry_edgeGpt_cookies'],
+                          )
+except KeyError:
+    edgeGpt = EdgeGPTFree()
+
 
 try:
     baidu = Baidu(appid=config["settings"]['entry_baidu_appid'], apikey=config["settings"]['entry_baidu_apikey'], secretkey=config["settings"]['entry_baidu_secretkey'])

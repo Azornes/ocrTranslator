@@ -18,6 +18,13 @@ result_boxes = []  # Result window identified earlier
 from PIL import Image
 
 
+def new_tag_config(self, tagName, **kwargs):
+    return self._textbox.tag_config(tagName, **kwargs)
+
+
+customtkinter.CTkTextbox.tag_config = new_tag_config
+
+
 class ComplexTkGui(customtkinter.CTk):
     def __init__(self):
         super().__init__()
@@ -176,13 +183,12 @@ class ComplexTkGui(customtkinter.CTk):
         self.label_tab_3.grid(row=0, column=0, padx=20, pady=20)
 
         # ||||||||||||||||||| create main entry and button |||||||||||||||||||
-        self.button_options = customtkinter.CTkButton(master=self, corner_radius=0, height=20, width= 20, border_spacing=0, text="", fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"), image=self.settings_image, anchor="w", command=self.hide_show_side_bar)
-        #self.button_options = customtkinter.CTkButton(master=self, text="Options", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), width= 25, command=self.hide_show_side_bar)
+        self.button_options = customtkinter.CTkButton(master=self, corner_radius=0, height=20, width=20, border_spacing=0, text="", fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"), image=self.settings_image, anchor="w", command=self.hide_show_side_bar)
+        # self.button_options = customtkinter.CTkButton(master=self, text="Options", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), width= 25, command=self.hide_show_side_bar)
         self.button_options.grid(row=0, column=0, padx=(0, 0), pady=(0, 0), sticky="nw")
 
-
         self.button_start = customtkinter.CTkButton(master=self.home_frame, text="START", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.pressed_print)
-        self.button_start.grid(row=1, column=0, columnspan = 2, padx=(20, 20), pady=5)
+        self.button_start.grid(row=1, column=0, columnspan=2, padx=(20, 20), pady=5)
         self.seg_button_last_ocr_area = customtkinter.CTkSegmentedButton(self.home_frame)
         self.seg_button_last_ocr_area.grid(row=1, column=0, padx=(20, 10), pady=(10, 10), sticky="")
         self.seg_button_last_ocr_area.configure(values=["Off", "On", "Saved"])
@@ -200,10 +206,10 @@ class ComplexTkGui(customtkinter.CTk):
 
         self.chat_ai_frame.grid_rowconfigure(0, weight=1)
         self.chat_ai_frame.grid_columnconfigure(0, weight=1)
-
+        from tkinter import Tk, font
         # ||||||||||||||||||| create tabview |||||||||||||||||||
         self.tabview_chat_ai = customtkinter.CTkTabview(self.chat_ai_frame, width=25)
-        self.tabview_chat_ai.grid(row=0, column=0, columnspan= 2, padx=(0, 20), pady=(5, 5), sticky="nsew")
+        self.tabview_chat_ai.grid(row=0, column=0, columnspan=2, padx=(0, 20), pady=(5, 5), sticky="nsew")
         self.tabview_chat_ai.add("ChatGPT")
         self.tabview_chat_ai.add("Bing")
         self.tabview_chat_ai.add("Bard")
@@ -213,18 +219,26 @@ class ComplexTkGui(customtkinter.CTk):
         self.textbox_chatgpt_frame = customtkinter.CTkTextbox(self.tabview_chat_ai.tab("ChatGPT"), undo=True, autoseparators=True)
         self.textbox_chatgpt_frame.grid(row=0, column=0, padx=(0, 0), pady=(0, 0), sticky="nsew")
 
+        self.textbox_chatgpt_frame.tag_config("right", justify='right')
+        self.textbox_chatgpt_frame.tag_config("user_name", justify='right', foreground='white', font=customtkinter.CTkFont(size=14, weight="bold"))
+        self.textbox_chatgpt_frame.tag_config("user_message", justify='right', foreground='white')
+        self.textbox_chatgpt_frame.tag_config("chatbot_name", justify='left', foreground='lightblue', font=customtkinter.CTkFont(size=14, weight="bold"))
+        self.textbox_chatgpt_frame.tag_config("chatbot_message", justify='left', foreground='lightblue')
+        self.textbox_chatgpt_frame.tag_config('red', foreground='red')
+        self.textbox_chatgpt_frame.tag_config('blue', foreground='blue')
+        self.textbox_chatgpt_frame.tag_config('green', foreground='green')
+
         self.textbox_chat_frame = customtkinter.CTkTextbox(self.chat_ai_frame, height=50, undo=True, autoseparators=True)
         self.textbox_chat_frame.grid(row=1, column=0, padx=(20, 5), pady=(20, 20), sticky="nsew")
         self.textbox_chat_frame.bind("<KeyRelease>", self.change_size_textbox)
         self.textbox_chat_frame.bind("<KeyPress>", self.change_size_textbox)
-
+        self.textbox_chat_frame.bind("<Shift-Return>", self.shift_enter)
+        self.textbox_chat_frame.bind("<KeyRelease-Return>", self.shift_enter)
+        self.textbox_chat_frame.bind("<Return>", lambda e: "break")
 
         self.button_send_message_chat_ai = customtkinter.CTkButton(master=self.chat_ai_frame, text="", fg_color="transparent", border_width=0, width=26, anchor="left", height=26, text_color=("gray10", "#DCE4EE"), image=self.send_message_icon)
         self.button_send_message_chat_ai.grid(row=1, column=1, padx=(5, 20), pady=(20, 20), sticky="nsew")
 
-        self.textbox_chat_frame.bind("<Shift-Return>", self.shift_enter)
-        self.textbox_chat_frame.bind("<KeyRelease-Return>", self.shift_enter)
-        self.textbox_chat_frame.bind("<Return>", lambda e: "break")
         # section Settings Frame
         # |_████████████████████████████████████████████████████████████████████████|
         # |_________________________ create settings frame _________________________|
@@ -236,7 +250,7 @@ class ComplexTkGui(customtkinter.CTk):
 
         # ||||||||||||||||||| create tabview |||||||||||||||||||
         self.tabview_settings = customtkinter.CTkTabview(self.settings_frame, width=25)
-        self.tabview_settings.grid(row=0, column=0, columnspan= 2, padx=(0, 20), pady=(0, 20), sticky="nsew")
+        self.tabview_settings.grid(row=0, column=0, columnspan=2, padx=(0, 20), pady=(0, 20), sticky="nsew")
         self.tabview_settings.add("Services")
         self.tabview_settings.add("Other")
         self.tabview_settings.tab("Services").grid_columnconfigure(0, weight=1)  # configure grid of individual tabs
@@ -290,6 +304,7 @@ class ComplexTkGui(customtkinter.CTk):
         self.label_binding_start_ocr.grid(row=1, column=0, padx=(5, 5), pady=(5, 5), sticky="nsew")
 
         key_combination = []
+
         def on_key_press(event):
             nonlocal key_combination
             separator = "_"
@@ -352,9 +367,9 @@ class ComplexTkGui(customtkinter.CTk):
 
     def change_size_textbox(self, event):
         cursor_index = self.textbox_chat_frame._textbox.count('1.0', 'end', 'displaylines')[0]
-        new_height = (cursor_index * 15)+15
-        #print(cursor_index)
-        #print(self.textbox_chat_frame.cget('height'))
+        new_height = (cursor_index * 15) + 15
+        # print(cursor_index)
+        # print(self.textbox_chat_frame.cget('height'))
         if new_height != self.textbox_chat_frame.cget('height') and self.textbox_chat_frame.cget('height') <= 105:
             if new_height >= 105:
                 self.textbox_chat_frame.configure(height=105)
@@ -365,7 +380,7 @@ class ComplexTkGui(customtkinter.CTk):
         if self.sidebar_frame.winfo_manager() == "grid":
             self.sidebar_frame.grid_forget()
         else:
-            self.sidebar_frame.grid(row=0, column=0, rowspan=4, pady=(30, 0),padx=(0, 20), sticky="nsew")
+            self.sidebar_frame.grid(row=0, column=0, rowspan=4, pady=(30, 0), padx=(0, 20), sticky="nsew")
             self.sidebar_frame.grid_columnconfigure(0, weight=1)
 
     def disable_all_ocr_switchers(self):

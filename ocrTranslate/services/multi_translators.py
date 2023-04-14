@@ -6,7 +6,9 @@ from ocrTranslate.langs import convert_language
 
 class MultiTranslators:
     def __init__(self) -> None:
-        print(ts.translators_pool)  # ts.preaccelerate()
+        print(ts.translators_pool)
+        #ts.preaccelerate()
+
 
     def run_translate(self, word, language_from="auto", language_to="English", translator="bing"):
         _language_from, _language_to = convert_language(language_from, language_to)
