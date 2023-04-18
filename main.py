@@ -1,6 +1,7 @@
 import asyncio
 import ctypes
 import logging
+import threading
 
 import tkinter
 
@@ -9,7 +10,7 @@ import win32gui
 from BlurWindow.blurWindow import blur
 
 from ocrTranslate.assets import Assets as assets
-from ocrTranslate.config_files import google_api, google_free, chatGpt, deepL, multi_translators, capture2Text, tesseract, baidu, rapid_ocr, config
+from ocrTranslate.config_files import google_api, google_free, chatGpt, deepL, multi_translators, capture2Text, tesseract, baidu, rapid_ocr, config, edgeGpt
 from ocrTranslate.gui.complex_tk_gui import ComplexTkGui, result_boxes
 
 import os
@@ -397,7 +398,22 @@ async def display_translations_ChatGPT(word, language_to="English"):
             line_num += 2
         else:
             root.translation_frame_textbox.insert(f"{line_num}.0 lineend", response)
+        final_result += response
+    return final_result
 
+
+
+async def display_translations_EdgeGPT(word, language_to="English"):
+    root.translation_frame_textbox.insert("0.0", "\n\n")
+    final_result = ""
+    line_num = 0
+
+    async for response in edgeGpt.run_translate_async(word, language_to):
+        if "\n" in response:
+            root.translation_frame_textbox.insert(f"{line_num}.0 lineend", response)
+            line_num += 2
+        else:
+            root.translation_frame_textbox.insert(f"{line_num}.0 lineend", response)
         final_result += response
     return final_result
 
@@ -411,12 +427,14 @@ def translate(results):
         translated = deepL.run_translate(results, root.combobox_from_language.get(), root.combobox_to_language.get())
     elif root.option_menu_translation.get() == "ChatGPT":
         translated = asyncio.run(display_translations_ChatGPT(results, root.combobox_to_language.get()))
+    elif root.option_menu_translation.get() == "EdgeGPT":
+        translated = asyncio.run(display_translations_EdgeGPT(results, root.combobox_to_language.get()))
     elif root.option_menu_translation.get() in ['alibaba', 'apertium', 'argos', 'baidu', 'bing', 'caiyun', 'cloudYi', 'deepl', 'elia', 'google', 'iciba', 'iflytek', 'iflyrec', 'itranslate', 'judic', 'languageWire', 'lingvanex', 'niutrans', 'mglip', 'modernMt', 'myMemory', 'papago', 'qqFanyi', 'qqTranSmart', 'reverso', 'sogou', 'sysTran', 'tilde', 'translateCom', 'translateMe', 'utibet', 'volcEngine', 'yandex', 'yeekit', 'youdao']:
         translated = multi_translators.run_translate(results, root.combobox_from_language.get(), root.combobox_to_language.get(), root.option_menu_translation.get())
     if root.switch_results_to_clipboard.get() == 1:
         root.clipboard_clear()
         root.clipboard_append(translated)
-    elif root.option_menu_translation.get() != "ChatGPT":
+    elif root.option_menu_translation.get() != "ChatGPT" and root.option_menu_translation.get() != "EdgeGPT":
         root.translation_frame_textbox.insert("0.0", translated + "\n\n")
     root.loading_icon.stop()
     return translated

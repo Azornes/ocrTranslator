@@ -139,7 +139,7 @@ class ComplexTkGui(customtkinter.CTk):
         self.scrollable_frame_translation.grid(row=0, column=0, padx=(0, 0), pady=(0, 0), sticky="nsew")
         self.scrollable_frame_translation.grid_columnconfigure((0, 1, 2), weight=1)
 
-        services_translators_languages_tab = ["Disabled", "ChatGPT"]
+        services_translators_languages_tab = ["Disabled", "ChatGPT", "EdgeGPT"]
         for a in services_translators_languages.keys():
             services_translators_languages_tab.append(a)
 
@@ -503,7 +503,7 @@ class ComplexTkGui(customtkinter.CTk):
                 self.combobox_from_language.set("auto")
             if self.combobox_to_language.get() not in c:
                 self.combobox_to_language.set("")
-        elif self.option_menu_translation.get() == "ChatGPT" or self.option_menu_translation.get() == "GoogleFree":
+        elif self.option_menu_translation.get() == "ChatGPT" or self.option_menu_translation.get() == "GoogleFree" or self.option_menu_translation.get() == "EdgeGPT":
             self.combobox_from_language.configure(completevalues=list(_langs2.values()))
             self.combobox_to_language.configure(completevalues=list(_langs2.values()))
 

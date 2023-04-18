@@ -28,40 +28,26 @@ class EdgeGPTFree:
             print(e)
             print("cookies has been out of date, please renew cookies")
 
-    async def run_translate_async(self, word, language_to="English"):
-        if self.is_active:
-            words = format_words(word)
-            prev_text = ""
-            for data in self.chat_gpt_free.ask("Just translate the following sentence into {languageInText}, without any explanation and write only the translated sentence:\n{wordInText}".format(wordInText=words, languageInText=language_to)):
-                response = data["message"][len(prev_text):]
-                prev_text = data["message"]
-                yield response
-        else:
-            yield "chatgpt non valid user date"
-
-    def run_translate(self, word, language_to="English", prompt=""):
-        print("translate_by_chat_gpt")
+    async def run_translate_async(self, word, language_to="English", prompt=""):
         if self.is_active:
             words = format_words(word)
             if prompt == "":
-                prompt = "Just translate the following sentence into {languageInText}, without any explanation and write only the translated sentence: {wordInText}".format(wordInText=words, languageInText=language_to)
+                prompt = "Please, translate the following text into {languageInText} yourself, without using a web translation service and without any explanation. Write only translated text. This is text to translate: {wordInText}".format(wordInText=words, languageInText=language_to)
             else:
                 prompt = prompt + " " + words
 
-            response = ""
             prev_text = ""
-            #print(self.chat_gpt_free.conversation_id)
-            #print(self.chat_gpt_free.parent_id)
-
-            for data in self.chat_gpt_free.ask(prompt=prompt, conversation_id=str(uuid.uuid4())):
-                response = data["message"]
-                message = data["message"][len(prev_text):]
-                print(message, end="", flush=True)
-                prev_text = data["message"]
-            print("")
-            return response
+            async for data in self.edge_gpt_free.ask_stream(prompt=prompt, conversation_style=ConversationStyle.precise, wss_link="wss://sydney.bing.com/sydney/ChatHub"):
+                print(data[0])
+                print(data[1])
+                if not data[0]:
+                    response = data[1][len(prev_text):]
+                    prev_text = data[1]
+                    yield response
+                else:
+                    break
         else:
-            return "chatgpt non valid user date"
+            yield "edgegpt non valid user date. Get cookies.json from bing.com"
 
     async def run_chat_ai(self, prompt=""):
         print("run_chat_ai")
@@ -69,7 +55,7 @@ class EdgeGPTFree:
             response = await self.edge_gpt_free.ask(prompt=prompt, conversation_style=ConversationStyle.creative, wss_link="wss://sydney.bing.com/sydney/ChatHub")
             return response
         else:
-            return "chatgpt non valid user date"
+            return "edgegpt non valid user date"
 
     async def run_chat_ai_async(self, prompt=""):
         if self.is_active:
@@ -86,7 +72,7 @@ class EdgeGPTFree:
                 #response = data['item']['messages'][1]['text']
                 #yield data
         else:
-            yield "edgegpt non valid user date"
+            yield "edgegpt non valid user date. Get cookies.json from bing.com"
 
 
 def test_edge_gpt():
