@@ -486,37 +486,6 @@ def load_hotkey():
 load_hotkey()
 root.button_start.configure(command=buttonCaptureClick)
 
-
-async def display_chat_ChatGPT(word):
-    async for response in chatGpt.run_chat_ai_async(word):
-        root.textbox_chatgpt_frame.insert('end', response, 'chatbot_message')
-    root.textbox_chatgpt_frame.insert('end', "\n\n")
-
-def send_message_chat_ai():
-    # root.loading_icon.start()
-    message = root.textbox_chat_frame.get(0.0, 'end')
-    print(message)
-    root.textbox_chat_frame.delete(0.0, 'end')
-
-    root.textbox_chatgpt_frame.insert('end', f"You:\n", 'user_name')
-    root.textbox_chatgpt_frame.insert('end', f"{message}\n", 'user_message')
-    root.textbox_chatgpt_frame.insert('end', f"ChatGPT:\n", 'chatbot_name')
-    asyncio.run(display_chat_ChatGPT(message))
-    # root.loading_icon.stop()
-
-
-def send_message_chat_ai_button():
-    #root.textbox_chatgpt_frame.insert("end", "test\n", "user")
-    #root.textbox_chatgpt_frame.insert("end", "test\n", 'chatbot')
-    thread = Thread(target=send_message_chat_ai)
-    thread.start()
-
-
-
-root.button_send_message_chat_ai.configure(command=send_message_chat_ai_button)
-
-
-
 try:
     root.mainloop()
 except Exception as e:

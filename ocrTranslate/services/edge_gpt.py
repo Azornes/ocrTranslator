@@ -103,3 +103,5 @@ def test_edge_gpt():
 
     print(asyncio.run(edgeGpt.run_chat_ai("caan you remember the first time you saw a computer?")))
     print(asyncio.run(edgeGpt.run_chat_ai("what is your favorite color?")))
+
+#test_edge_gpt()

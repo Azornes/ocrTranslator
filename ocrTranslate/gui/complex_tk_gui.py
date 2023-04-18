@@ -9,6 +9,8 @@ from ocrTranslate.assets import Assets as assets
 from ocrTranslate.config_files import google_api, capture2Text, chatGpt, tesseract, baidu
 from ocrTranslate.gui.AnimatedGif import AnimatedGif
 from ocrTranslate.gui.auto_complete_combobox import AutocompleteCombobox
+from ocrTranslate.gui.auto_resize_text_box import AutoResizeTextBox
+from ocrTranslate.gui.tabviewChats import TabviewChats
 from ocrTranslate.langs import _langs, services_translators_languages, _langs2
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
@@ -203,41 +205,87 @@ class ComplexTkGui(customtkinter.CTk):
         # |_██████████████████████████████████████████████████████████████████████|
 
         self.chat_ai_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
-
         self.chat_ai_frame.grid_rowconfigure(0, weight=1)
         self.chat_ai_frame.grid_columnconfigure(0, weight=1)
-        from tkinter import Tk, font
+
         # ||||||||||||||||||| create tabview |||||||||||||||||||
-        self.tabview_chat_ai = customtkinter.CTkTabview(self.chat_ai_frame, width=25)
-        self.tabview_chat_ai.grid(row=0, column=0, columnspan=2, padx=(0, 20), pady=(5, 5), sticky="nsew")
-        self.tabview_chat_ai.add("ChatGPT")
-        self.tabview_chat_ai.add("Bing")
-        self.tabview_chat_ai.add("Bard")
-        self.tabview_chat_ai.tab("ChatGPT").grid_columnconfigure(0, weight=1)  # configure grid of individual tabs
-        self.tabview_chat_ai.tab("ChatGPT").grid_rowconfigure(0, weight=1)  # configure grid of individual tabs
-        # ||| ChatGPT tab |||
-        self.textbox_chatgpt_frame = customtkinter.CTkTextbox(self.tabview_chat_ai.tab("ChatGPT"), undo=True, autoseparators=True)
-        self.textbox_chatgpt_frame.grid(row=0, column=0, padx=(0, 0), pady=(0, 0), sticky="nsew")
 
-        self.textbox_chatgpt_frame.tag_config("right", justify='right')
-        self.textbox_chatgpt_frame.tag_config("user_name", justify='right', foreground='white', font=customtkinter.CTkFont(size=14, weight="bold"))
-        self.textbox_chatgpt_frame.tag_config("user_message", justify='right', foreground='white')
-        self.textbox_chatgpt_frame.tag_config("chatbot_name", justify='left', foreground='lightblue', font=customtkinter.CTkFont(size=14, weight="bold"))
-        self.textbox_chatgpt_frame.tag_config("chatbot_message", justify='left', foreground='lightblue')
-        self.textbox_chatgpt_frame.tag_config('red', foreground='red')
-        self.textbox_chatgpt_frame.tag_config('blue', foreground='blue')
-        self.textbox_chatgpt_frame.tag_config('green', foreground='green')
 
-        self.textbox_chat_frame = customtkinter.CTkTextbox(self.chat_ai_frame, height=50, undo=True, autoseparators=True)
-        self.textbox_chat_frame.grid(row=1, column=0, padx=(20, 5), pady=(20, 20), sticky="nsew")
-        self.textbox_chat_frame.bind("<KeyRelease>", self.change_size_textbox)
-        self.textbox_chat_frame.bind("<KeyPress>", self.change_size_textbox)
-        self.textbox_chat_frame.bind("<Shift-Return>", self.shift_enter)
-        self.textbox_chat_frame.bind("<KeyRelease-Return>", self.shift_enter)
-        self.textbox_chat_frame.bind("<Return>", lambda e: "break")
 
-        self.button_send_message_chat_ai = customtkinter.CTkButton(master=self.chat_ai_frame, text="", fg_color="transparent", border_width=0, width=26, anchor="left", height=26, text_color=("gray10", "#DCE4EE"), image=self.send_message_icon)
-        self.button_send_message_chat_ai.grid(row=1, column=1, padx=(5, 20), pady=(20, 20), sticky="nsew")
+        # self.tabviews_chat_ai = []
+        # self.textbox_ai_frames = []
+        # self.textbox_ai_send_frames = []
+        # self.buttons_send_message_ai = []
+
+        ai_services = [("ChatGPT",), ("Bing",), ("Bard",), ]
+
+        for ai_service in ai_services:
+            print(str(ai_service[0]))
+
+        #for i in range(len(ai_services)):
+        #    self.tabview_chat_ai1 = TabviewChats(self.chat_ai_frame, ai_services)
+
+        self.tabview_chat_ai1 = TabviewChats(root = self.chat_ai_frame, ai_services=ai_services, send_message_icon=self.send_message_icon)
+
+        # self.tabview_chat_ai = customtkinter.CTkTabview(self.chat_ai_frame, width=25)
+        # self.tabview_chat_ai.grid(row=0, column=0, padx=(0, 20), pady=(5, 5), sticky="nsew")
+        # self.tabview_chat_ai.add("ChatGPT")
+        # self.tabview_chat_ai.add("Bing")
+        # self.tabview_chat_ai.add("Bard")
+        # self.tabview_chat_ai.tab("ChatGPT").grid_columnconfigure(0, weight=1)  # configure grid of individual tabs
+        # self.tabview_chat_ai.tab("ChatGPT").grid_rowconfigure(0, weight=1)  # configure grid of individual tabs
+        # self.tabview_chat_ai.tab("Bing").grid_columnconfigure(0, weight=1)  # configure grid of individual tabs
+        # self.tabview_chat_ai.tab("Bing").grid_rowconfigure(0, weight=1)  # configure grid of individual tabs
+        # # ||| ChatGPT tab |||
+        # self.textbox_chatgpt_frame = customtkinter.CTkTextbox(self.tabview_chat_ai.tab("ChatGPT"), undo=True, autoseparators=True)
+        # self.textbox_chatgpt_frame.grid(row=0, column=0, padx=(0, 0), pady=(0, 0), sticky="nsew")
+        # self.textbox_chatgpt_frame.tag_config("user_name", justify='left', foreground='white', font=customtkinter.CTkFont(size=14, weight="bold"))
+        # self.textbox_chatgpt_frame.tag_config("user_message", justify='left', foreground='white')
+        # self.textbox_chatgpt_frame.tag_config("chatbot_name", justify='left', foreground='lightblue', font=customtkinter.CTkFont(size=14, weight="bold"))
+        # self.textbox_chatgpt_frame.tag_config("chatbot_message", justify='left', foreground='lightblue')
+        #
+        # self.textbox_chatgpt_send_frame = AutoResizeTextBox(self.textbox_chatgpt_frame)
+        # self.textbox_chatgpt_send_frame.grid(row=1, column=0, padx=(15, 0), pady=(0, 0), sticky="nsew")
+        # self.button_send_message_chatgpt_ai = customtkinter.CTkButton(master=self.textbox_chatgpt_send_frame, text="", fg_color="transparent", bg_color="transparent", border_width=0, width=26, anchor="left", height=26, text_color=("gray10", "#DCE4EE"), image=self.send_message_icon)
+        # self.button_send_message_chatgpt_ai.grid(row=0, column=1, padx=(14, 7), pady=(4, 0), sticky="e")
+        # self.textbox_chatgpt_send_frame.button = self.button_send_message_chatgpt_ai
+        # # ||| Bing tab |||
+        # self.textbox_bing_frame = customtkinter.CTkTextbox(self.tabview_chat_ai.tab("Bing"), undo=True, autoseparators=True)
+        # self.textbox_bing_frame.grid(row=0, column=0, padx=(0, 0), pady=(0, 0), sticky="nsew")
+        # self.textbox_bing_frame.tag_config("user_name", justify='left', foreground='white', font=customtkinter.CTkFont(size=14, weight="bold"))
+        # self.textbox_bing_frame.tag_config("user_message", justify='left', foreground='white')
+        # self.textbox_bing_frame.tag_config("chatbot_name", justify='left', foreground='lightblue', font=customtkinter.CTkFont(size=14, weight="bold"))
+        # self.textbox_bing_frame.tag_config("chatbot_message", justify='left', foreground='lightblue')
+        #
+        # self.textbox_bing_send_frame = AutoResizeTextBox(self.textbox_bing_frame)
+        # self.textbox_bing_send_frame.grid(row=1, column=0, padx=(15, 0), pady=(0, 0), sticky="nsew")
+        # self.button_send_message_bing_ai = customtkinter.CTkButton(master=self.textbox_bing_send_frame, text="", fg_color="transparent", bg_color="transparent", border_width=0, width=26, anchor="left", height=26, text_color=("gray10", "#DCE4EE"), image=self.send_message_icon)
+        # self.button_send_message_bing_ai.grid(row=0, column=1, padx=(14, 7), pady=(4, 0), sticky="e")
+        # self.textbox_bing_send_frame.button = self.button_send_message_bing_ai
+        #
+        # self.button_add_chat = customtkinter.CTkButton(master=self.chat_ai_frame, text="", fg_color="transparent", bg_color="transparent", border_width=0, width=26, anchor="left", height=26, text_color=("gray10", "#DCE4EE"), image=self.send_message_icon, command=self.add_new_chat)
+        # self.button_add_chat.grid(row=0, column=0, padx=(14, 7), pady=(4, 0), sticky="w")
+
+        # # ||||||||||||||||||| create tabview |||||||||||||||||||
+        # self.tabview_chat_ai2 = customtkinter.CTkTabview(self.chat_ai_frame, width=25)
+        # self.tabview_chat_ai2.grid(row=0, column=1, padx=(0, 20), pady=(5, 5), sticky="nsew")
+        # self.tabview_chat_ai2.add("ChatGPT")
+        # self.tabview_chat_ai2.add("Bing")
+        # self.tabview_chat_ai2.add("Bard")
+        # self.tabview_chat_ai2.tab("ChatGPT").grid_columnconfigure(0, weight=1)  # configure grid of individual tabs
+        # self.tabview_chat_ai2.tab("ChatGPT").grid_rowconfigure(0, weight=1)  # configure grid of individual tabs
+        # self.tabview_chat_ai2.tab("Bing").grid_columnconfigure(0, weight=1)  # configure grid of individual tabs
+        # self.tabview_chat_ai2.tab("Bing").grid_rowconfigure(0, weight=1)  # configure grid of individual tabs
+        #
+        # self.tabview_chat_ai2.grid_forget()
+        # self.tabview_chat_ai2.grid(row=0, column=1, padx=(0, 20), pady=(5, 5), sticky="nsew")
+
+        # ||| text send to all |||
+        self.textbox_chat_frame = AutoResizeTextBox(self.chat_ai_frame)
+        self.textbox_chat_frame.grid(row=1, column=0, padx=(5, 20), pady=(15, 15), sticky="nsew")
+        self.button_send_message_chat_ai = customtkinter.CTkButton(master=self.textbox_chat_frame, text="", fg_color="transparent", bg_color="transparent", border_width=0, width=26, anchor="left", height=26, text_color=("gray10", "#DCE4EE"), image=self.send_message_icon)
+        self.button_send_message_chat_ai.grid(row=0, column=1, padx=(14, 7), pady=(4, 0), sticky="e")
+        self.textbox_chat_frame.button = self.button_send_message_chat_ai
 
         # section Settings Frame
         # |_████████████████████████████████████████████████████████████████████████|
@@ -354,27 +402,47 @@ class ComplexTkGui(customtkinter.CTk):
     # |___________________________ Functions __________________________|
     # |_████████████████████████████████████████████████████████████████████████|
 
-    def send_message_chat_ai(self, event=None):
-        if event is None or event.keysym == 'Return':
-            self.button_send_message_chat_ai.invoke()
-
-    def shift_enter(self, event=None):
-        if event is not None and event.keysym == 'Return' and event.state == 9:
-            self.change_size_textbox(event)
-        elif event is not None and event.keysym == 'Return' and event.state == 8:
-            if self.textbox_chat_frame.get("0.0", "end").strip():
-                self.button_send_message_chat_ai.invoke()
-
-    def change_size_textbox(self, event):
-        cursor_index = self.textbox_chat_frame._textbox.count('1.0', 'end', 'displaylines')[0]
-        new_height = (cursor_index * 15) + 15
-        # print(cursor_index)
-        # print(self.textbox_chat_frame.cget('height'))
-        if new_height != self.textbox_chat_frame.cget('height') and self.textbox_chat_frame.cget('height') <= 105:
-            if new_height >= 105:
-                self.textbox_chat_frame.configure(height=105)
+    def add_new_chat(self):
+        for i, tabview_chat in enumerate(self.tabviews_chat_ai):
+            if tabview_chat.winfo_manager() == "grid":
+                tabview_chat.grid_forget()
+                self.chat_ai_frame.grid_columnconfigure((1, 2), weight=0)
             else:
-                self.textbox_chat_frame.configure(height=new_height)
+                tabview_chat.grid(row=0, column=i, padx=(0, 20), pady=(5, 5), sticky="nsew")
+                self.chat_ai_frame.grid_columnconfigure((0, 1, 2), weight=1)
+
+    def clone_widget(self, widget, master=None):
+        parent = master if master else widget.master
+        cls = widget.__class__
+
+        print(parent)
+        print(cls)
+        print(widget.configure())
+        # Clone the widget configuration
+        if widget.configure() != None:
+            cfg = {key: widget.cget(key) for key in widget.configure()}
+        else:
+            cfg = {}
+        cloned = cls(parent, **cfg)
+
+        # Clone the widget's children
+        for child in widget.winfo_children():
+            child_cloned = self.clone_widget(child, master=cloned)
+            print(child)
+            if child.grid_info():
+                grid_info = {k: v for k, v in child.grid_info().items() if k not in {'in'}}
+                child_cloned.grid(**grid_info)
+            elif child.place_info():
+                place_info = {k: v for k, v in child.place_info().items() if k not in {'in'}}
+                child_cloned.place(**place_info)
+            else:
+                try:
+                    pack_info = {k: v for k, v in child.pack_info().items() if k not in {'in'}}
+                    child_cloned.pack(**pack_info)
+                except:
+                    pass
+
+        return cloned
 
     def hide_show_side_bar(self):
         if self.sidebar_frame.winfo_manager() == "grid":
@@ -563,7 +631,14 @@ class ComplexTkGui(customtkinter.CTk):
         if "textbox" in child.winfo_name():
             # print("textbox")
             # print(child.get(0.0, 'end-1c'))
-            result[self.get_key(str(child))] = base64.b64encode(child.get("0.0", "end-1c").encode("utf-8")).decode("utf-8"),
+            # print(str(child))
+            # print(self.get_key(str(child)))
+            # print(self.tabview_chat_ai1.get_key(str(child)))
+            if self.get_key(str(child)) != "key doesn't exist":
+                result[self.get_key(str(child))] = base64.b64encode(child.get("0.0", "end-1c").encode("utf-8")).decode("utf-8")
+            else:
+                result[self.tabview_chat_ai1.get_key(str(child))] = base64.b64encode(child.get("0.0", "end-1c").encode("utf-8")).decode("utf-8")
+            #result[self.get_key(str(child))] = base64.b64encode(child.get("0.0", "end-1c").encode("utf-8")).decode("utf-8"),
         if "radiobutton" in child.winfo_name():
             print("radiobutton")
         return result
@@ -603,7 +678,11 @@ class ComplexTkGui(customtkinter.CTk):
             child.insert(0, config[settings_name][self.get_key(str(child))])
         if "textbox" in child.winfo_name():
             child.delete("0.0", "end")
-            child.insert("0.0", base64.b64decode(config[settings_name][self.get_key(str(child))]).decode("utf-8"))
+            if self.get_key(str(child)) != "key doesn't exist":
+                child.insert("0.0", base64.b64decode(config[settings_name][self.get_key(str(child))]).decode("utf-8"))
+            else:
+                child.insert("0.0", base64.b64decode(config[settings_name][self.tabview_chat_ai1.get_key(str(child))]).decode("utf-8"))
+            #child.insert("0.0", base64.b64decode(config[settings_name][self.get_key(str(child))]).decode("utf-8"))
         if "radiobutton" in child.winfo_name():
             print("radiobutton")
         if "optionmenu" in child.winfo_name():
