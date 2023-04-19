@@ -20,7 +20,7 @@ With this app, you can select your preferred OCR and translation services. After
 
 preview:
 
-https://user-images.githubusercontent.com/20650591/233106127-b8770428-ce9a-48f2-b20b-c3bb4aff1672.mp4
+https://user-images.githubusercontent.com/20650591/233107070-f9a14ed8-5c77-4947-8fa5-8d1c86d4a04f.mp4
 
 ---
 ### Dependency
