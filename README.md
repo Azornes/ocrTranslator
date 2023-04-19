@@ -25,7 +25,7 @@ preview:
 1. [Python 3.9](https://www.python.org/downloads/release/python-390/).
 2. (optional) [Capture2Text](https://sourceforge.net/projects/capture2text/).
 3. (optional) [Tesseract](https://github.com/UB-Mannheim/tesseract/wiki).
-4. (optional) Google api generate a [service_account_creds.json](https://developers.google.com/workspace/guides/create-credentials). Then, put file into the 'ocrTranslate/configs' directory.
+4. (optional) Google api generate a [service_account_creds.json](https://developers.google.com/workspace/guides/create-credentials). Then, put file into the `ocrTranslate/configs` directory.
 5. 	⬇
 <details>
 <summary>
@@ -45,6 +45,45 @@ Not supported for Google/Microsoft accounts
 2. Open the console in Google Chrome -> Application -> Storage -> Cookies -> https://chat.openai.com -> Get the value from __Secure-next-auth.session-token
 #### - Access token
 https://chat.openai.com/api/auth/session
+
+</details>
+
+<details>
+<summary>
+
+### (optional) EdgeGPT
+> #### [Source](https://github.com/acheong08/ChatGPT)
+</summary>
+
+<details>
+  <summary>
+
+### Checking access (Required)
+
+  </summary>
+
+- Install the latest version of Microsoft Edge
+- Alternatively, you can use any browser and set the user-agent to look like you're using Edge (e.g., `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.51`). You can do this easily with an extension like "User-Agent Switcher and Manager" for [Chrome](https://chrome.google.com/webstore/detail/user-agent-switcher-and-m/bhchdcejhohfmigjafbampogmaanbfkg) and [Firefox](https://addons.mozilla.org/en-US/firefox/addon/user-agent-string-switcher/).
+- Open [bing.com/chat](https://bing.com/chat)
+- If you see a chat feature, you are good to go
+
+</details>
+
+<details>
+  <summary>
+
+### Getting authentication (Required)
+
+  </summary>
+
+- Install the cookie editor extension for [Chrome](https://chrome.google.com/webstore/detail/cookie-editor/hlkenndednhfkekhgcdicdfddnkalmdm) or [Firefox](https://addons.mozilla.org/en-US/firefox/addon/cookie-editor/)
+- Go to `bing.com`
+- Open the extension
+- Click "Export" on the bottom right, then "Export as JSON" (This saves your cookies to clipboard)
+- Paste your cookies into a file `cookies.json`
+- Paste your file `cookies.json` to `ocrTranslate/configs/`
+
+</details>
 
 </details>
 

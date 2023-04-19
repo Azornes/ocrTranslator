@@ -2,19 +2,25 @@ import os
 import uuid
 
 import asyncio
-from EdgeGPT import Chatbot, ConversationStyle
+from enum import Enum
+
+from EdgeGPT import Chatbot
 from ocrTranslate.assets import Assets as assets
 
 from secrets import compare_digest
 
 from ocrTranslate.utils import format_words, format_words2
 
+class ConversationStyle(Enum):
+    creative = "h3imaginative,clgalileo,gencontentv3"
+    balanced = "galileo"
+    precise = "h3precise,clgalileo"
 
 class EdgeGPTFree:
-    def __init__(self, cookiePath="") -> None:
+    def __init__(self, cookie_path="") -> None:
         self.edge_gpt_free = None
-        if os.path.exists(cookiePath):
-            self.cookie_path = cookiePath
+        if os.path.exists(cookie_path):
+            self.cookie_path = cookie_path
             self.is_active = True
             self.renew_chatbot_cookies()
         else:
@@ -22,7 +28,7 @@ class EdgeGPTFree:
 
     def renew_chatbot_cookies(self):
         try:
-            self.edge_gpt_free = Chatbot(cookiePath=self.cookie_path)
+            self.edge_gpt_free = Chatbot(cookie_path=self.cookie_path)
         except Exception as e:
             self.is_active = False
             print(e)
@@ -37,7 +43,7 @@ class EdgeGPTFree:
                 prompt = prompt + " " + words
 
             prev_text = ""
-            async for data in self.edge_gpt_free.ask_stream(prompt=prompt, conversation_style=ConversationStyle.precise, wss_link="wss://sydney.bing.com/sydney/ChatHub"):
+            async for data in self.edge_gpt_free.ask_stream(prompt=prompt, conversation_style="precise", wss_link="wss://sydney.bing.com/sydney/ChatHub"):
                 print(data[0])
                 print(data[1])
                 if not data[0]:
@@ -52,7 +58,7 @@ class EdgeGPTFree:
     async def run_chat_ai(self, prompt=""):
         print("run_chat_ai")
         if self.is_active:
-            response = await self.edge_gpt_free.ask(prompt=prompt, conversation_style=ConversationStyle.creative, wss_link="wss://sydney.bing.com/sydney/ChatHub")
+            response = await self.edge_gpt_free.ask(prompt=prompt, conversation_style="balanced", wss_link="wss://sydney.bing.com/sydney/ChatHub")
             return response
         else:
             return "edgegpt non valid user date"
@@ -60,7 +66,7 @@ class EdgeGPTFree:
     async def run_chat_ai_async(self, prompt=""):
         if self.is_active:
             prev_text = ""
-            async for data in self.edge_gpt_free.ask_stream(prompt=prompt, conversation_style=ConversationStyle.creative, wss_link="wss://sydney.bing.com/sydney/ChatHub"):
+            async for data in self.edge_gpt_free.ask_stream(prompt=prompt, conversation_style="balanced", wss_link="wss://sydney.bing.com/sydney/ChatHub"):
                 #print(data[0])
                 #print(data[1])
                 if not data[0]:
@@ -77,7 +83,7 @@ class EdgeGPTFree:
 
 def test_edge_gpt():
     try:
-        edgeGpt = EdgeGPTFree(cookiePath="C:\Programowanie\Projekty\Python\HelpApps\ocrTranslator3\ocrTranslate\configs\cookies.json", )
+        edgeGpt = EdgeGPTFree(cookie_path="C:\Programowanie\Projekty\Python\HelpApps\ocrTranslator3\ocrTranslate\configs\cookies.json", )
     except KeyError:
         edgeGpt = EdgeGPTFree()
 

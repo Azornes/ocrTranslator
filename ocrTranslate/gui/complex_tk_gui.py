@@ -225,7 +225,7 @@ class ComplexTkGui(customtkinter.CTk):
         #for i in range(len(ai_services)):
         #    self.tabview_chat_ai1 = TabviewChats(self.chat_ai_frame, ai_services)
 
-        self.tabview_chat_ai1 = TabviewChats(root = self.chat_ai_frame, ai_services=ai_services, send_message_icon=self.send_message_icon)
+        self.tabview_chat_ai1 = TabviewChats(root = self.chat_ai_frame, ai_services=ai_services, send_message_icon=self.send_message_icon, column=0)
 
         # self.tabview_chat_ai = customtkinter.CTkTabview(self.chat_ai_frame, width=25)
         # self.tabview_chat_ai.grid(row=0, column=0, padx=(0, 20), pady=(5, 5), sticky="nsew")

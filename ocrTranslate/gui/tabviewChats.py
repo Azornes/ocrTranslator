@@ -13,12 +13,12 @@ from ocrTranslate.gui.auto_resize_text_box import AutoResizeTextBox
 
 
 class TabviewChats(customtkinter.CTkTabview):
-    def __init__(self, root, ai_services, send_message_icon, display_func = None):
+    def __init__(self, root, ai_services, send_message_icon, column=0):
         customtkinter.CTkTabview.__init__(self, root, width=25)
         self.root = root
         self.ai_services = ai_services
         self.send_message_icon = send_message_icon
-        self.display_func = display_func
+        self.column = column
 
         self.textbox_chatgpt_frame = None
         self.textbox_chatgpt_send_frame = None
@@ -33,7 +33,7 @@ class TabviewChats(customtkinter.CTkTabview):
         self.button_send_message_Bard = None
 
         method_name = 'tabview_chat_ai'
-        self.grid(row=0, column=0, padx=(0, 20), pady=(5, 5), sticky="nsew")
+        self.grid(row=0, column=self.column, padx=(0, 20), pady=(5, 5), sticky="nsew")
         for ai_service in ai_services:
             self.add(str(ai_service[0]))
             self.tab(str(ai_service[0])).grid_columnconfigure(0, weight=1)  # configure grid of individual tabs

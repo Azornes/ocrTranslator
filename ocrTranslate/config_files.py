@@ -48,7 +48,7 @@ except KeyError:
     chatGpt = ChatGPTFree()
 
 try:
-    edgeGpt = EdgeGPTFree(cookiePath=assets.path_cookies_edge_gpt)
+    edgeGpt = EdgeGPTFree(cookie_path=assets.path_cookies_edge_gpt)
 except KeyError:
     edgeGpt = EdgeGPTFree()
 
