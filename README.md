@@ -20,9 +20,28 @@ With this app, you can select your preferred OCR and translation services. After
 
 preview:
 ![](documentation_images/Showrun.gif)
+
+# 🔥 Features
+
+Better ChatGPT comes with a bundle of amazing features! Here are some of them:
+
+- Desktop application with a user-friendly graphical user interface (GUI) provided by customtkinter.
+- Ability to select preferred OCR and translation services.
+- Option to run the program using either the START button or the keyboard shortcut (Alt+Win+T or bound from options).
+- Capability to choose the area of the screen to scan for text using OCR and save the position (for example, when watching a movie and the subtitles always appear in one spot, so you don't have to select the text area again).
+- Automatic translation of the captured text if a translation service has been selected.
+- Ability to capture subtitles from movies or games by selecting the corresponding area of the screen and displaying the translated text next to them.
+- Chat with chatGPT or edgeGPT.
+- Ability to translate from the clipboard or manually entered text (similar to a typical translation app).
+- Save all selected options and settings to a file and load them when the program is launched.
+
+## Desktop App
+Download the desktop app [here](https://github.com/Azornes/ocrTranslator/releases)
+Tested only on Windows 10.
+
 ---
 ### Dependency
-1. [Python 3.9](https://www.python.org/downloads/release/python-390/).
+1. [Python 3.9](https://www.python.org/downloads/release/python-390/). (If you want run from source)
 2. (optional) [Capture2Text](https://sourceforge.net/projects/capture2text/).
 3. (optional) [Tesseract](https://github.com/UB-Mannheim/tesseract/wiki).
 4. (optional) Google api generate a [service_account_creds.json](https://developers.google.com/workspace/guides/create-credentials). Then, put file into the `ocrTranslate/configs` directory.
