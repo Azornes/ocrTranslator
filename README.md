@@ -24,8 +24,6 @@ https://user-images.githubusercontent.com/20650591/233107070-f9a14ed8-5c77-4947-
 
 # 🔥 Features
 
-Better ChatGPT comes with a bundle of amazing features! Here are some of them:
-
 - Desktop application with a user-friendly graphical user interface (GUI) provided by customtkinter.
 - Ability to select preferred OCR and translation services.
 - Option to run the program using either the START button or the keyboard shortcut (Alt+Win+T or bound from options).
