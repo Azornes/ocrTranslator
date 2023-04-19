@@ -39,7 +39,7 @@ Download the desktop app [here](https://github.com/Azornes/ocrTranslator/release
 Tested only on Windows 10.
 
 ---
-### Dependency
+## Dependency
 1. [Python 3.9](https://www.python.org/downloads/release/python-390/). (If you want run from source)
 2. (optional) [Capture2Text](https://sourceforge.net/projects/capture2text/).
 3. (optional) [Tesseract](https://github.com/UB-Mannheim/tesseract/wiki).
