@@ -47,3 +47,5 @@ class Assets:
     path_to_chatai_white = resolve_path("ocrTranslate/assets/chatai_white.png")
     path_to_send_message_black = resolve_path("ocrTranslate/assets/send_message_black.png")
     path_to_send_message_white = resolve_path("ocrTranslate/assets/send_message_white.png")
+    path_to_open_side_menu_dark = resolve_path("ocrTranslate/assets/open_side_menu_dark.png")
+    path_to_open_side_menu_white = resolve_path("ocrTranslate/assets/open_side_menu_white.png")

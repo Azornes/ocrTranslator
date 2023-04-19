@@ -46,6 +46,7 @@ class ComplexTkGui(customtkinter.CTk):
         self.chat_ai_icon = customtkinter.CTkImage(light_image=Image.open(assets.path_to_chatai_black), dark_image=Image.open(assets.path_to_chatai_white), size=(20, 20))
         self.home_image = customtkinter.CTkImage(light_image=Image.open(assets.path_to_home_dark), dark_image=Image.open(assets.path_to_home_light), size=(20, 20))
         self.settings_image = customtkinter.CTkImage(light_image=Image.open(assets.path_to_settings_dark), dark_image=Image.open(assets.path_to_settings_light), size=(20, 20))
+        self.open_side_menu_icon = customtkinter.CTkImage(light_image=Image.open(assets.path_to_open_side_menu_dark), dark_image=Image.open(assets.path_to_open_side_menu_white), size=(20, 20))
         # ||||||||||||||||||| create sidebar frame with widgets |||||||||||||||||||
         self.sidebar_frame = customtkinter.CTkFrame(self, width=100, corner_radius=10)
 
@@ -185,7 +186,7 @@ class ComplexTkGui(customtkinter.CTk):
         self.label_tab_3.grid(row=0, column=0, padx=20, pady=20)
 
         # ||||||||||||||||||| create main entry and button |||||||||||||||||||
-        self.button_options = customtkinter.CTkButton(master=self, corner_radius=0, height=20, width=20, border_spacing=0, text="", fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"), image=self.settings_image, anchor="w", command=self.hide_show_side_bar)
+        self.button_options = customtkinter.CTkButton(master=self, corner_radius=0, height=20, width=20, border_spacing=0, text="", fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"), image=self.open_side_menu_icon, anchor="w", command=self.hide_show_side_bar)
         # self.button_options = customtkinter.CTkButton(master=self, text="Options", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), width= 25, command=self.hide_show_side_bar)
         self.button_options.grid(row=0, column=0, padx=(0, 0), pady=(0, 0), sticky="nw")
 
