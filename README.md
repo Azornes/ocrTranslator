@@ -106,6 +106,8 @@ https://chat.openai.com/api/auth/session
 
 ---
 
+# 📊 Tables with information
+
 <details>
 <summary>
 
