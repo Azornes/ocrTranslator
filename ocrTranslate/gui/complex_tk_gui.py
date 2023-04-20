@@ -10,6 +10,7 @@ from ocrTranslate.config_files import google_api, capture2Text, chatGpt, tessera
 from ocrTranslate.gui.AnimatedGif import AnimatedGif
 from ocrTranslate.gui.auto_complete_combobox import AutocompleteCombobox
 from ocrTranslate.gui.auto_resize_text_box import AutoResizeTextBox
+from ocrTranslate.gui.bindingEntry import BindingEntry
 from ocrTranslate.gui.tabviewChats import TabviewChats
 from ocrTranslate.langs import _langs, services_translators_languages, _langs2
 
@@ -352,38 +353,8 @@ class ComplexTkGui(customtkinter.CTk):
         self.label_binding_start_ocr = customtkinter.CTkLabel(self.scrollable_settings_frame_others, text="Bind START", anchor="w")
         self.label_binding_start_ocr.grid(row=1, column=0, padx=(5, 5), pady=(5, 5), sticky="nsew")
 
-        key_combination = []
-
-        def on_key_press(event):
-            nonlocal key_combination
-            separator = "_"
-            if separator in event.keysym:
-                first_part, second_part = event.keysym.split(separator, 1)
-                new_string = separator.join([first_part])
-            else:
-                new_string = event.keysym
-            if new_string not in key_combination:
-                key_combination.append(new_string)
-
-            self.entry_binding_start_ocr.configure(state="normal", border_color="orange")
-            self.entry_binding_start_ocr.delete(0, 'end')
-            self.entry_binding_start_ocr.insert(0, "+".join(key_combination))
-            self.entry_binding_start_ocr.configure(state="readonly")
-
-        def on_key_release(event):
-            nonlocal key_combination
-            self.entry_binding_start_ocr.configure(border_color="grey")
-            self.label_binding_start_ocr.focus_set()
-            key_combination = []
-
-        def on_mouse_press(event):
-            self.entry_binding_start_ocr.configure(state="readonly", border_color="orange")
-
-        self.entry_binding_start_ocr = customtkinter.CTkEntry(self.scrollable_settings_frame_others, placeholder_text="")
+        self.entry_binding_start_ocr = BindingEntry(self.scrollable_settings_frame_others, self.label_binding_start_ocr)
         self.entry_binding_start_ocr.grid(row=1, column=1, padx=(5, 5), pady=(5, 5), sticky="nsew")
-        self.entry_binding_start_ocr.bind("<KeyPress>", on_key_press)
-        self.entry_binding_start_ocr.bind("<KeyRelease>", on_key_release)
-        self.entry_binding_start_ocr.bind("<ButtonPress>", on_mouse_press)
 
         # |_████████████████████████████████████████████████████████████████████████|
         # |___________________________ set default values __________________________|
@@ -613,6 +584,10 @@ class ComplexTkGui(customtkinter.CTk):
             # print("ctkentry")
             # print(child.get())
             result[self.get_key(str(child))] = child.get()
+        if "bindingentry" in child.winfo_name():
+            # print("ctkentry")
+            # print(child.get())
+            result[self.get_key(str(child))] = child.get()
         if "slider" in child.winfo_name():
             # print("slider")
             # print(child.get())
@@ -677,6 +652,12 @@ class ComplexTkGui(customtkinter.CTk):
         if "ctkentry" in child.winfo_name():
             child.delete(0, "end")
             child.insert(0, config[settings_name][self.get_key(str(child))])
+        if "bindingentry" in child.winfo_name():
+            #print(child.winfo_name())
+            child.configure(state="normal")
+            child.delete(0, "end")
+            child.insert(0, config[settings_name][self.get_key(str(child))])
+            child.configure(state="readonly")
         if "textbox" in child.winfo_name():
             child.delete("0.0", "end")
             if self.get_key(str(child)) != "key doesn't exist":

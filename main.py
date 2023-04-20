@@ -402,7 +402,6 @@ async def display_translations_ChatGPT(word, language_to="English"):
     return final_result
 
 
-
 async def display_translations_EdgeGPT(word, language_to="English"):
     root.translation_frame_textbox.insert("0.0", "\n\n")
     final_result = ""
@@ -501,8 +500,8 @@ def load_hotkey():
         keyboard.add_hotkey('alt+win+t', key, args=('From global keystroke',))
 
 
+root.entry_binding_start_ocr.hotkey_function = key
 load_hotkey()
-root.button_start.configure(command=buttonCaptureClick)
 
 try:
     root.mainloop()
