@@ -5,15 +5,13 @@ import keyboard
 class BindingEntry(ctk.CTkEntry):
     def __init__(self, root, focus_on=None, hotkey_function=None):
         ctk.CTkEntry.__init__(self, root, placeholder_text="")
-        # Initialize the ModifiedMixin.
         self.root = root
         self.focus_on = focus_on
         self.hotkey_function = hotkey_function
+        self.key_combination = []
         self.bind("<KeyPress>", self.on_key_press)
         self.bind("<KeyRelease>", self.on_key_release)
         self.bind("<ButtonPress>", self.on_mouse_press)
-
-        self.key_combination = []
 
     def on_key_press(self, event):
         separator = "_"
@@ -34,11 +32,12 @@ class BindingEntry(ctk.CTkEntry):
         self.configure(border_color="grey")
         self.focus_on.focus_set()
         self.key_combination = []
-        try:
-            keyboard.clear_all_hotkeys()
-            keyboard.add_hotkey(self.get(), self.hotkey_function, args=('From global keystroke',))
-        except AttributeError:
-            pass
+        if self.hotkey_function is not None and self.get() != "":
+            try:
+                keyboard.clear_all_hotkeys()
+                keyboard.add_hotkey(self.get(), self.hotkey_function, args=('From global keystroke',))
+            except AttributeError:
+                pass
 
     def on_mouse_press(self, event):
         self.configure(state="readonly", border_color="orange")

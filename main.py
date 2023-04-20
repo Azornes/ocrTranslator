@@ -464,7 +464,6 @@ def handle_app_windows(win_state):
 
 
 def buttonCaptureClick():
-    load_hotkey()
     win_state = root.state()
     if root.switch_from_text.get() != 1 and root.switch_from_clipboard.get() != 1:
         handle_app_windows(win_state)
