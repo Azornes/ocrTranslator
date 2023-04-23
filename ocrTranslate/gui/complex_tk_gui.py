@@ -126,8 +126,12 @@ class ComplexTkGui(customtkinter.CTk):
         # self.scrollable_frame_textbox = customtkinter.CTkTextbox(self, width=250)
         # self.scrollable_frame_textbox.grid(row=1, column=1,padx=(10, 10), pady=(10, 10), sticky="nsew")
 
+        self.button_start_stt_ocr_tab = AnimatedGifButton(root= self.scrollable_frame, gif_file=assets.path_to_microphone_active_png, stop_icon=assets.path_to_microphone_white, delay=0.03, size=(25, 25), hide=False)
+        self.button_start_stt_ocr_tab.grid(row=rows + 2, column=1, padx=0, pady=0, sticky="e")
+        self.button_start_stt_ocr_tab.grid_save()
+
         self.scrollable_frame_textbox = customtkinter.CTkTextbox(self.scrollable_frame, height=1500, undo=True, autoseparators=True)
-        self.scrollable_frame_textbox.grid(row=rows + 2, column=0, columnspan=4, rowspan=10, padx=(10, 10), pady=(10, 10), sticky="nsew")
+        self.scrollable_frame_textbox.grid(row=rows + 3, column=0, columnspan=4, rowspan=10, padx=(10, 10), pady=(10, 10), sticky="nsew")
 
         # ||||||||||||||||||| create tabview |||||||||||||||||||
         self.tabview = customtkinter.CTkTabview(self.home_frame, width=25)
@@ -181,8 +185,12 @@ class ComplexTkGui(customtkinter.CTk):
         self.combobox_to_language = AutocompleteCombobox(self.scrollable_frame_translation, completevalues=list(_langs2.values()))
         self.combobox_to_language.grid(row=3, column=2, padx=(5, 20), pady=(0, 0))
 
+        self.button_start_stt_tran_tab = AnimatedGifButton(root= self.scrollable_frame_translation, gif_file=assets.path_to_microphone_active_png, stop_icon=assets.path_to_microphone_white, delay=0.03, size=(25, 25), hide=False)
+        self.button_start_stt_tran_tab.grid(row=4, column=1, padx=0, pady=0)
+        self.button_start_stt_tran_tab.grid_save()
+
         self.translation_frame_textbox = customtkinter.CTkTextbox(self.scrollable_frame_translation, width=250, height=1500, undo=True, autoseparators=True)
-        self.translation_frame_textbox.grid(row=4, column=0, columnspan=3, padx=(10, 10), pady=(10, 10), sticky="nsew")
+        self.translation_frame_textbox.grid(row=5, column=0, columnspan=3, padx=(10, 10), pady=(10, 10), sticky="nsew")
 
         # section Speech to Text tab
         # ||| Speech to Text tab |||
@@ -193,7 +201,7 @@ class ComplexTkGui(customtkinter.CTk):
         self.scrollable_frame_stt.grid(row=0, column=0, padx=(0, 0), pady=(0, 0), sticky="nsew")
         self.scrollable_frame_stt.grid_columnconfigure((0, 1, 2), weight=1)
 
-        services_stt_tab = ["Disabled", "WebGoogle", "EdgeGPT"]
+        services_stt_tab = ["Disabled", "WebGoogle"]
 
         self.option_menu_stt = customtkinter.CTkOptionMenu(self.scrollable_frame_stt, dynamic_resizing=False, values=services_stt_tab, command=self.change_sst_service)
         self.option_menu_stt.grid(row=0, column=1, padx=20, pady=(20, 10))
@@ -201,9 +209,9 @@ class ComplexTkGui(customtkinter.CTk):
         self.sst_frame_textbox = customtkinter.CTkTextbox(self.scrollable_frame_stt, width=250, height=1500, undo=True, autoseparators=True)
         self.sst_frame_textbox.grid(row=2, column=0, columnspan=3, padx=(10, 10), pady=(10, 10), sticky="nsew")
 
-        self.button_start_stt2 = AnimatedGifButton(root= self.scrollable_frame_stt, gif_file=assets.path_to_microphone_active_png, stop_icon=assets.path_to_microphone_white, delay=0.03, size=(50, 50), hide=False)
-        self.button_start_stt2.grid(row=1, column=1, rowspan=1, padx=0, pady=0)
-        self.button_start_stt2.grid_save()
+        self.button_start_stt = AnimatedGifButton(root= self.scrollable_frame_stt, gif_file=assets.path_to_microphone_active_png, stop_icon=assets.path_to_microphone_white, delay=0.03, size=(50, 50), hide=False)
+        self.button_start_stt.grid(row=1, column=1, rowspan=1, padx=0, pady=0)
+        self.button_start_stt.grid_save()
 
         self.combobox_sst_language = AutocompleteCombobox(self.scrollable_frame_stt, completevalues=list(_langs2.values()))
 
@@ -515,13 +523,21 @@ class ComplexTkGui(customtkinter.CTk):
                 self.combobox_to_language.set("")
 
     def change_sst_service(self, option):
+        buttons_sst_list = [self.button_start_stt, self.button_start_stt_ocr_tab, self.button_start_stt_tran_tab]
+        sst_frame_textbox_list = [self.sst_frame_textbox, self.scrollable_frame_textbox, self.translation_frame_textbox]
+        if option == "Disabled":
+            self.combobox_sst_language.grid_forget()
+            for button in buttons_sst_list:
+                button.configure(state="disabled")
         if option == "WebGoogle":
+            for button in buttons_sst_list:
+                button.configure(state="normal")
             print("WebGoogle")
             self.combobox_sst_language.grid(row=1, column=2, padx=(20, 5), pady=(0, 0))
             self.combobox_sst_language.configure(completevalues=list(get_subdictionary(services_stt_languages, "WebGoogle").values()))
             self.combobox_sst_language.set("English-United Kingdom")
             if self.speechRecognitionGUI is None:
-                self.speechRecognitionGUI = SpeechRecognitionGUI(start_button=self.button_start_stt2, text_box=self.sst_frame_textbox, combobox_sst_language = self.combobox_sst_language)
+                self.speechRecognitionGUI = SpeechRecognitionGUI(start_button=buttons_sst_list, text_box=sst_frame_textbox_list, combobox_sst_language = self.combobox_sst_language)
 
 
 
@@ -689,7 +705,10 @@ class ComplexTkGui(customtkinter.CTk):
         if "combobox" in child.winfo_name():
             child.set(config[settings_name][self.get_key(str(child))])
             if callable(child._command):
-                child._command()
+                try:
+                    child._command()
+                except TypeError:
+                    child._command(config[settings_name][self.get_key(str(child))])
         if "ctkentry" in child.winfo_name():
             child.delete(0, "end")
             child.insert(0, config[settings_name][self.get_key(str(child))])
