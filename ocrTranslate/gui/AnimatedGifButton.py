@@ -14,28 +14,19 @@ except ImportError:
     import tkinter as tk  # for Python3
 
 import customtkinter as ctk
-
 from PIL import Image
 
 
-class AnimatedGif(ctk.CTkLabel):
-    """
-	Class to show animated GIF file in a label
-	Use start() method to begin animation, and set the stop flag to stop it
-	"""
-
-    def __init__(self, root, gif_file, delay=0.04, size=(40, 40), hide=True):
-        """
-		:param root: tk.parent
-		:param gif_file: filename (and path) of animated gif
-		:param delay: delay between frames in the gif animation (float)
-		"""
-        ctk.CTkLabel.__init__(self, root, text="")
+class AnimatedGifButton(ctk.CTkButton):
+    def __init__(self, root, gif_file, stop_icon, delay=0.04, size=(40, 40), hide=True):
+        self.stop_icon = ctk.CTkImage(Image.open(stop_icon), size=size)
+        ctk.CTkButton.__init__(self, root, text="", fg_color="transparent", border_width=0, anchor="left", command=self.start_button, image=self.stop_icon, width=size[0], height=size[1])
         self.root = root
         self.hide = hide
         self.gif_file = gif_file
         self.delay = delay  # Animation delay - try low floats, like 0.04 (depends on the gif in question)
         self.stop_animation = False  # Thread exit request flag
+        self.started_animation = False  # Thread exit request flag
         self.size = size
         self.grid_saved = self.grid_info()
         self._num = 0
@@ -45,6 +36,23 @@ class AnimatedGif(ctk.CTkLabel):
 
     def grid_restore(self):
         self.grid(**self.grid_saved)
+
+    def start_button(self, started_animation=None):
+        if started_animation is not None:
+            started_forced_animation = not started_animation
+            if self.started_animation and started_forced_animation:
+                self.started_animation = False
+                self.stop()
+            elif not self.started_animation and not started_forced_animation:
+                self.started_animation = True
+                self.start()
+        else:
+            if self.started_animation:
+                self.started_animation = False
+                self.stop()
+            else:
+                self.started_animation = True
+                self.start()
 
     def start(self):
         """ Starts non-threaded version that we need to manually update() """
@@ -61,16 +69,18 @@ class AnimatedGif(ctk.CTkLabel):
             self.grid_forget()
 
     def _animate(self):
-        with Image.open(assets.path_to_loading_png) as im:
+        with Image.open(self.gif_file) as im:
             try:
                 im.seek(self._num + 1)
                 self.gif = ctk.CTkImage(light_image=im, dark_image=im, size=self.size)
                 self.configure(image=self.gif)  # do something to im
                 self._num += 1
             except EOFError:
-                self._num = -1                  # end of sequence
+                self._num = -1  # end of sequence
             if not self.stop_animation:  # If the stop flag is set, we don't repeat
                 self.root.after(int(self.delay * 1000), self._animate)
+            else:
+                self.configure(image=self.stop_icon)
 
     def start_thread(self):
         """ This starts the thread that runs the animation, if we are using a threaded approach """

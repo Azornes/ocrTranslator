@@ -8,11 +8,13 @@ import customtkinter
 from ocrTranslate.assets import Assets as assets
 from ocrTranslate.config_files import google_api, capture2Text, chatGpt, tesseract, baidu
 from ocrTranslate.gui.AnimatedGif import AnimatedGif
+from ocrTranslate.gui.AnimatedGifButton import AnimatedGifButton
 from ocrTranslate.gui.auto_complete_combobox import AutocompleteCombobox
 from ocrTranslate.gui.auto_resize_text_box import AutoResizeTextBox
 from ocrTranslate.gui.bindingEntry import BindingEntry
 from ocrTranslate.gui.tabviewChats import TabviewChats
-from ocrTranslate.langs import _langs, services_translators_languages, _langs2
+from ocrTranslate.langs import _langs, services_translators_languages, _langs2, get_subdictionary, services_stt_languages
+from ocrTranslate.services.speach_to_text_web_google import SpeechRecognitionGUI
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -40,7 +42,8 @@ class ComplexTkGui(customtkinter.CTk):
         # ||||||||||||||||||| configure grid layout |||||||||||||||||||
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
-
+        # ||||||||||||||||||| configure variable |||||||||||||||||||
+        self.speechRecognitionGUI = None
         # ||||||||||||||||||| load images |||||||||||||||||||
         self.rev_translate_icon = customtkinter.CTkImage(Image.open(assets.reverse_icon), size=(26, 26))
         self.send_message_icon = customtkinter.CTkImage(light_image=Image.open(assets.path_to_send_message_black), dark_image=Image.open(assets.path_to_send_message_white), size=(26, 26))
@@ -135,7 +138,10 @@ class ComplexTkGui(customtkinter.CTk):
         self.tabview.tab("Translation").grid_columnconfigure(0, weight=1)  # configure grid of individual tabs
         self.tabview.tab("Translation").grid_rowconfigure(0, weight=1)  # configure grid of individual tabs
         self.tabview.tab("Speech to Text").grid_columnconfigure(0, weight=1)
+        self.tabview.tab("Speech to Text").grid_rowconfigure(0, weight=1)
         self.tabview.tab("Text to Speech").grid_columnconfigure(0, weight=1)
+
+        # section Translation tab
         # ||| Translation tab |||
         self.scrollable_frame_translation = customtkinter.CTkScrollableFrame(self.tabview.tab("Translation"))
         self.scrollable_frame_translation.grid(row=0, column=0, padx=(0, 0), pady=(0, 0), sticky="nsew")
@@ -178,9 +184,33 @@ class ComplexTkGui(customtkinter.CTk):
         self.translation_frame_textbox = customtkinter.CTkTextbox(self.scrollable_frame_translation, width=250, height=1500, undo=True, autoseparators=True)
         self.translation_frame_textbox.grid(row=4, column=0, columnspan=3, padx=(10, 10), pady=(10, 10), sticky="nsew")
 
+        # section Speech to Text tab
         # ||| Speech to Text tab |||
-        self.label_tab_2 = customtkinter.CTkLabel(self.tabview.tab("Speech to Text"), text="WORK IN PROGRESS")
-        self.label_tab_2.grid(row=0, column=0, padx=20, pady=20)
+        # self.label_tab_2 = customtkinter.CTkLabel(self.tabview.tab("Speech to Text"), text="WORK IN PROGRESS")
+        # self.label_tab_2.grid(row=0, column=0, padx=20, pady=20)
+
+        self.scrollable_frame_stt = customtkinter.CTkScrollableFrame(self.tabview.tab("Speech to Text"))
+        self.scrollable_frame_stt.grid(row=0, column=0, padx=(0, 0), pady=(0, 0), sticky="nsew")
+        self.scrollable_frame_stt.grid_columnconfigure((0, 1, 2), weight=1)
+
+        services_stt_tab = ["Disabled", "WebGoogle", "EdgeGPT"]
+
+        self.option_menu_stt = customtkinter.CTkOptionMenu(self.scrollable_frame_stt, dynamic_resizing=False, values=services_stt_tab, command=self.change_sst_service)
+        self.option_menu_stt.grid(row=0, column=1, padx=20, pady=(20, 10))
+
+        self.sst_frame_textbox = customtkinter.CTkTextbox(self.scrollable_frame_stt, width=250, height=1500, undo=True, autoseparators=True)
+        self.sst_frame_textbox.grid(row=2, column=0, columnspan=3, padx=(10, 10), pady=(10, 10), sticky="nsew")
+
+        self.button_start_stt2 = AnimatedGifButton(root= self.scrollable_frame_stt, gif_file=assets.path_to_microphone_active_png, stop_icon=assets.path_to_microphone_white, delay=0.03, size=(50, 50), hide=False)
+        self.button_start_stt2.grid(row=1, column=1, rowspan=1, padx=0, pady=0)
+        self.button_start_stt2.grid_save()
+
+        self.combobox_sst_language = AutocompleteCombobox(self.scrollable_frame_stt, completevalues=list(_langs2.values()))
+
+
+        #SpeechRecognitionGUI(start_button=self.button_start_stt2, text_box=self.sst_frame_textbox)
+
+
 
         # ||| Text to Speech tab |||
         self.label_tab_3 = customtkinter.CTkLabel(self.tabview.tab("Text to Speech"), text="WORK IN PROGRESS")
@@ -483,6 +513,17 @@ class ComplexTkGui(customtkinter.CTk):
                 self.combobox_from_language.set("auto")
             if self.combobox_to_language.get() not in list(_langs2.values()):
                 self.combobox_to_language.set("")
+
+    def change_sst_service(self, option):
+        if option == "WebGoogle":
+            print("WebGoogle")
+            self.combobox_sst_language.grid(row=1, column=2, padx=(20, 5), pady=(0, 0))
+            self.combobox_sst_language.configure(completevalues=list(get_subdictionary(services_stt_languages, "WebGoogle").values()))
+            self.combobox_sst_language.set("English-United Kingdom")
+            if self.speechRecognitionGUI is None:
+                self.speechRecognitionGUI = SpeechRecognitionGUI(start_button=self.button_start_stt2, text_box=self.sst_frame_textbox, combobox_sst_language = self.combobox_sst_language)
+
+
 
     def select_frame_by_name(self, name):
         # set button color for selected button

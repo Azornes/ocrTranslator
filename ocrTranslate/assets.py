@@ -31,6 +31,7 @@ class Assets:
     path_to_point_image = resolve_path("ocrTranslate/assets/point.jpg")
 
     path_config_ini = resolve_path("ocrTranslate/configs/config.ini")
+    path_web_speech_demo = resolve_path("ocrTranslate\services\webspeechdemo\webspeechdemo.html")
     path_service_account_creds = resolve_path("ocrTranslate/configs/service_account_creds.json")
     path_cookies_edge_gpt = resolve_path("ocrTranslate/configs/cookies.json")
     path_settings_gui = resolve_path("ocrTranslate/configs/settings.ini")
@@ -43,8 +44,10 @@ class Assets:
     path_to_settings_light = resolve_path("ocrTranslate/assets/settings_light.png")
     path_to_loading_gif = resolve_path("ocrTranslate/assets/loading.gif")
     path_to_loading_png = resolve_path("ocrTranslate/assets/loading.png")
+    path_to_microphone_active_png = resolve_path("ocrTranslate/assets/microphone_active.png")
     path_to_chatai_black = resolve_path("ocrTranslate/assets/chatai_black.png")
     path_to_chatai_white = resolve_path("ocrTranslate/assets/chatai_white.png")
+    path_to_microphone_white = resolve_path("ocrTranslate/assets/microphone_white.png")
     path_to_send_message_black = resolve_path("ocrTranslate/assets/send_message_black.png")
     path_to_send_message_white = resolve_path("ocrTranslate/assets/send_message_white.png")
     path_to_open_side_menu_dark = resolve_path("ocrTranslate/assets/open_side_menu_dark.png")

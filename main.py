@@ -498,7 +498,7 @@ def load_hotkey():
     except KeyError:
         keyboard.add_hotkey('alt+win+t', key, args=('From global keystroke',))
 
-
+root.button_start.configure(command=buttonCaptureClick)
 root.entry_binding_start_ocr.hotkey_function = key
 load_hotkey()
 
