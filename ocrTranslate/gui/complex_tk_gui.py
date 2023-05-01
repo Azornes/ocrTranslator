@@ -14,6 +14,7 @@ from ocrTranslate.gui.auto_resize_text_box import AutoResizeTextBox
 from ocrTranslate.gui.bindingEntry import BindingEntry
 from ocrTranslate.gui.tabviewChats import TabviewChats
 from ocrTranslate.langs import _langs, services_translators_languages, _langs2, get_subdictionary, services_stt_languages
+from ocrTranslate.services.speach_to_text_multi_services import VoiceRecognizerMulti
 from ocrTranslate.services.speach_to_text_web_google import SpeechRecognitionGUI
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
@@ -44,6 +45,7 @@ class ComplexTkGui(customtkinter.CTk):
         self.grid_columnconfigure(1, weight=1)
         # ||||||||||||||||||| configure variable |||||||||||||||||||
         self.speechRecognitionGUI = None
+        self.voiceRecognizerMulti = None
         # ||||||||||||||||||| load images |||||||||||||||||||
         self.rev_translate_icon = customtkinter.CTkImage(Image.open(assets.reverse_icon), size=(26, 26))
         self.send_message_icon = customtkinter.CTkImage(light_image=Image.open(assets.path_to_send_message_black), dark_image=Image.open(assets.path_to_send_message_white), size=(26, 26))
@@ -201,7 +203,7 @@ class ComplexTkGui(customtkinter.CTk):
         self.scrollable_frame_stt.grid(row=0, column=0, padx=(0, 0), pady=(0, 0), sticky="nsew")
         self.scrollable_frame_stt.grid_columnconfigure((0, 1, 2), weight=1)
 
-        services_stt_tab = ["Disabled", "WebGoogle"]
+        services_stt_tab = ["Disabled", "WebGoogle", "Google", "Whisper"]
 
         self.option_menu_stt = customtkinter.CTkOptionMenu(self.scrollable_frame_stt, dynamic_resizing=False, values=services_stt_tab, command=self.change_sst_service)
         self.option_menu_stt.grid(row=0, column=1, padx=20, pady=(20, 10))
@@ -535,11 +537,20 @@ class ComplexTkGui(customtkinter.CTk):
             print("WebGoogle")
             self.combobox_sst_language.grid(row=1, column=2, padx=(20, 5), pady=(0, 0))
             self.combobox_sst_language.configure(completevalues=list(get_subdictionary(services_stt_languages, "WebGoogle").values()))
-            self.combobox_sst_language.set("English-United Kingdom")
             if self.speechRecognitionGUI is None:
                 self.speechRecognitionGUI = SpeechRecognitionGUI(start_button=buttons_sst_list, text_box=sst_frame_textbox_list, combobox_sst_language = self.combobox_sst_language)
-
-
+            else:
+                self.speechRecognitionGUI.start()
+        if option == "Google" or option == "Whisper":
+            for button in buttons_sst_list:
+                button.configure(state="normal")
+            print("test_universal")
+            self.combobox_sst_language.grid(row=1, column=2, padx=(20, 5), pady=(0, 0))
+            self.combobox_sst_language.configure(completevalues=list(get_subdictionary(services_stt_languages, option).values()))
+            if self.voiceRecognizerMulti is None:
+                self.voiceRecognizerMulti = VoiceRecognizerMulti(start_button=buttons_sst_list, text_box=sst_frame_textbox_list, combobox_sst_language=self.combobox_sst_language, name_service=option)
+            else:
+                self.voiceRecognizerMulti.start(option)
 
     def select_frame_by_name(self, name):
         # set button color for selected button

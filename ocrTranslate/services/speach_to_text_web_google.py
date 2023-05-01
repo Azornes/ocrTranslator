@@ -1,12 +1,8 @@
 import threading
 import time
-from tkinter import *
 from selenium import webdriver
 from selenium.common import JavascriptException, NoSuchWindowException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
 from ocrTranslate.langs import convert_language_sst
 from ocrTranslate.assets import Assets as assets
 
@@ -19,10 +15,11 @@ class SpeechRecognitionGUI:
         # self.options.add_argument('--headless')
         self.initialize_driver()
         self.combobox_sst_language = combobox_sst_language
-        self.combobox_sst_language.configure(command=self.change_language)
+        #self.combobox_sst_language.configure(command=self.change_language)
         #self.start_button = start_button
         self.buttons_sst_list = start_button
         self.sst_frame_textbox_list = text_box
+        self.stop = True
         # command = self.start_button._command
         # if callable(command):
         #     print("callable")
@@ -81,6 +78,7 @@ class SpeechRecognitionGUI:
             #if button == self.start_button:
             #    print("ten sam")
         self.initialize_driver()
+        self.change_language(self.combobox_sst_language.get())
         try:
             self.driver.execute_script("startButton();")
         except JavascriptException:
@@ -95,7 +93,7 @@ class SpeechRecognitionGUI:
         button.start_button(started_animation=recognizing)
         for button2 in self.buttons_sst_list:
             if button != button2:
-                button2.configure(state=DISABLED)
+                button2.configure(state="disabled")
         if recognizing:
             textbox.insert("0.0", "\n")
         while recognizing:
@@ -113,8 +111,13 @@ class SpeechRecognitionGUI:
             time.sleep(0.1)
         # print(recognizing)
         for button2 in self.buttons_sst_list:
-            button2.configure(state=NORMAL)
+            button2.configure(state="normal")
         button.start_button(started_animation=recognizing)
+
+    def start(self):
+        self.initialize_driver()
+        for button in self.buttons_sst_list:
+            button.configure(command=lambda b=button: self.on_start_button_click(b))
 
 # if __name__ == "__main__":
 #     SpeechRecognitionGUI()
