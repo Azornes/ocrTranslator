@@ -19,9 +19,11 @@ class ConversationStyle(Enum):
 class EdgeGPTFree:
     def __init__(self, cookie_path="") -> None:
         self.edge_gpt_free = None
+        self.error_message = "Not initialized. Please go to https://bing.com/ and retrieve the cookies.json file, then paste it into the config folder."
         if os.path.exists(cookie_path):
             self.cookie_path = cookie_path
             self.is_active = True
+            self.error_message = "Your cookies are expired. Please go to https://bing.com/ and retrieve the cookies.json file, then paste it into the config folder."
             self.renew_chatbot_cookies()
         else:
             self.is_active = False
@@ -32,7 +34,7 @@ class EdgeGPTFree:
         except Exception as e:
             self.is_active = False
             print(e)
-            print("cookies has been out of date, please renew cookies")
+            print(self.error_message)
 
     async def run_translate_async(self, word, language_to="English", prompt=""):
         if self.is_active:
@@ -53,7 +55,7 @@ class EdgeGPTFree:
                 else:
                     break
         else:
-            yield "edgegpt non valid user date. Get cookies.json from bing.com"
+            yield self.error_message
 
     async def run_chat_ai(self, prompt=""):
         print("run_chat_ai")
@@ -61,7 +63,7 @@ class EdgeGPTFree:
             response = await self.edge_gpt_free.ask(prompt=prompt, conversation_style="balanced", wss_link="wss://sydney.bing.com/sydney/ChatHub")
             return response
         else:
-            return "edgegpt non valid user date"
+            return self.error_message
 
     async def run_chat_ai_async(self, prompt=""):
         if self.is_active:
@@ -78,7 +80,7 @@ class EdgeGPTFree:
                 #response = data['item']['messages'][1]['text']
                 #yield data
         else:
-            yield "edgegpt non valid user date. Get cookies.json from bing.com"
+            yield self.error_message
 
 
 def test_edge_gpt():
@@ -91,9 +93,9 @@ def test_edge_gpt():
         async for response in edgeGpt.run_chat_ai_async(word):
             print(response)
 
-    asyncio.run(display_chat_ChatGPT("caan you remember the first time you saw a computer?"))
+    asyncio.run(display_chat_ChatGPT("can you remember the first time you saw a computer?"))
 
-    print(asyncio.run(edgeGpt.run_chat_ai("caan you remember the first time you saw a computer?")))
+    print(asyncio.run(edgeGpt.run_chat_ai("can you remember the first time you saw a computer?")))
     print(asyncio.run(edgeGpt.run_chat_ai("what is your favorite color?")))
 
 #test_edge_gpt()
