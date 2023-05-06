@@ -4,22 +4,26 @@ from revChatGPT.V1 import Chatbot as ChatbotFree
 from secrets import compare_digest
 
 from ocrTranslate.utils import format_words, format_words2
-
+import json
 
 class ChatGPTFree:
     def __init__(self, email="", password="", session_token="", access_token="") -> None:
         self.chat_gpt_free = None
+        self.error_message = "Not initialized, go to Settings and enter your access token"
         if not compare_digest(email, "") and not compare_digest(password, ""):
             self.email = email
             self.password = password
+            self.error_message = "Your email or password is invalid"
             self.is_active = True
             self.renew_chatbot_session_password()
         elif not compare_digest(session_token, ""):
             self.session_token = session_token
+            self.error_message = "Your session token is invalid"
             self.is_active = True
             self.renew_chatbot_session_token()
         elif not compare_digest(access_token, ""):
             self.access_token = access_token
+            self.error_message = "Your access token is expired, please log in at https://chat.openai.com/ and next get the access token from the https://chat.openai.com/api/auth/session"
             self.is_active = True
             self.renew_chatbot_access_token()
         else:
@@ -58,7 +62,7 @@ class ChatGPTFree:
                 prev_text = data["message"]
                 yield response
         else:
-            yield "chatgpt non valid user date"
+            yield self.error_message
 
     def run_translate(self, word, language_to="English", prompt=""):
         print("translate_by_chat_gpt")
@@ -82,7 +86,7 @@ class ChatGPTFree:
             print("")
             return response
         else:
-            return "chatgpt non valid user date"
+            return self.error_message
 
     def run_chat_ai(self, prompt=""):
         print("run_chat_ai")
@@ -98,15 +102,21 @@ class ChatGPTFree:
             print("")
             return response
         else:
-            return "chatgpt non valid user date"
+            return self.error_message
 
     async def run_chat_ai_async(self, prompt=""):
         if self.is_active:
             prev_text = ""
-            for data in self.chat_gpt_free.ask(prompt=prompt):
-                response = data["message"][len(prev_text):]
-                prev_text = data["message"]
-                yield response
+            try:
+                for data in self.chat_gpt_free.ask(prompt=prompt):
+                    response = data["message"][len(prev_text):]
+                    prev_text = data["message"]
+                    yield response
+            except Exception as e:
+                print(e)
+                #res = json.loads(e.__dict__.get("message")).get("detail").get("message")
+                #print(res)
+                yield self.error_message
             print(self.chat_gpt_free.conversation_id)
         else:
-            yield "chatgpt non valid user date"
+            yield self.error_message

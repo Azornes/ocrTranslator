@@ -38,14 +38,20 @@ try:
 except KeyError:
     tesseract = Tesseract()
 
+
 try:
-    chatGpt = ChatGPTFree(email=config["settings"]['entry_chatgpt_email'],
-                          password=config["settings"]['entry_chatgpt_password'],
-                          session_token=config["settings"]['entry_chatgpt_session_token'],
-                          access_token=config["settings"]['entry_chatgpt_access_token']
-                          )
+    chatGpt = ChatGPTFree(access_token=config["settings"]['entry_chatgpt_access_token'])
 except KeyError:
     chatGpt = ChatGPTFree()
+
+# try:
+#     chatGpt = ChatGPTFree(email=config["settings"]['entry_chatgpt_email'],
+#                           password=config["settings"]['entry_chatgpt_password'],
+#                           session_token=config["settings"]['entry_chatgpt_session_token'],
+#                           access_token=config["settings"]['entry_chatgpt_access_token']
+#                           )
+# except KeyError:
+#     chatGpt = ChatGPTFree()
 
 try:
     edgeGpt = EdgeGPTFree(cookie_path=assets.path_cookies_edge_gpt)

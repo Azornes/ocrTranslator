@@ -47,7 +47,7 @@ class TabviewChats(customtkinter.CTkTabview):
             textbox_ai_frame.tag_config("chatbot_name", justify='left', foreground='lightblue', font=customtkinter.CTkFont(size=14, weight="bold"))
             textbox_ai_frame.tag_config("chatbot_message", justify='left', foreground='lightblue')
 
-            textbox_ai_frame.insert('end', "You: ", 'user_name')
+            #textbox_ai_frame.insert('end', "You: ", 'user_name')
             textbox_ai_send_frame = AutoResizeTextBox(textbox_ai_frame)
             textbox_ai_send_frame.grid(row=1, column=0, padx=(15, 0), pady=(0, 0), sticky="nsew")
             button_send_message_ai = customtkinter.CTkButton(master=textbox_ai_send_frame, text="", fg_color="transparent", bg_color="transparent", border_width=0, width=26, anchor="left", height=26, text_color=("gray10", "#DCE4EE"), image=self.send_message_icon)

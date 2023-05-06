@@ -356,7 +356,19 @@ class ComplexTkGui(customtkinter.CTk):
 
         self.entry_settings = []
 
-        settings_dict = {'ChatGPT': ("ApiKey", 'session_token', "access_token", "email", "password"), 'Baidu': ("AppId", 'ApiKey', "SecretKey"), 'Capture2Text': ("path_to_Capture2Text_CLI_exe",), 'Tesseract': ("path_to_tesseract_exe",)}
+        # settings_dict = {
+        #     'ChatGPT': ("ApiKey", 'session_token', "access_token", "email", "password"),
+        #     'Baidu': ("AppId", 'ApiKey', "SecretKey"),
+        #     'Capture2Text': ("path_to_Capture2Text_CLI_exe",),
+        #     'Tesseract': ("path_to_tesseract_exe",)
+        # }
+
+        settings_dict = {
+            'ChatGPT': ("ApiKey", "access_token"),
+            'Baidu': ("AppId", 'ApiKey', "SecretKey"),
+            'Capture2Text': ("path_to_Capture2Text_CLI_exe",),
+            'Tesseract': ("path_to_tesseract_exe",)
+        }
 
         iterations = 0
         for service in settings_dict.items():
@@ -537,6 +549,7 @@ class ComplexTkGui(customtkinter.CTk):
             print("WebGoogle")
             self.combobox_sst_language.grid(row=1, column=2, padx=(20, 5), pady=(0, 0))
             self.combobox_sst_language.configure(completevalues=list(get_subdictionary(services_stt_languages, "WebGoogle").values()))
+            self.combobox_sst_language.set("English-United Kingdom")
             if self.speechRecognitionGUI is None:
                 self.speechRecognitionGUI = SpeechRecognitionGUI(start_button=buttons_sst_list, text_box=sst_frame_textbox_list, combobox_sst_language = self.combobox_sst_language)
             else:
@@ -633,7 +646,8 @@ class ComplexTkGui(customtkinter.CTk):
 
         capture2Text.__init__(path_to_Capture2Text_CLI_exe=config["settings"]['entry_capture2text_path_to_capture2text_cli_exe'])
         tesseract.__init__(path_to_tesseract_exe=config["settings"]['entry_tesseract_path_to_tesseract_exe'])
-        chatGpt.__init__(email=config["settings"]['entry_chatgpt_email'], password=config["settings"]['entry_chatgpt_password'], session_token=config["settings"]['entry_chatgpt_session_token'], access_token=config["settings"]['entry_chatgpt_access_token'])
+        #chatGpt.__init__(email=config["settings"]['entry_chatgpt_email'], password=config["settings"]['entry_chatgpt_password'], session_token=config["settings"]['entry_chatgpt_session_token'], access_token=config["settings"]['entry_chatgpt_access_token'])
+        chatGpt.__init__(access_token=config["settings"]['entry_chatgpt_access_token'])
         baidu.__init__(appid=config["settings"]['entry_baidu_appid'], apikey=config["settings"]['entry_baidu_apikey'], secretkey=config["settings"]['entry_baidu_secretkey'])
 
         self.disable_all_ocr_switchers()
