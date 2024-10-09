@@ -7,10 +7,7 @@
    <a href="https://github.com/Azornes/ocrTranslator/releases">
     <img alt="Downloads" src="https://img.shields.io/github/downloads/Azornes/ocrTranslator/latest/total?label=Downloads&style=flat-square">
    </a>
-   <a href="https://github.com/Azornes/ocrTranslator">
-    <img alt="Visitors" src="https://shields-io-visitor-counter.herokuapp.com/badge?page=Azornes.ocrTranslator&color=1D70B8&logo=GitHub&logoColor=FFFFFF&style=flat-square">
-   </a>
-  <a href="https://www.python.org/">
+  <a href="https://visitorbadge.io/status?path=https%3A%2F%2Fgithub.com%2FAzornes%2FocrTranslator"><img src="https://api.visitorbadge.io/api/combined?path=https%3A%2F%2Fgithub.com%2FAzornes%2FocrTranslator&countColor=%2337d67a&style=flat-square&labelStyle=none" /></a>
     <img alt="python 3.9" src="https://img.shields.io/badge/python-3.9-3776AB?logo=Python&logoColor=FFFFFF&style=flat-square">
    </a>
 </p>
